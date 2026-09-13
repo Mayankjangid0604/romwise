@@ -1,0 +1,215 @@
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/db";
+import { computeBudgetSummary, type BudgetItem } from "@/lib/budget";
+import { OptimizeButton } from "./optimize-button";
+import {
+  PageShell,
+  PageHeader,
+  SectionHeading,
+  Card,
+  Alert,
+  Stat,
+  Progress,
+  EmptyState,
+  Figure,
+  formatInr,
+} from "@/components/ui";
+
+export default async function BudgetPage(props: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session?.user?.id) redirect("/login");
+
+  const { id } = await props.params;
+
+  const trip = await prisma.trip.findUnique({
+    where: { id },
+    include: {
+      groupMembers: true,
+      staySelection: true,
+      itineraryDays: {
+        orderBy: { dayNumber: "asc" },
+        include: { items: { orderBy: { order: "asc" } } },
+      },
+    },
+  });
+
+  if (!trip) redirect("/dashboard");
+
+  const isMember = trip.groupMembers.some(
+    (m) => m.userId === session.user!.id,
+  );
+  if (!isMember) redirect("/dashboard");
+
+  const budgetItems: BudgetItem[] = trip.itineraryDays.flatMap((day) =>
+    day.items.map((item) => ({
+      id: item.id,
+      title: item.title,
+      category: item.category,
+      estimatedCostInr: item.estimatedCostInr,
+      dayNumber: day.dayNumber,
+    })),
+  );
+
+  const stayCostInr = trip.staySelection?.totalCostInr ?? 0;
+  const summary = computeBudgetSummary(budgetItems, trip.budgetInr);
+  const totalSpendWithStay = summary.estimatedSpend + stayCostInr;
+  const remainingWithStay = trip.budgetInr - totalSpendWithStay;
+  const isOverBudgetWithStay = remainingWithStay < 0;
+
+  return (
+    <PageShell>
+      <PageHeader
+        backHref={`/trips/${trip.id}`}
+        backLabel="Trip"
+        eyebrow={trip.title}
+        title="Budget"
+      />
+
+      {budgetItems.length === 0 ? (
+        <EmptyState
+          title="No itinerary items to budget"
+          hint="Generate an itinerary first."
+        />
+      ) : (
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Stat label="Total Budget" value={formatInr(summary.totalBudget)} />
+            <Stat
+              label="Estimated Spend"
+              value={formatInr(totalSpendWithStay)}
+              tone={isOverBudgetWithStay ? "negative" : "default"}
+              detail={
+                stayCostInr > 0
+                  ? `Activities ${formatInr(summary.estimatedSpend)} + Stay ${formatInr(stayCostInr)}`
+                  : undefined
+              }
+            />
+            <Stat
+              label={isOverBudgetWithStay ? "Over Budget" : "Remaining"}
+              value={`${isOverBudgetWithStay ? "−" : ""}${formatInr(Math.abs(remainingWithStay))}`}
+              tone={isOverBudgetWithStay ? "negative" : "positive"}
+            />
+          </div>
+
+          {isOverBudgetWithStay && (
+            <Alert tone="caution" title="Over budget">
+              <p>
+                The estimated spend exceeds your budget by{" "}
+                <Figure>{formatInr(Math.abs(remainingWithStay))}</Figure>.
+                {stayCostInr > 0 && " Consider a cheaper hotel or"} Use the
+                optimizer to remove lower-value items.
+              </p>
+              <OptimizeButton tripId={trip.id} />
+            </Alert>
+          )}
+
+          {trip.staySelection && (
+            <Card>
+              <h2 className="font-display text-lg font-semibold text-ink-800 mb-3">
+                Accommodation
+              </h2>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-medium text-ink-800">
+                    {trip.staySelection.hotelName}
+                  </p>
+                  <p className="text-[0.8125rem] text-ink-500 mt-0.5">
+                    <Figure>
+                      {formatInr(trip.staySelection.costPerNightInr)}
+                    </Figure>
+                    /night &times;{" "}
+                    <Figure>{trip.staySelection.nights}</Figure> nights
+                  </p>
+                </div>
+                <Figure className="font-semibold text-ink-900">
+                  {formatInr(trip.staySelection.totalCostInr)}
+                </Figure>
+              </div>
+            </Card>
+          )}
+
+          <section>
+            <SectionHeading
+              hint={
+                stayCostInr > 0
+                  ? "Activity spending only — accommodation shown separately above"
+                  : undefined
+              }
+            >
+              Spending by Category
+            </SectionHeading>
+
+            <Card padding="dense">
+              <div className="space-y-3">
+                {summary.categoryTotals.map((cat) => {
+                  const pct =
+                    summary.estimatedSpend > 0
+                      ? Math.round((cat.total / summary.estimatedSpend) * 100)
+                      : 0;
+                  return (
+                    <div
+                      key={cat.category}
+                      className="flex items-center gap-3 text-[0.8125rem]"
+                    >
+                      <span className="w-24 shrink-0 capitalize font-medium text-ink-700">
+                        {cat.category}
+                      </span>
+                      <Progress value={pct} size="sm" />
+                      <Figure className="w-28 text-right text-ink-700">
+                        {formatInr(cat.total)} ({pct}%)
+                      </Figure>
+                      <span className="w-16 text-right text-ink-400 text-[0.75rem]">
+                        {cat.itemCount} items
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          </section>
+
+          <section>
+            <SectionHeading>All Items</SectionHeading>
+            <Card padding="none" className="overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-[0.875rem]">
+                  <thead className="bg-ink-100">
+                    <tr className="text-[0.6875rem] uppercase tracking-wider text-ink-500">
+                      <th className="text-left font-medium px-4 py-2.5">Day</th>
+                      <th className="text-left font-medium px-4 py-2.5">Item</th>
+                      <th className="text-left font-medium px-4 py-2.5">
+                        Category
+                      </th>
+                      <th className="text-right font-medium px-4 py-2.5">Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {budgetItems.map((item) => (
+                      <tr key={item.id} className="border-t border-ink-100">
+                        <td className="px-4 py-2.5">
+                          <Figure className="text-ink-500">
+                            {item.dayNumber}
+                          </Figure>
+                        </td>
+                        <td className="px-4 py-2.5 text-ink-800">{item.title}</td>
+                        <td className="px-4 py-2.5 capitalize text-ink-600">
+                          {item.category}
+                        </td>
+                        <td className="px-4 py-2.5 text-right">
+                          <Figure className="text-ink-800">
+                            {formatInr(item.estimatedCostInr)}
+                          </Figure>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          </section>
+        </div>
+      )}
+    </PageShell>
+  );
+}

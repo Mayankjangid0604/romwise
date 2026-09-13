@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Primary — lagoon */
+  --color-lagoon-50: #effaf9;
+  --color-lagoon-100: #d6f2ef;
+  --color-lagoon-200: #aee5df;
+  --color-lagoon-300: #7bd1c9;
+  --color-lagoon-400: #46b5ac;
+  --color-lagoon-500: #26988f;
+  --color-lagoon-600: #1a7a73;
+  --color-lagoon-700: #17625d;
+  --color-lagoon-800: #164e4a;
+  --color-lagoon-900: #11403d;
+
+  /* Warm neutrals — ink */
+  --color-ink-50: #faf9f7;
+  --color-ink-100: #f4f2ef;
+  --color-ink-200: #e7e3dd;
+  --color-ink-300: #d3cdc4;
+  --color-ink-400: #a9a199;
+  --color-ink-500: #7d756d;
+  --color-ink-600: #5c554f;
+  --color-ink-700: #443e39;
+  --color-ink-800: #2c2825;
+  --color-ink-900: #1a1715;
+
+  /* Accent + disruption — ember */
+  --color-ember-50: #fef6ed;
+  --color-ember-100: #fce9d2;
+  --color-ember-200: #f8d0a3;
+  --color-ember-400: #ec8e3c;
+  --color-ember-500: #de7220;
+  --color-ember-600: #bf5716;
+  --color-ember-800: #7c3717;
+
+  /* Semantic — success */
+  --color-success-50: #f0faf3;
+  --color-success-100: #d8f0e1;
+  --color-success-200: #b0e1c4;
+  --color-success-600: #2f8f55;
+  --color-success-700: #256f43;
+  --color-success-800: #1d5734;
+
+  /* Semantic — danger */
+  --color-danger-50: #fdf3f2;
+  --color-danger-100: #fbe0de;
+  --color-danger-200: #f5bfbb;
+  --color-danger-600: #c4463c;
+  --color-danger-700: #9e362e;
+  --color-danger-800: #7c2b25;
+
+  /* Semantic — caution */
+  --color-caution-50: #fef9ec;
+  --color-caution-100: #fcefcb;
+  --color-caution-200: #f7dd9a;
+  --color-caution-600: #b07d12;
+  --color-caution-700: #8c620f;
+  --color-caution-800: #6e4c0d;
+
+  /* Radius */
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgb(26 23 21 / 0.04), 0 1px 3px rgb(26 23 21 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(26 23 21 / 0.05), 0 4px 12px rgb(26 23 21 / 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink-50);
+  color: var(--color-ink-700);
+  font-family: var(--font-sans);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
 }

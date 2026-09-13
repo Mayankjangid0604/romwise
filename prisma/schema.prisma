@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  name           String
+  passwordHash   String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  trips          Trip[]
+  groupMembers   GroupMember[]
+}
+
+model Trip {
+  id             String        @id @default(cuid())
+  title          String
+  destination    String
+  startDate      DateTime
+  endDate        DateTime
+  budgetInr      Int
+  maxTravelers   Int           @default(20)
+  paceLevel      String        @default("balanced") // easy | balanced | full
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  creatorId      String
+  creator        User          @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  groupMembers   GroupMember[]
+  itineraryDays  ItineraryDay[]
+  packingItems   PackingItem[]
+  staySelection  StaySelection?
+}
+
+model GroupMember {
+  id             String        @id @default(cuid())
+  role           String        @default("member") // creator | member
+  preferences    String        @default("[]") // JSON array of { category, priority }
+  accessibilityNotes String    @default("") // free-text accessibility needs (e.g. "wheelchair, hearing impaired")
+  joinedAt       DateTime      @default(now())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tripId         String
+  trip           Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tripId])
+}
+
+model PackingItem {
+  id             String        @id @default(cuid())
+  label          String
+  category       String        // clothing | toiletries | electronics | documents | health | accessories | misc
+  checked        Boolean       @default(false)
+  essential      Boolean       @default(false)
+  tripId         String
+  trip           Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+model StaySelection {
+  id             String        @id @default(cuid())
+  hotelName      String
+  costPerNightInr Int
+  totalCostInr   Int
+  nights         Int
+  lat            Float
+  lng            Float
+  tripId         String        @unique
+  trip           Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+model ItineraryDay {
+  id             String          @id @default(cuid())
+  dayNumber      Int
+  date           DateTime
+  tripId         String
+  trip           Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  items          ItineraryItem[]
+
+  @@unique([tripId, dayNumber])
+}
+
+model ItineraryItem {
+  id             String        @id @default(cuid())
+  title          String
+  description    String
+  category       String        // dining | sightseeing | adventure | culture | shopping | relaxation | nightlife | nature
+  startTime      String        // HH:MM format
+  endTime        String        // HH:MM format
+  estimatedCostInr Int         @default(0)
+  reasoning      String        // why this activity, why this time slot
+  order          Int
+  itineraryDayId String
+  itineraryDay   ItineraryDay  @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)
+}
