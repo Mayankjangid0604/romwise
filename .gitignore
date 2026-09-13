@@ -51,3 +51,4 @@ next-env.d.ts
 .cursor/
 .devin/
 .claude/skills/
+.neon
