@@ -7,17 +7,9 @@ import { Button } from "@/components/ui";
 export function HotelSelectButton({
   tripId,
   hotelName,
-  costPerNightInr,
-  nights,
-  lat,
-  lng,
 }: {
   tripId: string;
   hotelName: string;
-  costPerNightInr: number;
-  nights: number;
-  lat: number;
-  lng: number;
 }) {
   const [pending, startTransition] = useTransition();
 
@@ -25,9 +17,7 @@ export function HotelSelectButton({
     <Button
       size="sm"
       onClick={() =>
-        startTransition(() =>
-          selectHotel(tripId, hotelName, costPerNightInr, nights, lat, lng),
-        )
+        startTransition(() => selectHotel(tripId, hotelName))
       }
       disabled={pending}
     >

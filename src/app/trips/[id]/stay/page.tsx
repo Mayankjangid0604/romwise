@@ -28,6 +28,7 @@ export default async function StayPage(props: {
     include: {
       groupMembers: true,
       staySelection: true,
+      destinationRef: true,
       itineraryDays: {
         include: { items: true },
       },
@@ -59,8 +60,12 @@ export default async function StayPage(props: {
   const activitySummary = computeBudgetSummary(budgetItems, trip.budgetInr);
   const remainingAfterActivities = activitySummary.remaining;
 
+  const center = trip.destinationRef
+    ? { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng }
+    : undefined;
+
   const stopCoordinates = trip.itineraryDays.flatMap((day) =>
-    day.items.map((item) => syntheticCoordinates(item.title, item.category)),
+    day.items.map((item) => syntheticCoordinates(item.title, item.category, center)),
   );
 
   const ranked = rankHotels({
@@ -171,10 +176,6 @@ export default async function StayPage(props: {
                     <HotelSelectButton
                       tripId={id}
                       hotelName={hotel.name}
-                      costPerNightInr={hotel.costPerNightInr}
-                      nights={nights}
-                      lat={hotel.lat}
-                      lng={hotel.lng}
                     />
                   )}
                 </div>

@@ -6,6 +6,8 @@ import { prisma } from "./db";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
+      id: "email-password",
+      name: "Email",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -17,10 +19,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!email || !password) return null;
 
         const user = await prisma.user.findUnique({ where: { email } });
-        if (!user) return null;
+        if (!user || !user.passwordHash) return null;
 
         const isValid = await compare(password, user.passwordHash);
         if (!isValid) return null;
+
+        return { id: user.id, email: user.email, name: user.name };
+      },
+    }),
+    Credentials({
+      id: "phone-otp",
+      name: "Phone",
+      credentials: {
+        phone: { label: "Phone", type: "tel" },
+        otpId: { label: "OTP ID", type: "text" },
+      },
+      async authorize(credentials) {
+        const phone = credentials?.phone as string | undefined;
+        const otpId = credentials?.otpId as string | undefined;
+
+        if (!phone || !otpId) return null;
+
+        const otp = await prisma.otpCode.findUnique({ where: { id: otpId } });
+        if (!otp || otp.phone !== phone || !otp.verified) return null;
+
+        const user = await prisma.user.findUnique({ where: { phone } });
+        if (!user) return null;
 
         return { id: user.id, email: user.email, name: user.name };
       },

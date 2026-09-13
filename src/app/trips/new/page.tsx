@@ -1,6 +1,8 @@
 "use client";
 
+import { Suspense } from "react";
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createTrip, type TripState } from "@/app/actions/trips";
 import {
   PageShell,
@@ -16,6 +18,16 @@ import {
 const initialState: TripState = {};
 
 export default function NewTripPage() {
+  return (
+    <Suspense>
+      <NewTripForm />
+    </Suspense>
+  );
+}
+
+function NewTripForm() {
+  const searchParams = useSearchParams();
+  const prefillDestination = searchParams.get("destination") ?? "";
   const [state, formAction, pending] = useActionState(createTrip, initialState);
 
   return (
@@ -51,6 +63,7 @@ export default function NewTripPage() {
               name="destination"
               type="text"
               required
+              defaultValue={prefillDestination}
               placeholder="e.g. Goa, India"
               invalid={!!state.fieldErrors?.destination}
             />

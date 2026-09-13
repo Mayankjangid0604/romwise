@@ -66,7 +66,17 @@ export async function acceptReplan(
   );
   if (!isMember) throw new Error("Not a member of this trip");
 
+  const tripDays = await prisma.itineraryDay.findMany({
+    where: { tripId },
+    include: { items: { select: { id: true } } },
+  });
+  const validItemIds = new Set(tripDays.flatMap((d) => d.items.map((i) => i.id)));
+
   for (const change of proposal.changes) {
+    if (!validItemIds.has(change.itemId)) {
+      throw new Error("Invalid item reference");
+    }
+
     if (change.action === "removed" || change.action === "skipped") {
       await prisma.itineraryItem.delete({
         where: { id: change.itemId },

@@ -32,6 +32,7 @@ export default async function RoutePage(props: {
     where: { id },
     include: {
       groupMembers: true,
+      destinationRef: true,
       itineraryDays: {
         orderBy: { dayNumber: "asc" },
         include: { items: { orderBy: { order: "asc" } } },
@@ -63,8 +64,12 @@ export default async function RoutePage(props: {
 
   if (!dayData) redirect(`/trips/${id}/route?day=1`);
 
+  const center = trip.destinationRef
+    ? { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng }
+    : undefined;
+
   const stops: RouteStop[] = dayData.items.map((item) => {
-    const coords = syntheticCoordinates(item.title, item.category);
+    const coords = syntheticCoordinates(item.title, item.category, center);
     return {
       id: item.id,
       title: item.title,

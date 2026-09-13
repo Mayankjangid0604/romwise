@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { DiscoveryResponse } from "@/lib/discovery";
 import {
   PageShell,
@@ -148,6 +149,15 @@ export default function DiscoveryPage() {
                       </Badge>
                     ))}
                   </div>
+                </div>
+
+                <div className="mt-5 pt-4 border-t border-ink-100">
+                  <Link
+                    href={`/trips/new?destination=${encodeURIComponent(dest.name)}`}
+                    className="inline-flex items-center gap-1.5 text-[0.875rem] font-medium text-lagoon-700 hover:text-lagoon-800 transition-colors"
+                  >
+                    Plan a trip here &rarr;
+                  </Link>
                 </div>
               </Card>
             ))}

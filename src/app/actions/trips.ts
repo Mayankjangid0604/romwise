@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { findDestination } from "@/lib/destinations";
 import { redirect } from "next/navigation";
 
 export type TripState = {
@@ -67,6 +68,8 @@ export async function createTrip(
     return { fieldErrors };
   }
 
+  const matchedDestination = await findDestination(destination);
+
   const trip = await prisma.trip.create({
     data: {
       title,
@@ -76,7 +79,9 @@ export async function createTrip(
       budgetInr,
       maxTravelers,
       paceLevel,
+      status: "draft",
       creatorId: session.user.id,
+      destinationId: matchedDestination?.id ?? null,
       groupMembers: {
         create: {
           userId: session.user.id,

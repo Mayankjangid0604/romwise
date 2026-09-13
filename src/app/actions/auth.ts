@@ -67,7 +67,7 @@ export async function signup(
 
   resetRateLimit(`signup:${ip}`);
 
-  await signIn("credentials", {
+  await signIn("email-password", {
     email,
     password,
     redirect: false,
@@ -94,7 +94,7 @@ export async function login(
   }
 
   try {
-    await signIn("credentials", {
+    await signIn("email-password", {
       email,
       password,
       redirect: false,

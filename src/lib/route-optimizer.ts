@@ -45,20 +45,23 @@ function hashString(str: string): number {
   return Math.abs(hash);
 }
 
-const CITY_CENTER_LAT = 15.4909;
-const CITY_CENTER_LNG = 73.8278;
+const DEFAULT_CENTER_LAT = 20.5937;
+const DEFAULT_CENTER_LNG = 78.9629;
 const SPREAD = 0.08;
 
 export function syntheticCoordinates(
   title: string,
   category: string,
+  center?: { lat: number; lng: number },
 ): { lat: number; lng: number } {
+  const centerLat = center?.lat ?? DEFAULT_CENTER_LAT;
+  const centerLng = center?.lng ?? DEFAULT_CENTER_LNG;
   const h = hashString(title + category);
   const latOffset = ((h % 10000) / 10000 - 0.5) * 2 * SPREAD;
   const lngOffset = (((h >> 8) % 10000) / 10000 - 0.5) * 2 * SPREAD;
   return {
-    lat: Math.round((CITY_CENTER_LAT + latOffset) * 10000) / 10000,
-    lng: Math.round((CITY_CENTER_LNG + lngOffset) * 10000) / 10000,
+    lat: Math.round((centerLat + latOffset) * 10000) / 10000,
+    lng: Math.round((centerLng + lngOffset) * 10000) / 10000,
   };
 }
 

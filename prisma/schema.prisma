@@ -9,28 +9,64 @@ datasource db {
 
 model User {
   id             String        @id @default(cuid())
-  email          String        @unique
+  email          String?       @unique
+  phone          String?       @unique
   name           String
-  passwordHash   String
+  passwordHash   String?
+  phoneVerified  Boolean       @default(false)
+  tripGenerations Int          @default(0)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   trips          Trip[]
   groupMembers   GroupMember[]
+  otpCodes       OtpCode[]
+}
+
+model OtpCode {
+  id         String   @id @default(cuid())
+  phone      String
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int      @default(0)
+  verified   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([phone, verified])
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  state       String
+  lat         Float
+  lng         Float
+  population  Int?
+  description String?
+  createdAt   DateTime @default(now())
+  trips       Trip[]
+
+  @@index([state])
 }
 
 model Trip {
-  id             String        @id @default(cuid())
+  id             String         @id @default(cuid())
   title          String
   destination    String
   startDate      DateTime
   endDate        DateTime
   budgetInr      Int
-  maxTravelers   Int           @default(20)
-  paceLevel      String        @default("balanced") // easy | balanced | full
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  maxTravelers   Int            @default(20)
+  paceLevel      String         @default("balanced")
+  status         String         @default("draft")
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   creatorId      String
-  creator        User          @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creator        User           @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  destinationId  String?
+  destinationRef Destination?   @relation(fields: [destinationId], references: [id], onDelete: SetNull)
   groupMembers   GroupMember[]
   itineraryDays  ItineraryDay[]
   packingItems   PackingItem[]
@@ -38,23 +74,34 @@ model Trip {
 }
 
 model GroupMember {
-  id             String        @id @default(cuid())
-  role           String        @default("member") // creator | member
-  preferences    String        @default("[]") // JSON array of { category, priority }
-  accessibilityNotes String    @default("") // free-text accessibility needs (e.g. "wheelchair, hearing impaired")
-  joinedAt       DateTime      @default(now())
-  userId         String
-  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tripId         String
-  trip           Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  id                 String               @id @default(cuid())
+  role               String               @default("member")
+  preferences        String               @default("[]")
+  accessibilityNotes String               @default("")
+  joinedAt           DateTime             @default(now())
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tripId             String
+  trip               Trip                 @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  travelerPreferences TravelerPreference[]
 
   @@unique([userId, tripId])
+}
+
+model TravelerPreference {
+  id             String      @id @default(cuid())
+  category       String
+  priority       String
+  groupMemberId  String
+  groupMember    GroupMember  @relation(fields: [groupMemberId], references: [id], onDelete: Cascade)
+
+  @@unique([groupMemberId, category])
 }
 
 model PackingItem {
   id             String        @id @default(cuid())
   label          String
-  category       String        // clothing | toiletries | electronics | documents | health | accessories | misc
+  category       String
   checked        Boolean       @default(false)
   essential      Boolean       @default(false)
   tripId         String
@@ -88,11 +135,11 @@ model ItineraryItem {
   id             String        @id @default(cuid())
   title          String
   description    String
-  category       String        // dining | sightseeing | adventure | culture | shopping | relaxation | nightlife | nature
-  startTime      String        // HH:MM format
-  endTime        String        // HH:MM format
+  category       String
+  startTime      String
+  endTime        String
   estimatedCostInr Int         @default(0)
-  reasoning      String        // why this activity, why this time slot
+  reasoning      String
   order          Int
   itineraryDayId String
   itineraryDay   ItineraryDay  @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)

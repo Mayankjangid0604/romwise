@@ -77,12 +77,88 @@ describe("security", () => {
         const source = fs.readFileSync(path.join(actionsDir, file), "utf-8");
         if (!source.includes('"use server"')) continue;
         if (!source.includes("prisma.")) continue;
-        // auth.ts uses prisma but handles its own auth flow
-        if (file === "auth.ts") continue;
+        if (file === "auth.ts" || file === "phone-auth.ts") continue;
 
         expect(source).toContain("await auth()");
         expect(source).toContain("session.user");
       }
+    });
+  });
+
+  describe("API route authentication", () => {
+    it("discovery route checks auth", () => {
+      const source = fs.readFileSync(
+        path.resolve(__dirname, "../../app/api/discovery/route.ts"),
+        "utf-8",
+      );
+      expect(source).toContain("await auth()");
+      expect(source).toContain("401");
+    });
+
+    it("group-alignment route checks auth", () => {
+      const source = fs.readFileSync(
+        path.resolve(__dirname, "../../app/api/group-alignment/route.ts"),
+        "utf-8",
+      );
+      expect(source).toContain("await auth()");
+      expect(source).toContain("401");
+    });
+  });
+
+  describe("acceptReplan item validation", () => {
+    it("validates item IDs belong to the trip", () => {
+      const source = fs.readFileSync(
+        path.resolve(__dirname, "../../app/actions/replan.ts"),
+        "utf-8",
+      );
+      expect(source).toContain("validItemIds");
+      expect(source).toContain("Invalid item reference");
+    });
+  });
+
+  describe("selectHotel server validation", () => {
+    it("does not accept price or coordinates from client", () => {
+      const source = fs.readFileSync(
+        path.resolve(__dirname, "../../app/actions/stay.ts"),
+        "utf-8",
+      );
+      expect(source).toContain("SAMPLE_HOTELS.find");
+      expect(source).not.toContain("costPerNightInr: number,");
+      expect(source).not.toContain("lat: number,");
+    });
+  });
+
+  describe("middleware protection", () => {
+    it("middleware.ts exists and exports auth", () => {
+      const source = fs.readFileSync(
+        path.resolve(__dirname, "../../middleware.ts"),
+        "utf-8",
+      );
+      expect(source).toContain("auth");
+      expect(source).toContain("matcher");
+    });
+
+    it("middleware covers protected routes", () => {
+      const source = fs.readFileSync(
+        path.resolve(__dirname, "../../middleware.ts"),
+        "utf-8",
+      );
+      expect(source).toContain("/dashboard");
+      expect(source).toContain("/trips");
+      expect(source).toContain("/api/discovery");
+      expect(source).toContain("/api/group-alignment");
+    });
+  });
+
+  describe("OTP code security", () => {
+    it("OTP codes are hashed, not stored in plaintext", () => {
+      const source = fs.readFileSync(
+        path.resolve(__dirname, "../otp.ts"),
+        "utf-8",
+      );
+      expect(source).toContain("codeHash");
+      expect(source).toContain("hash(code,");
+      expect(source).toContain("compare(code,");
     });
   });
 

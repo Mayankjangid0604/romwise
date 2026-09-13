@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 import {
   analyzeGroupAlignment,
   validateGroupAlignmentInput,
@@ -7,6 +8,11 @@ import { ValidationError } from "@/lib/discovery";
 import { GeminiConfigError, GeminiProviderError, GeminiSchemaError } from "@/lib/gemini";
 
 export async function POST(request: NextRequest) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   let body: unknown;
   try {
     body = await request.json();
