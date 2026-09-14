@@ -63,24 +63,31 @@ model District {
 // Examples: Jaipur, Rishikesh, Goa, Manali, Havelock Island
 
 model TravelDestination {
-  id          String             @id @default(cuid())
-  name        String
-  slug        String             @unique
-  state       String
-  country     String             @default("India")
-  lat         Float
-  lng         Float
-  description String?
+  id              String             @id @default(cuid())
+  name            String
+  slug            String             @unique
+  state           String
+  country         String             @default("India")
+  lat             Float
+  lng             Float
+  description     String?
+  // city | beach | mountain | heritage | hill_station | wildlife | island | pilgrimage | other
+  destinationType String?
   // Optional link to the administrative district this destination sits within
-  districtId  String?
-  district    District?          @relation(fields: [districtId], references: [id], onDelete: SetNull)
-  aliases     DestinationAlias[]
-  places      Place[]
-  trips       Trip[]
+  districtId      String?
+  district        District?          @relation(fields: [districtId], references: [id], onDelete: SetNull)
+  // Provenance
+  sourceUrl       String?
+  sourceName      String?
+  // 0.0–1.0: overall confidence in destination record
+  confidence      Float?
+  aliases         DestinationAlias[]
+  places          Place[]
+  trips           Trip[]
   // seed | verified | needs_review | deprecated
-  dataStatus  String             @default("seed")
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  dataStatus      String             @default("seed")
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
 
   @@index([state])
 }
@@ -98,40 +105,80 @@ model DestinationAlias {
 // These are the unit of truth for itinerary generation.
 
 model Place {
-  id               String            @id @default(cuid())
-  name             String
-  slug             String            @unique
-  destinationId    String
-  destination      TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-  area             String?
-  description      String?
+  id                  String            @id @default(cuid())
+  name                String
+  slug                String            @unique
+  destinationId       String
+  destination         TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  area                String?
+  description         String?
+  address             String?
   // Must be one of PLACE_CATEGORIES in src/lib/categories.ts
-  category         String
-  lat              Float
-  lng              Float
-  typicalCostInr   Int?
-  durationMinutes  Int?
+  category            String
+  lat                 Float
+  lng                 Float
+  // Cost fields
+  typicalCostInr      Int?
+  costMinInr          Int?
+  costMaxInr          Int?
+  // free | known_range | unknown | estimated | verified
+  costStatus          String?
+  durationMinutes     Int?
   // "HH:MM" format, null if unknown
-  openingTime      String?
-  closingTime      String?
+  openingTime         String?
+  closingTime         String?
+  // e.g. "Mon-Sat", "Tue-Sun", "daily"
+  openingDays         String?
+  // verified | partial | unknown
+  openingHoursStatus  String?
   // e.g. "Oct-Mar" or "year-round"
-  bestSeason       String?
-  vibes            String?
+  bestSeason          String?
+  // verified | partial | unknown
+  seasonStatus        String?
+  vibes               String?
+  // e.g. "couples,families,photographers"
+  bestFor             String?
+  // 1–5 (1 = very easy, 5 = very demanding)
+  fatigueCost         Int?
   // 1–5 (1 = not accessible, 5 = fully accessible), null if unknown
-  accessibilityScore Int?
+  accessibilityScore  Int?
   // 0–100
-  popularityScore  Int               @default(50)
-  hiddenGem        Boolean           @default(false)
+  popularityScore     Int               @default(50)
+  hiddenGem           Boolean           @default(false)
+  // Provenance
+  sourceUrl           String?
+  sourceName          String?
+  sourceRecordId      String?
+  // 0.0–1.0
+  confidence          Float?
+  lastVerifiedAt      DateTime?
   // seed | verified | needs_review | deprecated
-  dataStatus       String            @default("seed")
-  // curated | ai_enriched | imported | official | fixture
-  sourceType       String            @default("curated")
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  itineraryItems   ItineraryItem[]
+  dataStatus          String            @default("seed")
+  // curated | ai_enriched | imported | official | fixture | osm | wikidata
+  sourceType          String            @default("curated")
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  itineraryItems      ItineraryItem[]
 
   @@index([destinationId])
   @@index([category])
+  @@index([dataStatus])
+}
+
+// ── Data source registry ───────────────────────────────────────────────────────
+// Tracks external sources used during data ingestion.
+
+model DataSource {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  // official | osm | wikidata | curated | community | api
+  type        String
+  url         String?
+  license     String?
+  attribution String?
+  notes       String?
+  accessedAt  DateTime?
+  createdAt   DateTime  @default(now())
 }
 
 // ── Trips ─────────────────────────────────────────────────────────────────────
