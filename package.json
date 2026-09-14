@@ -12,7 +12,9 @@
     "postinstall": "prisma skills sync || exit 0",
     "db:seed": "npx tsx prisma/seed.ts",
     "db:seed:districts": "npx tsx prisma/seed-districts.ts",
-    "db:seed:fixture": "npx tsx prisma/seed-fixture.ts"
+    "db:seed:fixture": "npx tsx prisma/seed-fixture.ts",
+    "data:validate": "npx tsx data/validate.ts",
+    "data:import": "npx tsx data/import.ts"
   },
   "dependencies": {
     "@google/genai": "^2.22.0",
