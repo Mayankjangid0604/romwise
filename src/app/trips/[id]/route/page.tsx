@@ -35,7 +35,7 @@ export default async function RoutePage(props: {
       destinationRef: true,
       itineraryDays: {
         orderBy: { dayNumber: "asc" },
-        include: { items: { orderBy: { order: "asc" } } },
+        include: { items: { orderBy: { order: "asc" }, include: { place: true } } },
       },
     },
   });
@@ -69,7 +69,11 @@ export default async function RoutePage(props: {
     : undefined;
 
   const stops: RouteStop[] = dayData.items.map((item) => {
-    const coords = syntheticCoordinates(item.title, item.category, center);
+    const realCoords =
+      item.place?.lat != null && item.place?.lng != null
+        ? { lat: item.place.lat, lng: item.place.lng }
+        : null;
+    const coords = realCoords ?? syntheticCoordinates(item.title, item.category, center);
     return {
       id: item.id,
       title: item.title,

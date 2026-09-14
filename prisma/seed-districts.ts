@@ -1,3 +1,12 @@
+/**
+ * Seeds the District table from the india-districts CSV.
+ *
+ * Districts are administrative geography — they are NOT tourist destinations.
+ * See prisma/seed-fixture.ts for travel destinations + places.
+ *
+ * Run: npm run db:seed:districts
+ */
+
 import { PrismaClient } from "@prisma/client";
 import * as fs from "fs";
 import * as path from "path";
@@ -42,8 +51,7 @@ async function main() {
 
   const csv = fs.readFileSync(csvPath, "utf-8");
   const lines = csv.split("\n").filter((l) => l.trim());
-  const header = lines[0];
-  const rows = lines.slice(1);
+  const rows = lines.slice(1); // skip header
 
   console.log(`Found ${rows.length} districts to seed`);
 
@@ -52,11 +60,13 @@ async function main() {
 
   for (const row of rows) {
     const fields = parseCsvLine(row);
+    // Columns: district_name, state, headquarters, latitude, longitude, population_2011_census, data_source, last_verified_date
     const name = fields[0]?.trim();
     const state = fields[1]?.trim();
     const lat = parseFloat(fields[3]);
     const lng = parseFloat(fields[4]);
     const population = fields[5] ? parseInt(fields[5], 10) : null;
+    const dataSource = fields[6]?.trim() || null;
 
     if (!name || !state || isNaN(lat) || isNaN(lng)) {
       skipped++;
@@ -73,18 +83,20 @@ async function main() {
         state,
         lat,
         lng,
-        population: isNaN(population ?? NaN) ? null : population,
+        population: population && !isNaN(population) ? population : null,
+        dataSource,
       },
       update: {
         lat,
         lng,
-        population: isNaN(population ?? NaN) ? null : population,
+        population: population && !isNaN(population) ? population : null,
+        dataSource,
       },
     });
     created++;
   }
 
-  console.log(`Seeded ${created} destinations (${skipped} skipped)`);
+  console.log(`Seeded ${created} districts (${skipped} skipped)`);
 }
 
 main()

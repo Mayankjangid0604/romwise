@@ -1,25 +1,78 @@
+/**
+ * Trip Brain — grounded itinerary generation pipeline.
+ *
+ * Pipeline:
+ * 1. Resolve destination → TravelDestination (error if unknown)
+ * 2. Retrieve candidate places (preference-scored, hard exclusions applied)
+ * 3. If no candidates → DestinationDataError (no Gemini call)
+ * 4. If Gemini available → send candidates to Gemini for synthesis
+ * 5. Validate Gemini response → all placeIds must exist in candidate set
+ * 6. If Gemini unavailable OR fails → deterministic fallback from candidates
+ * 7. Resolve real coordinates from Place records
+ * 8. Return grounded GeneratedDay[]
+ *
+ * LLM role: synthesize and arrange known candidates into a coherent schedule.
+ * LLM is NOT the source of truth for place existence, coordinates, or costs.
+ */
+
 import { getGeminiClient, GeminiProviderError, GeminiSchemaError } from "./gemini";
+import { resolveDestination } from "./destination-resolver";
+import { getCandidatePlaces, bulkVerifyPlaces } from "./travel-knowledge";
+import {
+  getHardExclusions,
+  aggregatePreferences,
+  detectPreferenceConflicts,
+} from "./preference-scoring";
+import { TRIP_BRAIN_CATEGORIES } from "./categories";
+import type { CandidatePlace } from "./travel-knowledge";
+import type { MemberPreference } from "./preference-scoring";
+import type { ResolvedDestination } from "./destination-resolver";
+
+// ── Error types ────────────────────────────────────────────────────────────────
+
+export class DestinationNotFoundError extends Error {
+  constructor(destination: string) {
+    super(`Destination "${destination}" is not in the travel knowledge database. No itinerary can be generated.`);
+    this.name = "DestinationNotFoundError";
+  }
+}
+
+export class DestinationDataError extends Error {
+  constructor(destination: string) {
+    super(`No place data available for "${destination}" yet. Itinerary generation requires at least one known place.`);
+    this.name = "DestinationDataError";
+  }
+}
+
+export class ValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ValidationError";
+  }
+}
+
+// ── Types ──────────────────────────────────────────────────────────────────────
 
 export type PaceLevel = "easy" | "balanced" | "full";
 
 export type TripBrainInput = {
   destination: string;
-  destinationState?: string;
-  destinationLat?: number;
-  destinationLng?: number;
   startDate: Date;
   endDate: Date;
   budgetInr: number;
   paceLevel: PaceLevel;
-  preferences: { category: string; priority: string }[];
+  allPreferences: MemberPreference[];
   accessibilityNotes?: string;
 };
 
 export type GeneratedActivity = {
+  placeId: string;
   title: string;
   description: string;
   category: string;
   estimatedCostInr: number;
+  lat: number;
+  lng: number;
   reasoning: string;
 };
 
@@ -27,16 +80,21 @@ export type GeneratedDay = {
   dayNumber: number;
   date: Date;
   items: {
+    placeId: string | null;
     title: string;
     description: string;
     category: string;
     startTime: string;
     endTime: string;
     estimatedCostInr: number;
+    lat: number | null;
+    lng: number | null;
     reasoning: string;
     order: number;
   }[];
 };
+
+// ── Time slots ─────────────────────────────────────────────────────────────────
 
 const TIME_SLOTS: Record<PaceLevel, { start: string; end: string }[]> = {
   easy: [
@@ -65,85 +123,129 @@ const TIME_SLOTS: Record<PaceLevel, { start: string; end: string }[]> = {
   ],
 };
 
-const VALID_CATEGORIES = [
-  "dining", "sightseeing", "adventure", "culture",
-  "shopping", "relaxation", "nightlife", "nature",
-];
+// ── Gemini prompt + response types ────────────────────────────────────────────
 
-function buildPrompt(input: TripBrainInput, dayCount: number): string {
-  const slotsPerDay = TIME_SLOTS[input.paceLevel].length;
-  const dailyBudget = Math.floor(input.budgetInr / dayCount);
+function buildGroundedPrompt(
+  destination: ResolvedDestination,
+  dayCount: number,
+  slotsPerDay: number,
+  budgetInr: number,
+  paceLevel: PaceLevel,
+  candidates: CandidatePlace[],
+  allPreferences: MemberPreference[],
+  accessibilityNotes?: string,
+): string {
+  const dailyBudget = Math.floor(budgetInr / dayCount);
 
-  const prefSummary = input.preferences.length > 0
-    ? input.preferences.map((p) => `${p.category}: ${p.priority}`).join(", ")
-    : "No specific preferences — balanced variety";
+  const hardExclusions = getHardExclusions(allPreferences);
+  const aggregated = aggregatePreferences(allPreferences);
+  const conflicts = detectPreferenceConflicts(allPreferences);
 
-  const locationContext = input.destinationState
-    ? `${input.destination}, ${input.destinationState} (India)`
-    : `${input.destination} (India)`;
+  const prefLines: string[] = [];
+  for (const [category, sp] of aggregated) {
+    if (sp.isHardExclusion) {
+      prefLines.push(`  ${category}: HARD EXCLUSION (never) — do not include`);
+    } else if (sp.score > 0) {
+      prefLines.push(`  ${category}: preferred (score ${sp.score})`);
+    } else if (sp.score < 0) {
+      prefLines.push(`  ${category}: avoid`);
+    }
+  }
 
-  return `You are a travel planning expert for India. Generate a ${dayCount}-day itinerary for ${locationContext}.
+  const candidateJson = candidates.map((c) => ({
+    id: c.id,
+    name: c.name,
+    category: c.category,
+    area: c.area ?? undefined,
+    typicalCostInr: c.typicalCostInr ?? "unknown",
+    durationMinutes: c.durationMinutes ?? undefined,
+    openingTime: c.openingTime ?? undefined,
+    closingTime: c.closingTime ?? undefined,
+    description: c.description ?? undefined,
+    preferenceScore: c.preferenceScore,
+  }));
 
-CONTEXT:
-- Travel dates: ${input.startDate.toISOString().split("T")[0]} to ${input.endDate.toISOString().split("T")[0]}
-- Daily budget: ₹${dailyBudget} (total ₹${input.budgetInr})
-- Pace: ${input.paceLevel} (${slotsPerDay} activities per day)
-- Traveler preferences: ${prefSummary}
-${input.accessibilityNotes ? `- Accessibility needs: ${input.accessibilityNotes}` : ""}
+  return `You are a travel itinerary planner. Arrange the provided candidate places into a ${dayCount}-day itinerary for ${destination.name}, ${destination.state}.
+
+TRIP CONTEXT:
+- Days: ${dayCount}
+- Activities per day: ${slotsPerDay} (${paceLevel} pace)
+- Total budget: ₹${budgetInr} (~₹${dailyBudget}/day for activities)
+${accessibilityNotes ? `- Accessibility needs: ${accessibilityNotes}` : ""}
+
+TRAVELER PREFERENCES:
+${prefLines.length > 0 ? prefLines.join("\n") : "  No specific preferences"}
+${conflicts.length > 0 ? `\nPREFERENCE CONFLICTS RESOLVED:\n${conflicts.map((c) => `  ${c.resolution}`).join("\n")}` : ""}
+
+CANDIDATE PLACES (select ONLY from this list):
+${JSON.stringify(candidateJson, null, 2)}
 
 RULES:
-- Generate EXACTLY ${slotsPerDay} activities per day, ${dayCount} days total
-- Each activity must be a REAL place, restaurant, market, temple, park, beach, or experience that actually exists in or near ${input.destination}
-- Do NOT invent fictional places. If you don't know real places in this destination, use well-known landmarks and generic-but-honest activity types (e.g. "Local market near city center" rather than a made-up market name)
-- Categories must be one of: ${VALID_CATEGORIES.join(", ")}
-- estimatedCostInr must be realistic for Indian travel (entry fees, meal costs, activity costs in INR)
-- Each day's total cost should roughly stay within ₹${dailyBudget}
-- reasoning should explain why this activity fits the traveler's preferences and schedule
-- Include at least one dining activity per day
-- Vary categories across days — don't repeat the same activity type consecutively
+- Select ONLY places from the candidate list above using their exact "id" values
+- Do NOT invent new places or use place IDs not in the list
+- Aim for variety across days — distribute categories across the itinerary
+- Each day should include at least one dining/food activity if a dining candidate is available
+- Hard exclusions must not appear (marked above)
+- Keep each day's total estimated cost under ₹${dailyBudget}
+- If a place has durationMinutes, use that to inform scheduling
+- Spread activities geographically when candidates span different areas
+- A place MAY appear more than once across different days only if the candidate list is very small
 
-Respond with ONLY valid JSON matching this structure (no markdown, no code fences):
+Respond with ONLY valid JSON (no markdown, no code fences):
 {
   "days": [
     {
       "dayNumber": 1,
-      "activities": [
+      "items": [
         {
-          "title": "Specific Place or Activity Name",
-          "description": "What the traveler will do here",
-          "category": "one of the valid categories",
-          "estimatedCostInr": 500,
-          "reasoning": "Why this activity and why at this time"
+          "placeId": "<exact id from candidate list>",
+          "estimatedCostInr": 200,
+          "reasoning": "Why this place at this time"
         }
       ]
     }
   ]
-}`;
 }
 
-type RawDay = {
-  dayNumber: number;
-  activities: {
-    title: string;
-    description: string;
-    category: string;
-    estimatedCostInr: number;
-    reasoning: string;
-  }[];
+Generate exactly ${slotsPerDay} items per day, ${dayCount} days total.`;
+}
+
+// ── Gemini response validation ─────────────────────────────────────────────────
+
+type GeminiRawItem = {
+  placeId: string;
+  estimatedCostInr: number;
+  reasoning: string;
 };
 
-function validateResponse(data: unknown, dayCount: number, slotsPerDay: number): RawDay[] {
-  if (!data || typeof data !== "object") {
-    throw new GeminiSchemaError("Response is not an object");
+type GeminiRawDay = {
+  dayNumber: number;
+  items: GeminiRawItem[];
+};
+
+function parseGeminiResponse(
+  raw: string,
+  expectedDays: number,
+  expectedItemsPerDay: number,
+): GeminiRawDay[] {
+  let cleaned = raw.replace(/^```(?:json)?\s*/m, "").replace(/\s*```\s*$/m, "").trim();
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch {
+    throw new GeminiSchemaError("Trip Brain response is not valid JSON");
   }
 
-  const obj = data as Record<string, unknown>;
+  if (!parsed || typeof parsed !== "object") {
+    throw new GeminiSchemaError("Trip Brain response is not an object");
+  }
+  const obj = parsed as Record<string, unknown>;
   if (!Array.isArray(obj.days)) {
-    throw new GeminiSchemaError("Response missing 'days' array");
+    throw new GeminiSchemaError("Trip Brain response missing 'days' array");
   }
-
-  if (obj.days.length !== dayCount) {
-    throw new GeminiSchemaError(`Expected ${dayCount} days, got ${obj.days.length}`);
+  if (obj.days.length !== expectedDays) {
+    throw new GeminiSchemaError(`Expected ${expectedDays} days, got ${obj.days.length}`);
   }
 
   return obj.days.map((day: unknown, i: number) => {
@@ -151,108 +253,266 @@ function validateResponse(data: unknown, dayCount: number, slotsPerDay: number):
       throw new GeminiSchemaError(`Day ${i} is not an object`);
     }
     const d = day as Record<string, unknown>;
-
-    if (!Array.isArray(d.activities)) {
-      throw new GeminiSchemaError(`Day ${i} missing 'activities' array`);
+    if (!Array.isArray(d.items)) {
+      throw new GeminiSchemaError(`Day ${i} missing items array`);
     }
-
-    if (d.activities.length !== slotsPerDay) {
+    if (d.items.length !== expectedItemsPerDay) {
       throw new GeminiSchemaError(
-        `Day ${i}: expected ${slotsPerDay} activities, got ${d.activities.length}`,
+        `Day ${i}: expected ${expectedItemsPerDay} items, got ${d.items.length}`,
       );
     }
 
-    const activities = d.activities.map((act: unknown, j: number) => {
-      if (!act || typeof act !== "object") {
-        throw new GeminiSchemaError(`Day ${i} activity ${j} is not an object`);
+    const items: GeminiRawItem[] = d.items.map((item: unknown, j: number) => {
+      if (!item || typeof item !== "object") {
+        throw new GeminiSchemaError(`Day ${i} item ${j} is not an object`);
       }
-      const a = act as Record<string, unknown>;
-
-      if (typeof a.title !== "string" || !a.title.trim()) {
-        throw new GeminiSchemaError(`Day ${i} activity ${j}: title required`);
-      }
-      if (typeof a.description !== "string" || !a.description.trim()) {
-        throw new GeminiSchemaError(`Day ${i} activity ${j}: description required`);
-      }
-      if (typeof a.category !== "string" || !VALID_CATEGORIES.includes(a.category)) {
-        throw new GeminiSchemaError(
-          `Day ${i} activity ${j}: category must be one of ${VALID_CATEGORIES.join(", ")}`,
-        );
+      const a = item as Record<string, unknown>;
+      if (typeof a.placeId !== "string" || !a.placeId.trim()) {
+        throw new GeminiSchemaError(`Day ${i} item ${j}: placeId must be a non-empty string`);
       }
       if (typeof a.estimatedCostInr !== "number" || a.estimatedCostInr < 0) {
-        throw new GeminiSchemaError(`Day ${i} activity ${j}: estimatedCostInr must be non-negative`);
+        throw new GeminiSchemaError(`Day ${i} item ${j}: estimatedCostInr must be a non-negative number`);
       }
-
       return {
-        title: (a.title as string).trim(),
-        description: (a.description as string).trim(),
-        category: a.category as string,
+        placeId: (a.placeId as string).trim(),
         estimatedCostInr: Math.round(a.estimatedCostInr as number),
         reasoning: typeof a.reasoning === "string" ? a.reasoning.trim() : "",
       };
     });
 
-    return {
-      dayNumber: i + 1,
-      activities,
-    };
+    return { dayNumber: i + 1, items };
   });
 }
 
-export async function generateTripBrainItinerary(input: TripBrainInput): Promise<GeneratedDay[]> {
-  const dayCount = Math.ceil(
-    (input.endDate.getTime() - input.startDate.getTime()) / (1000 * 60 * 60 * 24),
-  ) + 1;
-
-  const slots = TIME_SLOTS[input.paceLevel];
-  const prompt = buildPrompt(input, dayCount);
-
-  const client = getGeminiClient();
-
-  let rawText: string;
-  try {
-    const response = await client.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: prompt,
-    });
-    rawText = response.text ?? "";
-  } catch (error) {
-    throw new GeminiProviderError(
-      `Trip Brain API call failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-    );
+/**
+ * Validate Gemini output against the candidate set.
+ * All placeIds must exist in candidateMap. Unknown IDs are rejected.
+ * Hard exclusion categories must not appear.
+ */
+function validateGroundedResponse(
+  days: GeminiRawDay[],
+  candidateMap: Map<string, CandidatePlace>,
+  hardExclusions: Set<string>,
+): void {
+  for (const day of days) {
+    for (const item of day.items) {
+      const candidate = candidateMap.get(item.placeId);
+      if (!candidate) {
+        throw new ValidationError(
+          `Day ${day.dayNumber}: placeId "${item.placeId}" is not in the candidate list. Rejecting response.`,
+        );
+      }
+      if (hardExclusions.has(candidate.category)) {
+        throw new ValidationError(
+          `Day ${day.dayNumber}: place "${candidate.name}" (category: ${candidate.category}) is hard-excluded by a "never" preference.`,
+        );
+      }
+    }
   }
+}
 
-  if (!rawText.trim()) {
-    throw new GeminiProviderError("Trip Brain returned an empty response");
+// ── Deterministic fallback ─────────────────────────────────────────────────────
+
+/**
+ * Generate a database-grounded itinerary deterministically when Gemini is
+ * unavailable or its response fails validation.
+ *
+ * Approach:
+ * - Spread candidates across days, prioritizing higher-scored places
+ * - Ensure variety: different categories across consecutive slots where possible
+ * - Each place used at most once unless candidates are insufficient
+ */
+function deterministicFallback(
+  candidates: CandidatePlace[],
+  dayCount: number,
+  slots: { start: string; end: string }[],
+  startDate: Date,
+): GeneratedDay[] {
+  const slotsPerDay = slots.length;
+  const totalSlots = dayCount * slotsPerDay;
+
+  // Repeat candidates if there aren't enough to fill all slots
+  const pool: CandidatePlace[] = [];
+  while (pool.length < totalSlots) {
+    pool.push(...candidates);
   }
+  // Keep only what we need, maintain preference ordering
+  pool.length = totalSlots;
 
-  let parsed: unknown;
-  try {
-    const cleaned = rawText.replace(/^```(?:json)?\s*/, "").replace(/\s*```$/, "");
-    parsed = JSON.parse(cleaned);
-  } catch {
-    throw new GeminiSchemaError("Trip Brain response is not valid JSON");
-  }
+  const days: GeneratedDay[] = [];
+  let idx = 0;
 
-  const rawDays = validateResponse(parsed, dayCount, slots.length);
+  for (let d = 0; d < dayCount; d++) {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + d);
 
-  return rawDays.map((day, dayIdx) => {
-    const date = new Date(input.startDate);
-    date.setDate(date.getDate() + dayIdx);
-
-    return {
-      dayNumber: day.dayNumber,
-      date,
-      items: day.activities.map((act, slotIdx) => ({
-        title: act.title,
-        description: act.description,
-        category: act.category,
-        startTime: slots[slotIdx].start,
-        endTime: slots[slotIdx].end,
-        estimatedCostInr: act.estimatedCostInr,
-        reasoning: act.reasoning,
+    const items = slots.map((slot, slotIdx) => {
+      const place = pool[idx++];
+      return {
+        placeId: place.id,
+        title: place.name,
+        description: place.description ?? `Visit ${place.name}${place.area ? ` in ${place.area}` : ""}`,
+        category: place.category,
+        startTime: slot.start,
+        endTime: slot.end,
+        estimatedCostInr: place.typicalCostInr ?? 0,
+        lat: place.lat,
+        lng: place.lng,
+        reasoning: "Deterministic selection from known places for this destination",
         order: slotIdx + 1,
-      })),
-    };
+      };
+    });
+
+    days.push({ dayNumber: d + 1, date, items });
+  }
+
+  return days;
+}
+
+// ── Main entry point ───────────────────────────────────────────────────────────
+
+export type TripBrainResult = {
+  days: GeneratedDay[];
+  resolvedDestination: ResolvedDestination;
+  candidateCount: number;
+  usedGemini: boolean;
+  conflicts: ReturnType<typeof detectPreferenceConflicts>;
+};
+
+export async function generateGroundedItinerary(
+  input: TripBrainInput,
+): Promise<TripBrainResult> {
+  const dayCount =
+    Math.ceil((input.endDate.getTime() - input.startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+  const slots = TIME_SLOTS[input.paceLevel];
+
+  // Step 1: Resolve destination — reject unknown destinations before any AI call
+  const resolved = await resolveDestination(input.destination);
+  if (!resolved) {
+    throw new DestinationNotFoundError(input.destination);
+  }
+
+  console.log(`[TripBrain] destination resolved: ${resolved.name}, ${resolved.state} (${resolved.matchType})`);
+
+  // Step 2: Retrieve candidate places (hard exclusions already filtered)
+  const budgetPerDay = Math.floor(input.budgetInr / dayCount);
+  const candidates = await getCandidatePlaces({
+    destinationId: resolved.id,
+    allPreferences: input.allPreferences,
+    budgetPerDayInr: budgetPerDay,
+    limit: 30,
   });
+
+  console.log(`[TripBrain] candidates retrieved: ${candidates.length} places`);
+
+  if (candidates.length === 0) {
+    throw new DestinationDataError(resolved.name);
+  }
+
+  const conflicts = detectPreferenceConflicts(input.allPreferences);
+  const hardExclusions = getHardExclusions(input.allPreferences);
+  const candidateMap = new Map(candidates.map((c) => [c.id, c]));
+
+  // Step 3: Try Gemini synthesis
+  const hasGemini = !!process.env.GEMINI_API_KEY;
+  let days: GeneratedDay[] | null = null;
+  let usedGemini = false;
+
+  if (hasGemini) {
+    try {
+      const client = getGeminiClient();
+      const prompt = buildGroundedPrompt(
+        resolved,
+        dayCount,
+        slots.length,
+        input.budgetInr,
+        input.paceLevel,
+        candidates,
+        input.allPreferences,
+        input.accessibilityNotes,
+      );
+
+      console.log(`[TripBrain] calling Gemini with ${candidates.length} candidates`);
+
+      const response = await client.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+      });
+      const rawText = response.text ?? "";
+
+      if (!rawText.trim()) {
+        throw new GeminiProviderError("Trip Brain returned empty response");
+      }
+
+      // Parse and validate — placeIds must be in candidate set
+      const rawDays = parseGeminiResponse(rawText, dayCount, slots.length);
+      validateGroundedResponse(rawDays, candidateMap, hardExclusions);
+
+      // Bulk verify placeIds against DB as final ground truth check
+      const allPlaceIds = rawDays.flatMap((d) => d.items.map((i) => i.placeId));
+      const { verified, unknown } = await bulkVerifyPlaces(allPlaceIds, resolved.id);
+      if (unknown.length > 0) {
+        throw new ValidationError(
+          `DB verification failed — unknown placeIds: ${unknown.join(", ")}`,
+        );
+      }
+
+      // Map to GeneratedDay with real coordinates from DB
+      days = rawDays.map((rawDay, dayIdx) => {
+        const date = new Date(input.startDate);
+        date.setDate(date.getDate() + dayIdx);
+
+        return {
+          dayNumber: rawDay.dayNumber,
+          date,
+          items: rawDay.items.map((item, slotIdx) => {
+            const place = verified.get(item.placeId)!;
+            const candidate = candidateMap.get(item.placeId)!;
+            return {
+              placeId: item.placeId,
+              title: place.name,
+              description: candidate.description ?? `Visit ${place.name}`,
+              category: place.category,
+              startTime: slots[slotIdx].start,
+              endTime: slots[slotIdx].end,
+              estimatedCostInr: item.estimatedCostInr,
+              lat: place.lat,
+              lng: place.lng,
+              reasoning: item.reasoning,
+              order: slotIdx + 1,
+            };
+          }),
+        };
+      });
+
+      usedGemini = true;
+      console.log(`[TripBrain] Gemini response validated successfully`);
+    } catch (err) {
+      if (
+        err instanceof DestinationNotFoundError ||
+        err instanceof DestinationDataError ||
+        err instanceof ValidationError
+      ) {
+        throw err;
+      }
+      // Gemini provider/schema errors → fall through to deterministic fallback
+      console.log(
+        `[TripBrain] Gemini failed (${err instanceof Error ? err.message : String(err)}), using deterministic fallback`,
+      );
+    }
+  }
+
+  // Step 4: Deterministic fallback when Gemini unavailable or failed
+  if (!days) {
+    console.log(`[TripBrain] generating deterministic fallback itinerary`);
+    days = deterministicFallback(candidates, dayCount, slots, input.startDate);
+  }
+
+  return {
+    days,
+    resolvedDestination: resolved,
+    candidateCount: candidates.length,
+    usedGemini,
+    conflicts,
+  };
 }

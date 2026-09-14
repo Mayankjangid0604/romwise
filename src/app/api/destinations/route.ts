@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   const destinations = await searchDestinations(q, 8);
 
   return NextResponse.json({
-    destinations: destinations.map((d) => ({
+    destinations: destinations.map((d: { id: string; name: string; state: string; lat: number; lng: number }) => ({
       id: d.id,
       name: d.name,
       state: d.state,
