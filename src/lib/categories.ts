@@ -57,7 +57,7 @@ export const PLACE_TO_PREFERENCE_CATEGORY: Partial<Record<PlaceCategory, Prefere
   photography: "sightseeing",
   spiritual: "culture",
   family: "sightseeing",
-  local_experience: "dining",
+  local_experience: "culture",
 };
 
 // Categories that are valid in Gemini Trip Brain output (superset of preference categories).

@@ -129,18 +129,18 @@ describe("security", () => {
   });
 
   describe("middleware protection", () => {
-    it("middleware.ts exists and exports auth", () => {
+    it("proxy.ts exists and validates sessions", () => {
       const source = fs.readFileSync(
-        path.resolve(__dirname, "../../middleware.ts"),
+        path.resolve(__dirname, "../../proxy.ts"),
         "utf-8",
       );
-      expect(source).toContain("auth");
+      expect(source).toContain("isValidToken");
       expect(source).toContain("matcher");
     });
 
     it("middleware covers protected routes", () => {
       const source = fs.readFileSync(
-        path.resolve(__dirname, "../../middleware.ts"),
+        path.resolve(__dirname, "../../proxy.ts"),
         "utf-8",
       );
       expect(source).toContain("/dashboard");

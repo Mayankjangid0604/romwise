@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { rankHotels } from "@/lib/stay";
-import { syntheticCoordinates } from "@/lib/route-optimizer";
 import { computeBudgetSummary, type BudgetItem } from "@/lib/budget";
 import { HotelSelectButton, HotelRemoveButton } from "./stay-actions";
 import {
@@ -64,9 +63,7 @@ export default async function StayPage(props: {
     ? { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng }
     : undefined;
 
-  const stopCoordinates = trip.itineraryDays.flatMap((day) =>
-    day.items.map((item) => syntheticCoordinates(item.title, item.category, center)),
-  );
+  const stopCoordinates = center ? [center] : [];
 
   const ranked = rankHotels({
     nights,

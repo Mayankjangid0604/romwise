@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { searchDestinations } from "@/lib/destinations";
+import { searchTravelDestinations } from "@/lib/destination-resolver";
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ destinations: [] });
   }
 
-  const destinations = await searchDestinations(q, 8);
+  const destinations = await searchTravelDestinations(q, 8);
 
   return NextResponse.json({
     destinations: destinations.map((d: { id: string; name: string; state: string; lat: number; lng: number }) => ({

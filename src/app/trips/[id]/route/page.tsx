@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import {
   optimizeRoute,
-  syntheticCoordinates,
   type RouteStop,
 } from "@/lib/route-optimizer";
 import {
@@ -68,23 +67,25 @@ export default async function RoutePage(props: {
     ? { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng }
     : undefined;
 
-  const stops: RouteStop[] = dayData.items.map((item) => {
-    const realCoords =
-      item.place?.lat != null && item.place?.lng != null
-        ? { lat: item.place.lat, lng: item.place.lng }
-        : null;
-    const coords = realCoords ?? syntheticCoordinates(item.title, item.category, center);
-    return {
-      id: item.id,
-      title: item.title,
-      category: item.category,
-      startTime: item.startTime,
-      endTime: item.endTime,
-      order: item.order,
-      lat: coords.lat,
-      lng: coords.lng,
-    };
-  });
+  const stops: RouteStop[] = dayData.items
+    .map((item) => {
+      // Only include items with real place coordinates — never substitute destination center,
+      // which would make route distances appear precise when they are not.
+      const lat = item.place?.lat;
+      const lng = item.place?.lng;
+      if (lat == null || lng == null) return null;
+      return {
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        order: item.order,
+        lat,
+        lng,
+      };
+    })
+    .filter((s): s is RouteStop => s !== null);
 
   const result = optimizeRoute(stops);
 

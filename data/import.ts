@@ -3,6 +3,13 @@
  * Uses upsert-by-slug, so existing records are updated with better data.
  * Never deletes existing data.
  *
+ * Import order:
+ *  1. Register DataSource records
+ *  2. Upsert top-level destinations (no parent)
+ *  3. Upsert sub-destinations (have parentSlug) — two-pass to resolve IDs
+ *  4. Upsert DestinationAlias records
+ *  5. Upsert Place records
+ *
  * Run: npx tsx data/import.ts
  */
 
@@ -25,6 +32,11 @@ interface DestinationRecord {
   confidence?: number;
   sourceName?: string;
   sourceUrl?: string;
+  sourceType?: string;
+  sourceRecordId?: string;
+  lastVerifiedAt?: string;
+  /** Slug of parent destination. Resolved to parentDestinationId during import. */
+  parentSlug?: string;
   aliases?: string[];
 }
 
@@ -64,6 +76,44 @@ interface PlaceFile {
   places: PlaceRecord[];
 }
 
+/**
+ * Builds the Prisma update payload for a place upsert.
+ * Uses `?? undefined` so that null JSON values (genuinely unknown) do NOT
+ * overwrite existing DB values — undefined tells Prisma to skip the field.
+ * Only non-null values from the JSON are written to the DB.
+ *
+ * Exported for regression testing — do not remove the export.
+ */
+export function buildPlaceUpdatePayload(p: PlaceRecord) {
+  return {
+    lat: p.lat,
+    lng: p.lng,
+    category: p.category,
+    area: p.area ?? undefined,
+    description: p.description ?? undefined,
+    costMinInr: p.costMinInr ?? undefined,
+    costMaxInr: p.costMaxInr ?? undefined,
+    costStatus: p.costStatus ?? undefined,
+    openingTime: p.openingTime ?? undefined,
+    closingTime: p.closingTime ?? undefined,
+    openingDays: p.openingDays ?? undefined,
+    openingHoursStatus: p.openingHoursStatus ?? undefined,
+    bestSeason: p.bestSeason ?? undefined,
+    seasonStatus: p.seasonStatus ?? undefined,
+    durationMinutes: p.durationMinutes ?? undefined,
+    fatigueCost: p.fatigueCost ?? undefined,
+    accessibilityScore: p.accessibilityScore ?? undefined,
+    popularityScore: p.popularityScore ?? undefined,
+    hiddenGem: p.hiddenGem ?? undefined,
+    sourceType: p.sourceType ?? undefined,
+    sourceName: p.sourceName ?? undefined,
+    sourceUrl: p.sourceUrl ?? undefined,
+    sourceRecordId: p.sourceRecordId ?? undefined,
+    confidence: p.confidence ?? undefined,
+    dataStatus: p.dataStatus ?? undefined,
+  };
+}
+
 async function main() {
   console.log("=== Roamwise Master Data Import ===\n");
 
@@ -76,12 +126,10 @@ async function main() {
       url: "https://en.wikipedia.org/w/api.php?action=query&list=geosearch",
       license: "CC BY-SA 4.0",
       attribution: "Wikipedia contributors, via MediaWiki Geosearch API",
-      notes: "Coordinate data from Wikipedia article geotags, which typically source from Wikidata/OpenStreetMap. Coordinates are article-level, not GPS-verified.",
+      notes: "Coordinate data from Wikipedia article geotags. Coordinates are article-level, not GPS-verified.",
       accessedAt: new Date("2026-09-14"),
     },
-    update: {
-      accessedAt: new Date("2026-09-14"),
-    },
+    update: { accessedAt: new Date("2026-09-14") },
   });
 
   await prisma.dataSource.upsert({
@@ -89,7 +137,7 @@ async function main() {
     create: {
       name: "Roamwise Master Data",
       type: "curated",
-      notes: "Human-curated master data from data/master/ — compiled from Wikipedia Geosearch, manually reviewed for relevance.",
+      notes: "Human-curated master data from data/master/ — compiled from Wikipedia Geosearch, Wikipedia articles, and manual curation.",
     },
     update: {},
   });
@@ -98,11 +146,14 @@ async function main() {
 
   // ── Import destinations ──────────────────────────────────────────────────────
   const destinationsPath = path.resolve(__dirname, "master/destinations.json");
-  const destinations: DestinationRecord[] = JSON.parse(fs.readFileSync(destinationsPath, "utf-8"));
+  const destinations: DestinationRecord[] = JSON.parse(
+    fs.readFileSync(destinationsPath, "utf-8"),
+  );
 
   console.log(`\nImporting ${destinations.length} destinations...`);
-  const destinationIdBySlug = new Map<string, string>();
 
+  // First pass: upsert all destinations without parent links
+  const destinationIdBySlug = new Map<string, string>();
   for (const d of destinations) {
     const record = await prisma.travelDestination.upsert({
       where: { slug: d.slug },
@@ -119,9 +170,11 @@ async function main() {
         confidence: d.confidence ?? null,
         sourceName: d.sourceName ?? null,
         sourceUrl: d.sourceUrl ?? null,
+        sourceType: d.sourceType ?? null,
+        sourceRecordId: d.sourceRecordId ?? null,
+        lastVerifiedAt: d.lastVerifiedAt ? new Date(d.lastVerifiedAt) : null,
       },
       update: {
-        // Only update coordinate/meta fields if we have higher confidence
         lat: d.lat,
         lng: d.lng,
         destinationType: d.destinationType ?? undefined,
@@ -129,25 +182,53 @@ async function main() {
         confidence: d.confidence ?? undefined,
         sourceName: d.sourceName ?? undefined,
         sourceUrl: d.sourceUrl ?? undefined,
+        sourceType: d.sourceType ?? undefined,
+        sourceRecordId: d.sourceRecordId ?? undefined,
+        lastVerifiedAt: d.lastVerifiedAt ? new Date(d.lastVerifiedAt) : undefined,
       },
     });
-
     destinationIdBySlug.set(d.slug, record.id);
-    console.log(`  ✓ ${d.name} (${record.id})`);
+    console.log(`  ✓ ${d.name}`);
+  }
 
-    // Upsert aliases
-    for (const alias of (d.aliases ?? [])) {
+  // Second pass: resolve and set parent links
+  const withParent = destinations.filter((d) => d.parentSlug);
+  if (withParent.length > 0) {
+    console.log(`\nSetting ${withParent.length} parent relationships...`);
+    for (const d of withParent) {
+      const parentId = destinationIdBySlug.get(d.parentSlug!);
+      if (!parentId) {
+        console.warn(`  WARN ${d.slug}: parentSlug "${d.parentSlug}" not found — skipping parent link`);
+        continue;
+      }
+      const childId = destinationIdBySlug.get(d.slug);
+      if (!childId) continue;
+      await prisma.travelDestination.update({
+        where: { id: childId },
+        data: { parentDestinationId: parentId },
+      });
+      console.log(`  ✓ ${d.name} → parent: ${d.parentSlug}`);
+    }
+  }
+
+  // Upsert aliases
+  console.log("\nUpserting aliases...");
+  for (const d of destinations) {
+    const destId = destinationIdBySlug.get(d.slug);
+    if (!destId) continue;
+    for (const alias of d.aliases ?? []) {
       await prisma.destinationAlias.upsert({
         where: { alias },
-        create: { alias, destinationId: record.id },
-        update: { destinationId: record.id },
+        create: { alias, destinationId: destId },
+        update: { destinationId: destId },
       });
     }
   }
 
   // ── Import places ────────────────────────────────────────────────────────────
   const placesDir = path.resolve(__dirname, "master/places");
-  const placeFiles = fs.readdirSync(placesDir)
+  const placeFiles = fs
+    .readdirSync(placesDir)
     .filter((f) => f.endsWith(".json"))
     .sort();
 
@@ -204,19 +285,7 @@ async function main() {
             confidence: p.confidence ?? null,
             dataStatus: p.dataStatus ?? "needs_review",
           },
-          update: {
-            // Update coordinates and provenance, but never overwrite
-            // verified data with lower-confidence data
-            lat: p.lat,
-            lng: p.lng,
-            category: p.category,
-            area: p.area ?? undefined,
-            sourceType: p.sourceType ?? undefined,
-            sourceName: p.sourceName ?? undefined,
-            sourceUrl: p.sourceUrl ?? undefined,
-            sourceRecordId: p.sourceRecordId ?? undefined,
-            confidence: p.confidence ?? undefined,
-          },
+          update: buildPlaceUpdatePayload(p),
         });
         console.log(`    ✓ ${p.name}`);
         totalImported++;

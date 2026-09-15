@@ -86,7 +86,7 @@ export type GeneratedDay = {
     category: string;
     startTime: string;
     endTime: string;
-    estimatedCostInr: number;
+    estimatedCostInr: number | null;
     lat: number | null;
     lng: number | null;
     reasoning: string;
@@ -355,7 +355,7 @@ function deterministicFallback(
         category: place.category,
         startTime: slot.start,
         endTime: slot.end,
-        estimatedCostInr: place.typicalCostInr ?? 0,
+        estimatedCostInr: place.typicalCostInr ?? null,
         lat: place.lat,
         lng: place.lng,
         reasoning: "Deterministic selection from known places for this destination",
@@ -395,6 +395,7 @@ export async function generateGroundedItinerary(
   console.log(`[TripBrain] destination resolved: ${resolved.name}, ${resolved.state} (${resolved.matchType})`);
 
   // Step 2: Retrieve candidate places (hard exclusions already filtered)
+  // input.budgetInr is GROUP_TOTAL (whole trip, all travelers). Divide by days only for per-day budget hints.
   const budgetPerDay = Math.floor(input.budgetInr / dayCount);
   const candidates = await getCandidatePlaces({
     destinationId: resolved.id,

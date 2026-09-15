@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { findDestination } from "@/lib/destinations";
+import { resolveDestination } from "@/lib/destination-resolver";
 import { redirect } from "next/navigation";
 
 export type TripState = {
@@ -68,7 +68,7 @@ export async function createTrip(
     return { fieldErrors };
   }
 
-  const matchedDestination = await findDestination(destination);
+  const matchedDestination = await resolveDestination(destination);
 
   const trip = await prisma.trip.create({
     data: {

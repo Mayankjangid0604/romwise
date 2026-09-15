@@ -42,7 +42,7 @@ export default async function TripPage(props: { params: Promise<{ id: string }> 
 
   const totalCost = trip.itineraryDays.reduce(
     (sum, day) =>
-      sum + day.items.reduce((daySum, item) => daySum + item.estimatedCostInr, 0),
+      sum + day.items.reduce((daySum, item) => daySum + (item.estimatedCostInr ?? 0), 0),
     0,
   );
 
@@ -174,7 +174,7 @@ export default async function TripPage(props: { params: Promise<{ id: string }> 
                         </Badge>
                         <p className="mt-1.5">
                           <Figure className="text-[0.875rem] text-ink-700 font-medium">
-                            {formatInr(item.estimatedCostInr)}
+                            {item.estimatedCostInr !== null ? formatInr(item.estimatedCostInr) : "—"}
                           </Figure>
                         </p>
                       </div>

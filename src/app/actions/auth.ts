@@ -3,7 +3,8 @@
 import { hash } from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { signIn } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { CredentialsSignin } from "next-auth";
+
 import { checkRateLimit, resetRateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
 
@@ -70,10 +71,10 @@ export async function signup(
   await signIn("email-password", {
     email,
     password,
-    redirect: false,
+    redirectTo: "/dashboard",
   });
-
-  redirect("/dashboard");
+  // signIn with redirectTo always throws NEXT_REDIRECT — unreachable
+  return {};
 }
 
 export async function login(
@@ -97,13 +98,17 @@ export async function login(
     await signIn("email-password", {
       email,
       password,
-      redirect: false,
+      redirectTo: "/dashboard",
     });
-  } catch {
-    return { error: "Invalid email or password" };
+  } catch (err) {
+    // Only catch actual credential failures — let NEXT_REDIRECT propagate
+    if (err instanceof CredentialsSignin) {
+      return { error: "Invalid email or password" };
+    }
+    throw err;
   }
 
   resetRateLimit(`login:${ip}`);
-
-  redirect("/dashboard");
+  // signIn with redirectTo always throws NEXT_REDIRECT — unreachable
+  return {};
 }

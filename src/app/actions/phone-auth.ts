@@ -6,7 +6,6 @@ import { getSmsProvider } from "@/lib/sms";
 import { signIn } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 export type PhoneAuthState = {
   step: "phone" | "otp";
@@ -93,10 +92,11 @@ export async function verifyOtpAction(
   }
 
   await signIn("phone-otp", {
-    redirect: false,
+    redirectTo: "/dashboard",
     phone,
     otpId: result.otpId,
   });
 
-  redirect("/dashboard");
+  // Safety fallback — signIn above always redirects, but TypeScript requires a return
+  return { step: "otp", phone };
 }

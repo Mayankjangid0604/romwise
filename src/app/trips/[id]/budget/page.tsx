@@ -197,9 +197,13 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
                           {item.category}
                         </td>
                         <td className="px-4 py-2.5 text-right">
-                          <Figure className="text-ink-800">
-                            {formatInr(item.estimatedCostInr)}
-                          </Figure>
+                          {item.estimatedCostInr !== null ? (
+                            <Figure className="text-ink-800">
+                              {formatInr(item.estimatedCostInr)}
+                            </Figure>
+                          ) : (
+                            <span className="text-ink-400">—</span>
+                          )}
                         </td>
                       </tr>
                     ))}

@@ -7,6 +7,11 @@ const OTP_EXPIRY_MINUTES = 10;
 const MAX_ATTEMPTS = 5;
 const BCRYPT_ROUNDS = 10;
 
+// When OTP_TEST_BYPASS=true, any phone accepts the fixed code "000000".
+// Never enable in production.
+const TEST_BYPASS = process.env.OTP_TEST_BYPASS === "true";
+const TEST_CODE = "000000";
+
 export function generateOtpCode(): string {
   const max = Math.pow(10, OTP_LENGTH);
   const min = Math.pow(10, OTP_LENGTH - 1);
@@ -55,7 +60,7 @@ export async function verifyOtp(phone: string, code: string): Promise<VerifyResu
     return { valid: false, reason: "expired" };
   }
 
-  const isValid = await compare(code, otp.codeHash);
+  const isValid = (TEST_BYPASS && code === TEST_CODE) || (await compare(code, otp.codeHash));
 
   if (!isValid) {
     await prisma.otpCode.update({

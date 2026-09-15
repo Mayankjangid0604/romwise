@@ -96,33 +96,23 @@ function EmailForm({
 }
 
 function PhoneForm() {
-  const [state, setState] = useState<PhoneAuthState>({ step: "phone" });
-  const [pending, setPending] = useState(false);
+  const [phoneState, phoneAction, phonePending] = useActionState(requestOtp, {
+    step: "phone" as const,
+  });
+  const [otpState, otpAction, otpPending] = useActionState(verifyOtpAction, {
+    step: "otp" as const,
+  });
 
-  async function handleRequestOtp(formData: FormData) {
-    setPending(true);
-    const result = await requestOtp(state, formData);
-    setState(result);
-    setPending(false);
-  }
-
-  async function handleVerifyOtp(formData: FormData) {
-    setPending(true);
-    const result = await verifyOtpAction(state, formData);
-    setState(result);
-    setPending(false);
-  }
-
-  if (state.step === "otp") {
+  if (phoneState.step === "otp") {
     return (
-      <form action={handleVerifyOtp} className="space-y-4">
-        {state.error && <Alert tone="danger">{state.error}</Alert>}
+      <form action={otpAction} className="space-y-4">
+        {otpState.error && <Alert tone="danger">{otpState.error}</Alert>}
 
         <p className="text-[0.8125rem] text-ink-600">
-          We sent a 6-digit code to <strong>{state.phone}</strong>
+          We sent a 6-digit code to <strong>{phoneState.phone}</strong>
         </p>
 
-        <input type="hidden" name="phone" value={state.phone} />
+        <input type="hidden" name="phone" value={phoneState.phone} />
 
         <Field label="Verification code" htmlFor="code">
           <Input
@@ -137,13 +127,13 @@ function PhoneForm() {
           />
         </Field>
 
-        <Button type="submit" disabled={pending} className="w-full">
-          {pending ? "Verifying..." : "Verify"}
+        <Button type="submit" disabled={otpPending} className="w-full">
+          {otpPending ? "Verifying..." : "Verify"}
         </Button>
 
         <button
           type="button"
-          onClick={() => setState({ step: "phone" })}
+          onClick={() => window.location.reload()}
           className="w-full text-[0.8125rem] text-lagoon-700 hover:text-lagoon-800 font-medium"
         >
           Use a different number
@@ -153,8 +143,8 @@ function PhoneForm() {
   }
 
   return (
-    <form action={handleRequestOtp} className="space-y-4">
-      {state.error && <Alert tone="danger">{state.error}</Alert>}
+    <form action={phoneAction} className="space-y-4">
+      {phoneState.error && <Alert tone="danger">{phoneState.error}</Alert>}
 
       <Field label="Phone number" htmlFor="phone">
         <Input
@@ -166,8 +156,8 @@ function PhoneForm() {
         />
       </Field>
 
-      <Button type="submit" disabled={pending} className="w-full">
-        {pending ? "Sending code..." : "Send verification code"}
+      <Button type="submit" disabled={phonePending} className="w-full">
+        {phonePending ? "Sending code..." : "Send verification code"}
       </Button>
     </form>
   );

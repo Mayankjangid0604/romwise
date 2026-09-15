@@ -71,14 +71,24 @@ model TravelDestination {
   lat             Float
   lng             Float
   description     String?
-  // city | beach | mountain | heritage | hill_station | wildlife | island | pilgrimage | other
+  // region | state | tourism_region | city | town | valley | island | national_park
+  // wildlife_reserve | lake | heritage_site | beach | mountain | hill_station
+  // pilgrimage | circuit | other
   destinationType String?
+  // Hierarchy: null = top-level; set to parent slug's id for sub-destinations
+  parentDestinationId String?
+  parent              TravelDestination?  @relation("DestinationHierarchy", fields: [parentDestinationId], references: [id], onDelete: SetNull)
+  children            TravelDestination[] @relation("DestinationHierarchy")
   // Optional link to the administrative district this destination sits within
   districtId      String?
   district        District?          @relation(fields: [districtId], references: [id], onDelete: SetNull)
   // Provenance
   sourceUrl       String?
   sourceName      String?
+  // curated | wikipedia_geosearch | wikidata | osm | official | ai_enriched
+  sourceType      String?
+  sourceRecordId  String?
+  lastVerifiedAt  DateTime?
   // 0.0–1.0: overall confidence in destination record
   confidence      Float?
   aliases         DestinationAlias[]
@@ -90,6 +100,7 @@ model TravelDestination {
   updatedAt       DateTime           @updatedAt
 
   @@index([state])
+  @@index([parentDestinationId])
 }
 
 // Alternate names that resolve to a canonical TravelDestination
@@ -154,7 +165,7 @@ model Place {
   lastVerifiedAt      DateTime?
   // seed | verified | needs_review | deprecated
   dataStatus          String            @default("seed")
-  // curated | ai_enriched | imported | official | fixture | osm | wikidata
+  // curated | ai_enriched | imported | official | fixture | osm | wikidata | wikipedia_geosearch
   sourceType          String            @default("curated")
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
@@ -189,6 +200,8 @@ model Trip {
   destination    String
   startDate      DateTime
   endDate        DateTime
+  // GROUP_TOTAL: total budget for the entire trip across all travelers and all days.
+  // NOT per-person. NOT per-day. Divide by numDays for daily budget; display ÷ travelers for per-person context.
   budgetInr      Int
   maxTravelers   Int                @default(20)
   paceLevel      String             @default("balanced")
@@ -271,7 +284,7 @@ model ItineraryItem {
   category         String
   startTime        String
   endTime          String
-  estimatedCostInr Int          @default(0)
+  estimatedCostInr Int?
   reasoning        String
   order            Int
   itineraryDayId   String
