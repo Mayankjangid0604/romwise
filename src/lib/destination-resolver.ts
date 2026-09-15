@@ -29,10 +29,19 @@ export async function resolveDestination(
   const normalized = query.trim();
   if (!normalized) return null;
 
+  // Sometimes queries come in as "City, State" or "City, Country"
+  // Extract just the first part for matching if it contains a comma
+  const baseName = normalized.split(',')[0].trim();
+
   // 1. Exact match on TravelDestination.name
-  const exact = await prisma.travelDestination.findFirst({
+  let exact = await prisma.travelDestination.findFirst({
     where: { name: { equals: normalized, mode: "insensitive" } },
   });
+  if (!exact && baseName !== normalized) {
+    exact = await prisma.travelDestination.findFirst({
+      where: { name: { equals: baseName, mode: "insensitive" } },
+    });
+  }
   if (exact) {
     return {
       id: exact.id,
@@ -46,10 +55,16 @@ export async function resolveDestination(
   }
 
   // 2. Alias match
-  const aliasRecord = await prisma.destinationAlias.findFirst({
+  let aliasRecord = await prisma.destinationAlias.findFirst({
     where: { alias: { equals: normalized, mode: "insensitive" } },
     include: { destination: true },
   });
+  if (!aliasRecord && baseName !== normalized) {
+    aliasRecord = await prisma.destinationAlias.findFirst({
+      where: { alias: { equals: baseName, mode: "insensitive" } },
+      include: { destination: true },
+    });
+  }
   if (aliasRecord) {
     const d = aliasRecord.destination;
     return {
@@ -65,10 +80,16 @@ export async function resolveDestination(
 
   // 3. Partial/fuzzy name match (contains query, case-insensitive)
   // Only used as a last resort — confidence is lower.
-  const partial = await prisma.travelDestination.findFirst({
+  let partial = await prisma.travelDestination.findFirst({
     where: { name: { contains: normalized, mode: "insensitive" } },
     orderBy: { name: "asc" },
   });
+  if (!partial && baseName !== normalized) {
+    partial = await prisma.travelDestination.findFirst({
+      where: { name: { contains: baseName, mode: "insensitive" } },
+      orderBy: { name: "asc" },
+    });
+  }
   if (partial) {
     return {
       id: partial.id,
