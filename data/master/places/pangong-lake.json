@@ -1,12 +1,12 @@
 {
   "destinationSlug": "pangong-lake",
-  "sourceNote": "Pangong Lake is a single destination entity. All places here are within the Pangong Tso area. Coordinates are approximate from Wikipedia article data. NOTE: Pangong Tso (pangong-tso-viewpoint) coordinate (33.7495, 78.6478) intentionally matches destination center — the lake is the destination itself; there is no more precise single-point coordinate for the main viewpoint than the lake centroid.",
+  "sourceNote": "Pangong Lake is a single destination entity. All places here are within the Pangong Tso area. Coordinates are approximate from Wikipedia article data. NOTE: Pangong Tso (pangong-tso-viewpoint) coordinate (33.7496, 78.6478) intentionally matches destination center — the lake is the destination itself; there is no more precise single-point coordinate for the main viewpoint than the lake centroid.",
   "places": [
     {
       "name": "Pangong Tso",
       "slug": "pangong-tso-viewpoint",
       "category": "nature",
-      "lat": 33.7495,
+      "lat": 33.7496,
       "lng": 78.6478,
       "description": null,
       "area": "Pangong Lake",

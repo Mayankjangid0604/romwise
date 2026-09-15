@@ -23,7 +23,7 @@ import {
   aggregatePreferences,
   detectPreferenceConflicts,
 } from "./preference-scoring";
-import { TRIP_BRAIN_CATEGORIES } from "./categories";
+// import { TRIP_BRAIN_CATEGORIES } from "./categories";
 import type { CandidatePlace } from "./travel-knowledge";
 import type { MemberPreference } from "./preference-scoring";
 import type { ResolvedDestination } from "./destination-resolver";
@@ -137,7 +137,7 @@ function buildGroundedPrompt(
 ): string {
   const dailyBudget = Math.floor(budgetInr / dayCount);
 
-  const hardExclusions = getHardExclusions(allPreferences);
+  // const hardExclusions = getHardExclusions(allPreferences);
   const aggregated = aggregatePreferences(allPreferences);
   const conflicts = detectPreferenceConflicts(allPreferences);
 
@@ -228,7 +228,7 @@ function parseGeminiResponse(
   expectedDays: number,
   expectedItemsPerDay: number,
 ): GeminiRawDay[] {
-  let cleaned = raw.replace(/^```(?:json)?\s*/m, "").replace(/\s*```\s*$/m, "").trim();
+  const cleaned = raw.replace(/^```(?:json)?\s*/m, "").replace(/\s*```\s*$/m, "").trim();
 
   let parsed: unknown;
   try {

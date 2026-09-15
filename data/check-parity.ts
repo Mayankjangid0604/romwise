@@ -18,10 +18,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-interface PlaceRecord {
-  slug: string;
-  destinationSlug: string;
-}
+// interface PlaceRecord {
+//   slug: string;
+//   destinationSlug: string;
+// }
 
 async function main() {
   // ── Load JSON master ──────────────────────────────────────────────────────────

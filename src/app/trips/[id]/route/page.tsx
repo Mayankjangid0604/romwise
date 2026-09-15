@@ -63,9 +63,9 @@ export default async function RoutePage(props: {
 
   if (!dayData) redirect(`/trips/${id}/route?day=1`);
 
-  const center = trip.destinationRef
-    ? { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng }
-    : undefined;
+  // const center = trip.destinationRef
+  //   ? { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng }
+  //   : undefined;
 
   const stops: RouteStop[] = dayData.items
     .map((item) => {

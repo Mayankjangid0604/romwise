@@ -1,6 +1,6 @@
 {
   "destinationSlug": "darjeeling",
-  "sourceNote": "All records curated from Wikipedia articles and publicly documented sources. Darjeeling is in the Darjeeling Sadar sub-division of West Bengal at 2042m. Best season Mar–May and Sep–Nov; Jun–Aug is monsoon. NOTE: Darjeeling Himalayan Railway coordinate (27.041, 88.2663) intentionally matches destination center — it is the correct NJP/Darjeeling town railway station. DO NOT change this coordinate. All records needs_review.",
+  "sourceNote": "All records curated from Wikipedia articles and publicly documented sources. Darjeeling is in the Darjeeling Sadar sub-division of West Bengal at 2042m. Best season Mar–May and Sep–Nov; Jun–Aug is monsoon. NOTE: Darjeeling Himalayan Railway coordinate (27.0411, 88.2663) intentionally matches destination center — it is the correct NJP/Darjeeling town railway station. DO NOT change this coordinate. All records needs_review.",
   "places": [
     {
       "name": "Tiger Hill",
@@ -34,7 +34,7 @@
       "name": "Darjeeling Himalayan Railway",
       "slug": "darjeeling-himalayan-railway",
       "category": "culture",
-      "lat": 27.041,
+      "lat": 27.0411,
       "lng": 88.2663,
       "description": "UNESCO World Heritage narrow-gauge (610mm) steam railway built 1879–1881, running 88km from New Jalpaiguri (NJP) at 116m to Darjeeling at 2204m. The locomotive, popularly called the 'Toy Train', climbs through 5 spirals and 3 reverses; the Batasia Loop is the most dramatic curve. Multiple steam and diesel services daily, including the two-hour joyride from Darjeeling to Ghoom and back. The station in Darjeeling town sits at the destination centre. One of the oldest and most scenic mountain railways in the world.",
       "area": "Darjeeling Railway Station, town centre",

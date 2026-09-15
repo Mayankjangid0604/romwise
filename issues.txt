@@ -1,0 +1,23 @@
+1. Missing Destination Data Issue:
+When trying to generate an itinerary for a trip (e.g., "kashmir trip" for "Gulmarg, India"), the application throws the error: "Destination 'Gulmarg, India' is not in the travel knowledge database. No itinerary can be generated."
+Cause: The application currently relies on a seeded database of destinations and places (currently only containing Jaipur, Rishikesh, and Goa from the dev fixtures). If a user selects or enters a destination that is not pre-populated in the `TravelDestination` table, the itinerary generation fails.
+Potential Fixes:
+- Implement dynamic data fetching for unrecognised destinations using an external API or AI to create the destination and places on the fly.
+- Run a full database seed pipeline (like the `india-districts` data pipeline mentioned in `package.json`) to populate a comprehensive list of destinations before usage. (Note: `npm run data:import` does import Gulmarg, but it needs to be run).
+- Add better error handling/fallback to gracefully inform the user or provide a generic AI-generated itinerary when the destination is missing from the local database.
+
+2. Linting Errors:
+- `npm run lint` fails with 1 error and 8 warnings.
+- Error: `prefer-const` in `src/lib/trip-brain.ts` line 231 (`cleaned` is never reassigned).
+- Warnings: 8 instances of unused variables (e.g., `PlaceRecord`, `header`, `PhoneAuthState`, `center`, `dayCount`, `disrupted`, `TRIP_BRAIN_CATEGORIES`, `hardExclusions`).
+
+3. DB Seed Script Broken:
+- `npm run db:seed` fails because `prisma/seed.ts` depends on a CSV file located in a sibling directory that doesn't exist: `/Users/hardik/Desktop/WORK/navigate/india-districts/out/all_districts.csv`. 
+- Fix: Bundle the necessary district data within the project or fetch it remotely instead of relying on an external local path.
+
+4. Data Validation Warnings:
+- `npm run data:validate` completes but reports 3 warnings:
+  - `darjeeling.json`: Darjeeling Himalayan Railway coordinates match the destination center.
+  - `pangong-lake.json`: Pangong Tso coordinates match the destination center.
+  - `shimla.json`: Kalka-Shimla Railway coordinates match the destination center.
+- Fix: Ensure that these places have precise coordinates that do not perfectly overlap the destination centroid, which might cause map marker overlapping or routing issues.

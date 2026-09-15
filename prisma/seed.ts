@@ -40,9 +40,14 @@ async function main() {
     process.exit(1);
   }
 
+  if (!fs.existsSync(csvPath)) {
+    console.log(`CSV not found at ${csvPath}`);
+    console.log(`Skipping district seeding. To seed districts, run the india-districts data pipeline first.`);
+    return;
+  }
   const csv = fs.readFileSync(csvPath, "utf-8");
   const lines = csv.split("\n").filter((l) => l.trim());
-  const header = lines[0];
+  // const header = lines[0];
   const rows = lines.slice(1);
 
   console.log(`Found ${rows.length} districts to seed`);

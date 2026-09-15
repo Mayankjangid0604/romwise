@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { login, type AuthState } from "@/app/actions/auth";
-import { requestOtp, verifyOtpAction, type PhoneAuthState } from "@/app/actions/phone-auth";
+import { requestOtp, verifyOtpAction } from "@/app/actions/phone-auth";
 import Link from "next/link";
 import { Alert, Card, Field, Input, Button, CenteredShell } from "@/components/ui";
 
