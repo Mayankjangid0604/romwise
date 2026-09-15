@@ -436,7 +436,7 @@ export async function generateGroundedItinerary(
       console.log(`[TripBrain] calling Gemini with ${candidates.length} candidates`);
 
       const response = await client.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.6-flash",
         contents: prompt,
       });
       const rawText = response.text ?? "";

@@ -156,7 +156,7 @@ export async function analyzeGroupAlignment(
   let rawText: string;
   try {
     const response = await client.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-3.6-flash",
       contents: `${GROUP_ALIGNMENT_PROMPT}\n\nTraveler profiles:\n${profilesSummary}`,
     });
     rawText = response.text ?? "";

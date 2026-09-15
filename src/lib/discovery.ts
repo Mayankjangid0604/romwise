@@ -161,7 +161,7 @@ export async function discoverDestinations(
   let rawText: string;
   try {
     const response = await client.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-3.6-flash",
       contents: `${DISCOVERY_PROMPT}\n\nTrip description: ${input.description}`,
     });
     rawText = response.text ?? "";
