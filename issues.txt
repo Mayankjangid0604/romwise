@@ -21,3 +21,7 @@ Potential Fixes:
   - `pangong-lake.json`: Pangong Tso coordinates match the destination center.
   - `shimla.json`: Kalka-Shimla Railway coordinates match the destination center.
 - Fix: Ensure that these places have precise coordinates that do not perfectly overlap the destination centroid, which might cause map marker overlapping or routing issues.
+
+5. Dynamic Destinations Not Supported:
+- Even after running `npm run data:import`, certain destinations like "Dehradun Local & Maldevta Circuit, India" trigger the same error: "Destination ... is not in the travel knowledge database".
+- Fix: The static JSON data approach (`data/master/destinations.json`) is not exhaustive. The system needs to support dynamic destination resolution (e.g. hitting Google Places API on the fly if a destination isn't found locally) to support all user queries.
