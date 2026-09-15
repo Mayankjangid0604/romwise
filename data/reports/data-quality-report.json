@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T10:51:18.977Z",
+  "generatedAt": "2026-09-15T13:39:03.547Z",
   "destinations": {
     "total": 55,
     "topLevel": 45,
@@ -68,5 +68,5 @@
     "varanasi": 11
   },
   "validationErrors": 0,
-  "validationWarnings": 3
+  "validationWarnings": 0
 }

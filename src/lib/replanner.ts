@@ -84,7 +84,7 @@ export function proposeReplan(
     };
   }
 
-  // const disrupted = sorted[disruptedIndex];
+  const _disrupted = sorted[disruptedIndex];
 
   if (disruption.type === "skipped") {
     return handleSkip(sorted, disruptedIndex, previousState);

@@ -338,8 +338,14 @@ for (const fileName of placeFiles.sort()) {
 
     validateCoords(fileName, p.lat, p.lng, label);
 
-    // Warn if place coordinates exactly match destination center — likely copy-paste error
-    if (dest && p.lat === dest.lat && p.lng === dest.lng) {
+    // Warn if place coordinates exactly match destination center — likely copy-paste error.
+    // Known intentional exceptions: railway terminus stations and lake-as-destination cases.
+    const INTENTIONAL_CENTER_MATCHES = new Set([
+      "darjeeling-himalayan-railway", // terminus station IS the destination anchor
+      "kalka-shimla-railway",         // terminus station IS the destination anchor
+      "pangong-tso-viewpoint",        // the lake is the destination; no sub-centroid exists
+    ]);
+    if (dest && p.lat === dest.lat && p.lng === dest.lng && !INTENTIONAL_CENTER_MATCHES.has(p.slug)) {
       warn(fileName, `${label}: coordinates (${p.lat}, ${p.lng}) exactly match destination center — verify this is intentional`);
     }
 

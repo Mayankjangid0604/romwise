@@ -1,0 +1,519 @@
+destination_id,name,state,region,type,styles,best_season,latitude,longitude,source_type,data_status,confidence
+dest_baratang-island_andaman-and-nicobar-islands,Baratang Island,Andaman and Nicobar Islands,Southern India,Island,"[""Adventure"",""Nature"",""Offbeat"",""Forest Trail""]",November – May,12.1167,92.7833,kaggle_destination,candidate,0.7
+dest_diglipur_andaman-and-nicobar-islands,Diglipur,Andaman and Nicobar Islands,Southern India,Beach,"[""Adventure"",""Beach"",""Nature"",""Trek""]",November – April,13.2678,93.0033,kaggle_destination,candidate,0.7
+dest_havelock-island_andaman-and-nicobar-islands,Havelock Island,Andaman and Nicobar Islands,,city,,,,,kaggle_place_city,candidate,0.6
+dest_long-island_andaman-and-nicobar-islands,Long Island,Andaman and Nicobar Islands,Southern India,Island,"[""Beach"",""Nature"",""Peaceful Retreat"",""Offbeat""]",November – April,12.3942,92.9308,kaggle_destination,candidate,0.7
+dest_neil-island_andaman-and-nicobar-islands,Neil Island,Andaman and Nicobar Islands,,city,,,,,kaggle_place_city,candidate,0.6
+dest_port-blair_andaman-and-nicobar-islands,Port Blair,Andaman and Nicobar Islands,,city,,,,,kaggle_place_city,candidate,0.6
+dest_amravati_andhra-pradesh,Amravati,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_anantapur_andhra-pradesh,Anantapur,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_araku-valley_andhra-pradesh,Araku Valley,Andhra Pradesh,Southern India,Valley,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,18.32344,82.88058,kaggle_destination,candidate,0.7
+dest_belum-caves_andhra-pradesh,Belum Caves,Andhra Pradesh,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,15.10218,78.11167,kaggle_destination,candidate,0.7
+dest_borra-caves_andhra-pradesh,Borra Caves,Andhra Pradesh,Southern India,Mountain,"[""Nature"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,18.29391,83.05973,kaggle_destination,candidate,0.7
+dest_coringa-wildlife-sanctuary_andhra-pradesh,Coringa Wildlife Sanctuary,Andhra Pradesh,Southern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,16.83139,82.33667,kaggle_destination,candidate,0.7
+dest_gandikota_andhra-pradesh,Gandikota,Andhra Pradesh,Southern India,Valley,"[""Adventure"",""Photography"",""Nature""]",October – February,14.81499,78.287,kaggle_destination,candidate,0.7
+dest_guntur_andhra-pradesh,Guntur,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_hope-island_andhra-pradesh,Hope Island,Andhra Pradesh,Southern India,Island,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,16.92362,82.36267,kaggle_destination,candidate,0.7
+dest_horsley-hills_andhra-pradesh,Horsley Hills,Andhra Pradesh,Southern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,13.65087,78.39653,kaggle_destination,candidate,0.7
+dest_kadapa_andhra-pradesh,Kadapa,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kondapalli-fort_andhra-pradesh,Kondapalli Fort,Andhra Pradesh,Southern India,Village,"[""Culture"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,16.62505,80.53052,kaggle_destination,candidate,0.7
+dest_kurnool_andhra-pradesh,Kurnool,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_lambasingi_andhra-pradesh,Lambasingi,Andhra Pradesh,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,17.81818,82.49272,kaggle_destination,candidate,0.7
+dest_lepakshi_andhra-pradesh,Lepakshi,Andhra Pradesh,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,13.80316,77.60975,kaggle_destination,candidate,0.7
+dest_maredumilli_andhra-pradesh,Maredumilli,Andhra Pradesh,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,17.5989,81.7121,kaggle_destination,candidate,0.7
+dest_orvakal-rock-garden_andhra-pradesh,Orvakal Rock Garden,Andhra Pradesh,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,15.69184,78.15177,kaggle_destination,candidate,0.7
+dest_puttaparthi_andhra-pradesh,Puttaparthi,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_rajahmundry_andhra-pradesh,Rajahmundry,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_srisailam_andhra-pradesh,Srisailam,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_talakona-waterfall_andhra-pradesh,Talakona Waterfall,Andhra Pradesh,Southern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,13.81166,79.21578,kaggle_destination,candidate,0.7
+dest_vijayawada_andhra-pradesh,Vijayawada,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_visakhapatnam_andhra-pradesh,Visakhapatnam,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_vizianagaram_andhra-pradesh,Vizianagaram,Andhra Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_along-aalo_arunachal-pradesh,Along (Aalo),Arunachal Pradesh,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,28.16786,94.79883,kaggle_destination,candidate,0.7
+dest_anini_arunachal-pradesh,Anini,Arunachal Pradesh,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,28.79693,95.90448,kaggle_destination,candidate,0.7
+dest_bhalukpong_arunachal-pradesh,Bhalukpong,Arunachal Pradesh,Northeastern India,Mountain,"[""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Summer – Spring,27.01372,92.63581,kaggle_destination,candidate,0.7
+dest_bomdila_arunachal-pradesh,Bomdila,Arunachal Pradesh,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.26444,92.42065,kaggle_destination,candidate,0.7
+dest_dirang_arunachal-pradesh,Dirang,Arunachal Pradesh,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.36008,92.24121,kaggle_destination,candidate,0.7
+dest_mechuka_arunachal-pradesh,Mechuka,Arunachal Pradesh,Northeastern India,Valley,"[""Nature"",""Photography"",""Adventure"",""Peaceful Retreat""]",October – April,28.59875,94.13358,kaggle_destination,candidate,0.7
+dest_namdapha-national-park_arunachal-pradesh,Namdapha National Park,Arunachal Pradesh,Northeastern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,27.47088,96.55524,kaggle_destination,candidate,0.7
+dest_pasighat_arunachal-pradesh,Pasighat,Arunachal Pradesh,Northeastern India,Mountain,"[""Nature"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Summer – Spring,28.05897,95.33249,kaggle_destination,candidate,0.7
+dest_roing_arunachal-pradesh,Roing,Arunachal Pradesh,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,28.13685,95.84308,kaggle_destination,candidate,0.7
+dest_sangti-valley_arunachal-pradesh,Sangti Valley,Arunachal Pradesh,Northeastern India,Valley,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,27.40345,92.2764,kaggle_destination,candidate,0.7
+dest_tawang_arunachal-pradesh,Tawang,Arunachal Pradesh,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.58792,91.86373,kaggle_destination,candidate,0.7
+dest_ziro-valley_arunachal-pradesh,Ziro Valley,Arunachal Pradesh,Northeastern India,Valley,"[""Nature"",""Culture"",""Photography"",""Peaceful Retreat""]",March – October,27.56981,93.8277,kaggle_destination,candidate,0.7
+dest_dibru-saikhowa-national-park_assam,Dibru-Saikhowa National Park,Assam,Northeastern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,27.68552,95.39475,kaggle_destination,candidate,0.7
+dest_digboi_assam,Digboi,Assam,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.39561,95.61487,kaggle_destination,candidate,0.7
+dest_guwahati_assam,Guwahati,Assam,,city,,,,,kaggle_place_city,candidate,0.6
+dest_haflong_assam,Haflong,Assam,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,25.18251,92.8984,kaggle_destination,candidate,0.7
+dest_hajo_assam,Hajo,Assam,Northeastern India,Village,"[""Nature"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Summer – Spring,26.23598,91.54235,kaggle_destination,candidate,0.7
+dest_kaziranga_assam,Kaziranga,Assam,,city,,,,,kaggle_place_city,candidate,0.6
+dest_majuli_assam,Majuli,Assam,,city,,,,,kaggle_place_city,candidate,0.6
+dest_majuli-island_assam,Majuli Island,Assam,Northeastern India,Island,"[""Culture"",""Nature"",""Photography"",""Peaceful Retreat""]",November – March,27.0129,94.27469,kaggle_destination,candidate,0.7
+dest_manas_assam,Manas,Assam,,city,,,,,kaggle_place_city,candidate,0.6
+dest_manas-national-park_assam,Manas National Park,Assam,Northeastern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,26.72279,90.97789,kaggle_destination,candidate,0.7
+dest_mayong-village_assam,Mayong Village,Assam,Northeastern India,Village,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,26.25915,92.04132,kaggle_destination,candidate,0.7
+dest_pobitora-wildlife-sanctuary_assam,Pobitora Wildlife Sanctuary,Assam,Northeastern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,26.2594,91.98477,kaggle_destination,candidate,0.7
+dest_sibsagar_assam,Sibsagar,Assam,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,26.98349,94.63942,kaggle_destination,candidate,0.7
+dest_sivasagar_assam,Sivasagar,Assam,,city,,,,,kaggle_place_city,candidate,0.6
+dest_sualkuchi_assam,Sualkuchi,Assam,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,26.16991,91.57085,kaggle_destination,candidate,0.7
+dest_tezpur_assam,Tezpur,Assam,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,26.62299,92.79761,kaggle_destination,candidate,0.7
+dest_umrangso_assam,Umrangso,Assam,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,25.5737,92.82166,kaggle_destination,candidate,0.7
+dest_barabar-caves_bihar,Barabar Caves,Bihar,Eastern India,Village,"[""Heritage"",""Culture"",""Photography"",""Offbeat""]",October – March,25.018,85.062,kaggle_destination,candidate,0.7
+dest_bodh-gaya_bihar,Bodh Gaya,Bihar,,city,,,,,kaggle_place_city,candidate,0.6
+dest_patna_bihar,Patna,Bihar,,city,,,,,kaggle_place_city,candidate,0.6
+dest_rohtasgarh-fort_bihar,Rohtasgarh Fort,Bihar,Eastern India,Trek,"[""Heritage"",""Adventure"",""Trek"",""Photography""]",October – March,24.6333,83.9167,kaggle_destination,candidate,0.7
+dest_telhar-kund_bihar,Telhar Kund,Bihar,Eastern India,Valley,"[""Nature"",""Adventure"",""Photography"",""Waterfalls""]",August – February,24.9667,83.5833,kaggle_destination,candidate,0.7
+dest_valmiki-nagar_bihar,Valmiki Nagar,Bihar,Eastern India,Valley,"[""Nature"",""Wildlife"",""Adventure"",""Offbeat""]",November – April,27.4286,83.9167,kaggle_destination,candidate,0.7
+dest_vikramshila_bihar,Vikramshila,Bihar,Eastern India,Village,"[""Heritage"",""Culture"",""Photography"",""Peaceful Retreat""]",October – March,25.3,87.275,kaggle_destination,candidate,0.7
+dest_barnawapara-wildlife-sanctuary_chhattisgarh,Barnawapara Wildlife Sanctuary,Chhattisgarh,Central India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,21.4,82.46389,kaggle_destination,candidate,0.7
+dest_bastar_chhattisgarh,Bastar,Chhattisgarh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bhoramdeo-temple_chhattisgarh,Bhoramdeo Temple,Chhattisgarh,Central India,Village,"[""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,22.11544,81.14826,kaggle_destination,candidate,0.7
+dest_chitrakote-falls_chhattisgarh,Chitrakote Falls,Chhattisgarh,Central India,Mountain,"[""Nature"",""Photography"",""Adventure""]",July to October & November to February,19.2008,81.7667,kaggle_destination,candidate,0.7
+dest_dantewada-temples_chhattisgarh,Dantewada Temples,Chhattisgarh,Central India,Village,"[""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,18.9,81.339,kaggle_destination,candidate,0.7
+dest_ghatarani-waterfalls_chhattisgarh,Ghatarani Waterfalls,Chhattisgarh,Central India,Village,"[""Spiritual"",""Nature"",""Trekking""]",July to October,20.8927,82.0125,kaggle_destination,candidate,0.7
+dest_kanger-valley-national-park_chhattisgarh,Kanger Valley National Park,Chhattisgarh,Central India,Valley,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,18.83398,82.02011,kaggle_destination,candidate,0.7
+dest_kutumsar-caves_chhattisgarh,Kutumsar Caves,Chhattisgarh,Central India,Mountain,"[""Nature"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,18.9142,81.8653,kaggle_destination,candidate,0.7
+dest_mainpat_chhattisgarh,Mainpat,Chhattisgarh,Central India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,22.79646,83.30619,kaggle_destination,candidate,0.7
+dest_sirpur-group-of-monuments_chhattisgarh,Sirpur Group of Monuments,Chhattisgarh,Central India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,21.34522,82.18481,kaggle_destination,candidate,0.7
+dest_tirathgarh-falls_chhattisgarh,Tirathgarh Falls,Chhattisgarh,Central India,Village,"[""Nature"",""Adventure"",""Travel""]",July to February,18.9142,81.8647,kaggle_destination,candidate,0.7
+dest_diu-island_dadra-and-nagar-haveli-and-daman-and-diu,Diu Island,Dadra and Nagar Haveli and Daman and Diu,Western India,Island,"[""Heritage"",""Beach"",""Culture"",""Relaxed Escape""]",October – March,20.7144,70.9822,kaggle_destination,candidate,0.7
+dest_dudhani-lake_dadra-and-nagar-haveli-and-daman-and-diu,Dudhani Lake,Dadra and Nagar Haveli and Daman and Diu,Western India,Village,"[""Nature"",""Culture"",""Relaxed Escape"",""Water Sports""]",November – March,20.125,73.023,kaggle_destination,candidate,0.7
+dest_moti-daman_dadra-and-nagar-haveli-and-daman-and-diu,Moti Daman,Dadra and Nagar Haveli and Daman and Diu,Western India,Village,"[""Heritage"",""Culture"",""Beach"",""Relaxed Escape""]",October – March,20.4078,72.8361,kaggle_destination,candidate,0.7
+dest_diu_daman-and-diu,Diu,Daman and Diu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_delhi_delhi,Delhi,Delhi,,city,,,,,kaggle_place_city,candidate,0.6
+dest_new-delhi_delhi,New Delhi,Delhi,,city,,,,,kaggle_place_city,candidate,0.6
+dest_cabo-de-rama-fort_goa,Cabo de Rama Fort,Goa,Western India,Village,"[""Culture"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,15.08741,73.91993,kaggle_destination,candidate,0.7
+dest_chorao-island_goa,Chorao Island,Goa,Western India,Island,"[""Nature"",""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,15.53939,73.88467,kaggle_destination,candidate,0.7
+dest_chorla-ghat_goa,Chorla Ghat,Goa,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,15.64963,74.11913,kaggle_destination,candidate,0.7
+dest_cola-beach_goa,Cola Beach,Goa,Western India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,15.05925,73.97015,kaggle_destination,candidate,0.7
+dest_cotigao-wildlife-sanctuary_goa,Cotigao Wildlife Sanctuary,Goa,Western India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,14.96116,74.15125,kaggle_destination,candidate,0.7
+dest_divar-island_goa,Divar Island,Goa,Western India,Island,"[""Nature"",""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,15.52509,73.90782,kaggle_destination,candidate,0.7
+dest_goa_goa,Goa,Goa,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kakolem-beach_goa,Kakolem Beach,Goa,Western India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,15.07292,73.95484,kaggle_destination,candidate,0.7
+dest_netravali-wildlife-sanctuary_goa,Netravali Wildlife Sanctuary,Goa,Western India,Mountain,"[""Nature"",""Adventure"",""Wildlife""]",October to March & June to September (monsoon beauty),15.0886,74.2185,kaggle_destination,candidate,0.7
+dest_querim-beach_goa,Querim Beach,Goa,Western India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,15.71279,73.6916,kaggle_destination,candidate,0.7
+dest_tambdi-surla_goa,Tambdi Surla,Goa,Western India,Village,"[""Culture"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,15.44343,74.2454,kaggle_destination,candidate,0.7
+dest_ahmedabad_gujarat,Ahmedabad,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bhuj_gujarat,Bhuj,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_champaner_gujarat,Champaner,Gujarat,Western India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,22.48481,73.53437,kaggle_destination,candidate,0.7
+dest_dholavira_gujarat,Dholavira,Gujarat,Western India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,23.87501,70.21796,kaggle_destination,candidate,0.7
+dest_dwarka_gujarat,Dwarka,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_gandhinagar_gujarat,Gandhinagar,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_girmal-falls_gujarat,Girmal Falls,Gujarat,Western India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,20.7588,73.6886,kaggle_destination,candidate,0.7
+dest_idar_gujarat,Idar,Gujarat,Western India,Village,"[""Culture"",""Spiritual"",""Nature"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,23.83623,73.01146,kaggle_destination,candidate,0.7
+dest_junagadh_gujarat,Junagadh,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kevadia_gujarat,Kevadia,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_lakhpat_gujarat,Lakhpat,Gujarat,Western India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,23.82689,68.77516,kaggle_destination,candidate,0.7
+dest_little-rann-of-kutch_gujarat,Little Rann of Kutch,Gujarat,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.36334,71.07183,kaggle_destination,candidate,0.7
+dest_mandvi-beach_gujarat,Mandvi Beach,Gujarat,Western India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,22.82561,69.33807,kaggle_destination,candidate,0.7
+dest_narara-marine-national-park_gujarat,Narara Marine National Park,Gujarat,Western India,Beach,"[""Wildlife"",""Nature"",""Adventure""]",November to February (check tide tables),22.4632,69.9324,kaggle_destination,candidate,0.7
+dest_palitana_gujarat,Palitana,Gujarat,Western India,Village,"[""Nature"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,21.52361,71.82196,kaggle_destination,candidate,0.7
+dest_patan_gujarat,Patan,Gujarat,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.77375,71.67986,kaggle_destination,candidate,0.7
+dest_polo-forest_gujarat,Polo Forest,Gujarat,Western India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,23.98804,73.31491,kaggle_destination,candidate,0.7
+dest_rann-of-kutch_gujarat,Rann of Kutch,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_saputara_gujarat,Saputara,Gujarat,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,20.57967,73.74789,kaggle_destination,candidate,0.7
+dest_somnath_gujarat,Somnath,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_tarnetar_gujarat,Tarnetar,Gujarat,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,22.64583,71.21333,kaggle_destination,candidate,0.7
+dest_vadodara_gujarat,Vadodara,Gujarat,,city,,,,,kaggle_place_city,candidate,0.6
+dest_vijaynagar_gujarat,Vijaynagar,Gujarat,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,22.42285,70.76818,kaggle_destination,candidate,0.7
+dest_wilson-hills_gujarat,Wilson Hills,Gujarat,Western India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,20.50811,73.35631,kaggle_destination,candidate,0.7
+dest_farrukhnagar_haryana,Farrukhnagar,Haryana,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,28.46722,76.82537,kaggle_destination,candidate,0.7
+dest_gurugram_haryana,Gurugram,Haryana,,city,,,,,kaggle_place_city,candidate,0.6
+dest_morni-hills_haryana,Morni Hills,Haryana,Northern India,Mountain,"[""Nature"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Summer – Spring,30.70466,76.95447,kaggle_destination,candidate,0.7
+dest_pinjore-gardens_haryana,Pinjore Gardens,Haryana,Northern India,Mountain,"[""Nature"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Summer – Spring,30.79234,76.91175,kaggle_destination,candidate,0.7
+dest_sultanpur-national-park_haryana,Sultanpur National Park,Haryana,Northern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,28.46001,76.88897,kaggle_destination,candidate,0.7
+dest_tikkar-taal_haryana,Tikkar Taal,Haryana,Northern India,Village,"[""Culture"",""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,30.65672,77.08026,kaggle_destination,candidate,0.7
+dest_tilyar-lake_haryana,Tilyar Lake,Haryana,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,28.87889,76.63583,kaggle_destination,candidate,0.7
+dest_barot_himachal-pradesh,Barot,Himachal Pradesh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,32.03773,76.84521,kaggle_destination,candidate,0.7
+dest_bir-billing_himachal-pradesh,Bir Billing,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_chamba_himachal-pradesh,Chamba,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_chitkul_himachal-pradesh,Chitkul,Himachal Pradesh,Northern India,Village,"[""Nature"",""Photography"",""Peaceful Retreat"",""Adventure""]",May – October,31.35179,78.43591,kaggle_destination,candidate,0.7
+dest_gushaini_himachal-pradesh,Gushaini,Himachal Pradesh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,31.63733,77.42758,kaggle_destination,candidate,0.7
+dest_janjehli_himachal-pradesh,Janjehli,Himachal Pradesh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,31.52411,77.22089,kaggle_destination,candidate,0.7
+dest_jibhi_himachal-pradesh,Jibhi,Himachal Pradesh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,31.59228,77.35262,kaggle_destination,candidate,0.7
+dest_kalpa_himachal-pradesh,Kalpa,Himachal Pradesh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,31.57779,78.22861,kaggle_destination,candidate,0.7
+dest_kangra_himachal-pradesh,Kangra,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kaza_himachal-pradesh,Kaza,Himachal Pradesh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,32.22438,78.07226,kaggle_destination,candidate,0.7
+dest_keylong_himachal-pradesh,Keylong,Himachal Pradesh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,32.57134,77.03452,kaggle_destination,candidate,0.7
+dest_kinnaur_himachal-pradesh,Kinnaur,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kufri_himachal-pradesh,Kufri,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kullu_himachal-pradesh,Kullu,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_malana_himachal-pradesh,Malana,Himachal Pradesh,Northern India,Village,"[""Culture"",""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,32.0618,77.26002,kaggle_destination,candidate,0.7
+dest_manali_himachal-pradesh,Manali,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_mandi_himachal-pradesh,Mandi,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_manikaran_himachal-pradesh,Manikaran,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_mcleod-ganj_himachal-pradesh,McLeod Ganj,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_narkanda_himachal-pradesh,Narkanda,Himachal Pradesh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,31.25475,77.46127,kaggle_destination,candidate,0.7
+dest_palampur_himachal-pradesh,Palampur,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_prashar-lake_himachal-pradesh,Prashar Lake,Himachal Pradesh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,31.75448,77.10164,kaggle_destination,candidate,0.7
+dest_rakchham_himachal-pradesh,Rakchham,Himachal Pradesh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,31.39234,78.35375,kaggle_destination,candidate,0.7
+dest_shangarh_himachal-pradesh,Shangarh,Himachal Pradesh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,31.75731,77.37707,kaggle_destination,candidate,0.7
+dest_shimla_himachal-pradesh,Shimla,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_shoja_himachal-pradesh,Shoja,Himachal Pradesh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,31.29786,77.034,kaggle_destination,candidate,0.7
+dest_spiti-valley_himachal-pradesh,Spiti Valley,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_tirthan-valley_himachal-pradesh,Tirthan Valley,Himachal Pradesh,Northern India,Valley,"[""Nature"",""Adventure"",""Weekend Escape"",""Peaceful Retreat""]","April – June, September – November",31.6375,77.34444,kaggle_destination,candidate,0.7
+dest_dalhousie_himachal-pradesh,dalhousie,Himachal Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_anantnag_jammu-and-kashmir,Anantnag,Jammu and Kashmir,,city,,,,,kaggle_place_city,candidate,0.6
+dest_aru-valley_jammu-and-kashmir,Aru Valley,Jammu and Kashmir,Northern India,Valley,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.09083,75.26333,kaggle_destination,candidate,0.7
+dest_bhaderwah_jammu-and-kashmir,Bhaderwah,Jammu and Kashmir,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,32.97837,75.71856,kaggle_destination,candidate,0.7
+dest_chatpal_jammu-and-kashmir,Chatpal,Jammu and Kashmir,Northern India,Village,"[""Culture"",""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.0837,74.7973,kaggle_destination,candidate,0.7
+dest_dachigam-national-park_jammu-and-kashmir,Dachigam National Park,Jammu and Kashmir,Northern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.13292,75.02241,kaggle_destination,candidate,0.7
+dest_daksum_jammu-and-kashmir,Daksum,Jammu and Kashmir,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,33.60916,75.41478,kaggle_destination,candidate,0.7
+dest_gurez-valley_jammu-and-kashmir,Gurez Valley,Jammu and Kashmir,Northern India,Valley,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.64504,74.70818,kaggle_destination,candidate,0.7
+dest_jammu_jammu-and-kashmir,Jammu,Jammu and Kashmir,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kishtwar_jammu-and-kashmir,Kishtwar,Jammu and Kashmir,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kokernag_jammu-and-kashmir,Kokernag,Jammu and Kashmir,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,33.58723,75.30125,kaggle_destination,candidate,0.7
+dest_lolab-valley_jammu-and-kashmir,Lolab Valley,Jammu and Kashmir,Northern India,Valley,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.50132,74.40525,kaggle_destination,candidate,0.7
+dest_pahalgam_jammu-and-kashmir,Pahalgam,Jammu and Kashmir,,city,,,,,kaggle_place_city,candidate,0.6
+dest_sinthan-top_jammu-and-kashmir,Sinthan Top,Jammu and Kashmir,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,33.58243,75.51109,kaggle_destination,candidate,0.7
+dest_srinagar_jammu-and-kashmir,Srinagar,Jammu and Kashmir,,city,,,,,kaggle_place_city,candidate,0.6
+dest_udhampur_jammu-and-kashmir,Udhampur,Jammu and Kashmir,,city,,,,,kaggle_place_city,candidate,0.6
+dest_verinag_jammu-and-kashmir,Verinag,Jammu and Kashmir,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,33.53926,75.24988,kaggle_destination,candidate,0.7
+dest_watlab_jammu-and-kashmir,Watlab,Jammu and Kashmir,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.3,74.47,kaggle_destination,candidate,0.7
+dest_yousmarg_jammu-and-kashmir,Yousmarg,Jammu and Kashmir,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,33.83,75.3,kaggle_destination,candidate,0.7
+dest_deoghar_jharkhand,Deoghar,Jharkhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kiriburu_jharkhand,Kiriburu,Jharkhand,Eastern India,Mountain,"[""Nature"",""Wildlife"",""Adventure"",""Forest Trail""]",October – March,22.0667,85.2833,kaggle_destination,candidate,0.7
+dest_mccluskieganj_jharkhand,McCluskieganj,Jharkhand,Eastern India,Village,"[""Heritage"",""Culture"",""Peaceful Retreat"",""Photography""]",September – March,23.6667,84.9833,kaggle_destination,candidate,0.7
+dest_netarhat_jharkhand,Netarhat,Jharkhand,Eastern India,Valley,"[""Nature"",""Trek"",""Peaceful Retreat"",""Forest Trail""]",October – April,23.4833,84.2667,kaggle_destination,candidate,0.7
+dest_ranchi_jharkhand,Ranchi,Jharkhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_agumbe_karnataka,Agumbe,Karnataka,Southern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,13.50848,75.09626,kaggle_destination,candidate,0.7
+dest_badami_karnataka,Badami,Karnataka,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,15.92039,75.68079,kaggle_destination,candidate,0.7
+dest_banavasi_karnataka,Banavasi,Karnataka,Southern India,Village,"[""Culture"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,14.53897,75.01298,kaggle_destination,candidate,0.7
+dest_bandipur_karnataka,Bandipur,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bangalore_karnataka,Bangalore,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bengaluru_karnataka,Bengaluru,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bijapur_karnataka,Bijapur,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_chikmagalur_karnataka,Chikmagalur,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_coorg_karnataka,Coorg,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_dandeli_karnataka,Dandeli,Karnataka,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,15.24903,74.6236,kaggle_destination,candidate,0.7
+dest_devarayanadurga_karnataka,Devarayanadurga,Karnataka,Southern India,Village,"[""Nature"",""Wildlife"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,13.37267,77.20759,kaggle_destination,candidate,0.7
+dest_gokarna_karnataka,Gokarna,Karnataka,Southern India,Beach,"[""Nature"",""Weekend Escape"",""Peaceful Retreat"",""Culture""]",October – March,14.5479,74.3188,kaggle_destination,candidate,0.7
+dest_halebidu_karnataka,Halebidu,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_hampi_karnataka,Hampi,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_honnemardu_karnataka,Honnemardu,Karnataka,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,14.17815,74.87629,kaggle_destination,candidate,0.7
+dest_karwar-beach_karnataka,Karwar Beach,Karnataka,Southern India,Beach,"[""Nature"",""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,14.8,74.13,kaggle_destination,candidate,0.7
+dest_kemmangundi_karnataka,Kemmangundi,Karnataka,Southern India,Mountain,"[""Nature"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,13.51705,75.77137,kaggle_destination,candidate,0.7
+dest_kudremukh_karnataka,Kudremukh,Karnataka,Southern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,13.21907,75.25103,kaggle_destination,candidate,0.7
+dest_madhugiri-monolith_karnataka,Madhugiri Monolith,Karnataka,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,13.66,77.21,kaggle_destination,candidate,0.7
+dest_mangalore_karnataka,Mangalore,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_maravanthe-beach_karnataka,Maravanthe Beach,Karnataka,Southern India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,13.70885,74.64186,kaggle_destination,candidate,0.7
+dest_melukote_karnataka,Melukote,Karnataka,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,12.66241,76.64965,kaggle_destination,candidate,0.7
+dest_mullayanagiri_karnataka,Mullayanagiri,Karnataka,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,13.39092,75.7214,kaggle_destination,candidate,0.7
+dest_murudeshwar_karnataka,Murudeshwar,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_mysore_karnataka,Mysore,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_shivamogga_karnataka,Shivamogga,Karnataka,,city,,,,,kaggle_place_city,candidate,0.6
+dest_shivanasamudra-falls_karnataka,Shivanasamudra Falls,Karnataka,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,12.29167,77.175,kaggle_destination,candidate,0.7
+dest_yana-rocks_karnataka,Yana Rocks,Karnataka,Southern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,14.5897,74.56625,kaggle_destination,candidate,0.7
+dest_alappuzha_kerala,Alappuzha,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_ashtamudi-lake_kerala,Ashtamudi Lake,Kerala,Southern India,Beach,"[""Nature"",""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,8.94782,76.57028,kaggle_destination,candidate,0.7
+dest_bekal_kerala,Bekal,Kerala,Southern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,12.39573,75.03719,kaggle_destination,candidate,0.7
+dest_gavi_kerala,Gavi,Kerala,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,9.43573,77.15947,kaggle_destination,candidate,0.7
+dest_kannur_kerala,Kannur,Kerala,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,11.87638,75.3738,kaggle_destination,candidate,0.7
+dest_kochi_kerala,Kochi,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kovalam_kerala,Kovalam,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kozhikode_kerala,Kozhikode,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kumarakom_kerala,Kumarakom,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_marari-beach_kerala,Marari Beach,Kerala,Southern India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,9.60318,76.29799,kaggle_destination,candidate,0.7
+dest_munnar_kerala,Munnar,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_muzhappilangad-beach_kerala,Muzhappilangad Beach,Kerala,Southern India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,11.79445,75.44332,kaggle_destination,candidate,0.7
+dest_nelliyampathy_kerala,Nelliyampathy,Kerala,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,10.53493,76.69327,kaggle_destination,candidate,0.7
+dest_peerumade_kerala,Peerumade,Kerala,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,9.52298,77.14348,kaggle_destination,candidate,0.7
+dest_ponmudi_kerala,Ponmudi,Kerala,Southern India,Mountain,"[""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,8.76,77.115,kaggle_destination,candidate,0.7
+dest_poovar-island_kerala,Poovar Island,Kerala,Southern India,Island,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,8.30925,77.0823,kaggle_destination,candidate,0.7
+dest_ranipuram_kerala,Ranipuram,Kerala,Southern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,12.41641,75.36398,kaggle_destination,candidate,0.7
+dest_silent-valley-national-park_kerala,Silent Valley National Park,Kerala,Southern India,Valley,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,11.13104,76.44433,kaggle_destination,candidate,0.7
+dest_thattekad-bird-sanctuary_kerala,Thattekad Bird Sanctuary,Kerala,Southern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,10.12785,76.71943,kaggle_destination,candidate,0.7
+dest_thekkady_kerala,Thekkady,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_thiruvananthapuram_kerala,Thiruvananthapuram,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_vagamon_kerala,Vagamon,Kerala,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,9.6886,76.90686,kaggle_destination,candidate,0.7
+dest_valiyaparamba-backwaters_kerala,Valiyaparamba Backwaters,Kerala,Southern India,Beach,"[""Nature"",""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,9.86348,76.3594,kaggle_destination,candidate,0.7
+dest_varkala_kerala,Varkala,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_wayanad_kerala,Wayanad,Kerala,,city,,,,,kaggle_place_city,candidate,0.6
+dest_alchi_ladakh,Alchi,Ladakh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.22363,77.17406,kaggle_destination,candidate,0.7
+dest_diskit_ladakh,Diskit,Ladakh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_dras_ladakh,Dras,Ladakh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_hemis_ladakh,Hemis,Ladakh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,33.90831,77.63415,kaggle_destination,candidate,0.7
+dest_kargil_ladakh,Kargil,Ladakh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_korzok_ladakh,Korzok,Ladakh,Northern India,Village,"[""Nature"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Summer – Spring,33.04492,78.23639,kaggle_destination,candidate,0.7
+dest_lamayuru_ladakh,Lamayuru,Ladakh,Northern India,Village,"[""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Summer – Spring,34.28271,76.77396,kaggle_destination,candidate,0.7
+dest_leh_ladakh,Leh,Ladakh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_nubra-valley_ladakh,Nubra Valley,Ladakh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_padum_ladakh,Padum,Ladakh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,33.46914,76.87818,kaggle_destination,candidate,0.7
+dest_rangdum_ladakh,Rangdum,Ladakh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.03619,76.372,kaggle_destination,candidate,0.7
+dest_sumur_ladakh,Sumur,Ladakh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.61856,77.61325,kaggle_destination,candidate,0.7
+dest_tso-moriri_ladakh,Tso Moriri,Ladakh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,32.88928,78.32153,kaggle_destination,candidate,0.7
+dest_turtuk_ladakh,Turtuk,Ladakh,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,34.8447,76.82795,kaggle_destination,candidate,0.7
+dest_uleytokpo_ladakh,Uleytokpo,Ladakh,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,34.25349,77.09262,kaggle_destination,candidate,0.7
+dest_bangaram-island_lakshadweep,Bangaram Island,Lakshadweep,Southern India,Island,"[""Beach"",""Nature"",""Luxury"",""Peaceful Retreat""]",October – May,10.94,72.28,kaggle_destination,candidate,0.7
+dest_kadmat-island_lakshadweep,Kadmat Island,Lakshadweep,Southern India,Island,"[""Beach"",""Nature"",""Water Sports"",""Peaceful Retreat""]",October – May,11.2333,72.7833,kaggle_destination,candidate,0.7
+dest_minicoy-island_lakshadweep,Minicoy Island,Lakshadweep,Southern India,Island,"[""Culture"",""Beach"",""Heritage"",""Water Sports""]",October – May,8.28,73.01,kaggle_destination,candidate,0.7
+dest_amarkantak_madhya-pradesh,Amarkantak,Madhya Pradesh,Central India,Village,"[""Culture"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,22.67047,81.75884,kaggle_destination,candidate,0.7
+dest_bandhavgarh_madhya-pradesh,Bandhavgarh,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bhedaghat_madhya-pradesh,Bhedaghat,Madhya Pradesh,Central India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.13175,79.80099,kaggle_destination,candidate,0.7
+dest_bhimbetka_madhya-pradesh,Bhimbetka,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bhimbetka-rock-shelters_madhya-pradesh,Bhimbetka Rock Shelters,Madhya Pradesh,Central India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,22.93739,77.6112,kaggle_destination,candidate,0.7
+dest_bhopal_madhya-pradesh,Bhopal,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_burhanpur_madhya-pradesh,Burhanpur,Madhya Pradesh,Central India,Mountain,"[""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,21.33487,76.37088,kaggle_destination,candidate,0.7
+dest_chanderi_madhya-pradesh,Chanderi,Madhya Pradesh,Central India,Village,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,24.71194,78.13727,kaggle_destination,candidate,0.7
+dest_chitrakoot_madhya-pradesh,Chitrakoot,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_gwalior_madhya-pradesh,Gwalior,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_gyaraspur_madhya-pradesh,Gyaraspur,Madhya Pradesh,Central India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.66903,78.11246,kaggle_destination,candidate,0.7
+dest_indore_madhya-pradesh,Indore,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_jabalpur_madhya-pradesh,Jabalpur,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kanha_madhya-pradesh,Kanha,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_khajuraho_madhya-pradesh,Khajuraho,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_maheshwar_madhya-pradesh,Maheshwar,Madhya Pradesh,Central India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,22.17743,75.58735,kaggle_destination,candidate,0.7
+dest_mandu_madhya-pradesh,Mandu,Madhya Pradesh,Central India,Village,"[""Culture"",""Photography"",""Peaceful Retreat""]",July – March,22.33975,75.40545,kaggle_destination,candidate,0.7
+dest_orchha_madhya-pradesh,Orchha,Madhya Pradesh,Central India,Mountain,"[""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,25.35287,78.64025,kaggle_destination,candidate,0.7
+dest_pachmarhi_madhya-pradesh,Pachmarhi,Madhya Pradesh,Central India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,22.47368,78.43605,kaggle_destination,candidate,0.7
+dest_panna-national-park_madhya-pradesh,Panna National Park,Madhya Pradesh,Central India,Village,"[""Wildlife"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,24.61608,79.94004,kaggle_destination,candidate,0.7
+dest_patalkot-valley_madhya-pradesh,Patalkot Valley,Madhya Pradesh,Central India,Valley,"[""Nature"",""Culture"",""Adventure""]",October to March & July to September (monsoon lushness),22.46,78.73,kaggle_destination,candidate,0.7
+dest_phen-sanctuary_madhya-pradesh,Phen Sanctuary,Madhya Pradesh,Central India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,22.36389,81.02778,kaggle_destination,candidate,0.7
+dest_sanchi-stupa_madhya-pradesh,Sanchi Stupa,Madhya Pradesh,Central India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.47922,77.73968,kaggle_destination,candidate,0.7
+dest_tamia_madhya-pradesh,Tamia,Madhya Pradesh,Central India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,22.34362,78.67082,kaggle_destination,candidate,0.7
+dest_ujjain_madhya-pradesh,Ujjain,Madhya Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_ajanta_maharashtra,Ajanta,Maharashtra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_amboli_maharashtra,Amboli,Maharashtra,Western India,Mountain,"[""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,20.88762,79.35721,kaggle_destination,candidate,0.7
+dest_bhandardara_maharashtra,Bhandardara,Maharashtra,Western India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,19.55513,73.75584,kaggle_destination,candidate,0.7
+dest_chikhaldara_maharashtra,Chikhaldara,Maharashtra,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,21.4764,77.27578,kaggle_destination,candidate,0.7
+dest_harihareshwar_maharashtra,Harihareshwar,Maharashtra,Western India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,17.99509,73.02453,kaggle_destination,candidate,0.7
+dest_jawhar_maharashtra,Jawhar,Maharashtra,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,19.91248,73.22516,kaggle_destination,candidate,0.7
+dest_kaas-plateau_maharashtra,Kaas Plateau,Maharashtra,Western India,Village,"[""Culture"",""Wildlife"",""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,17.72,73.82278,kaggle_destination,candidate,0.7
+dest_lonar-crater_maharashtra,Lonar Crater,Maharashtra,Western India,Village,"[""Culture"",""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,19.97445,76.49755,kaggle_destination,candidate,0.7
+dest_malshej-ghat_maharashtra,Malshej Ghat,Maharashtra,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,19.34171,73.79089,kaggle_destination,candidate,0.7
+dest_matheran_maharashtra,Matheran,Maharashtra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_morachi-chincholi_maharashtra,Morachi Chincholi,Maharashtra,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,18.81557,74.1565,kaggle_destination,candidate,0.7
+dest_panhala-fort_maharashtra,Panhala Fort,Maharashtra,Western India,Village,"[""Nature"",""Culture"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Winter – Spring,16.8089,74.10823,kaggle_destination,candidate,0.7
+dest_sandhan-valley_maharashtra,Sandhan Valley,Maharashtra,Western India,Trek,"[""Adventure"",""Nature"",""Photography""]",October – February,19.51362,73.68634,kaggle_destination,candidate,0.7
+dest_satara_maharashtra,Satara,Maharashtra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_shiroda-beach_maharashtra,Shiroda Beach,Maharashtra,Western India,Beach,"[""Beach"",""Peaceful Retreat"",""Local Sightseeing""]",October to March,15.782,73.6543,kaggle_destination,candidate,0.7
+dest_tarkarli_maharashtra,Tarkarli,Maharashtra,Western India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,16.00681,73.49184,kaggle_destination,candidate,0.7
+dest_toranmal_maharashtra,Toranmal,Maharashtra,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,21.88117,74.4634,kaggle_destination,candidate,0.7
+dest_velas-beach_maharashtra,Velas Beach,Maharashtra,Western India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,17.94194,73.03155,kaggle_destination,candidate,0.7
+dest_alibaug_maharastra,Alibaug,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_aurangabad_maharastra,Aurangabad,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kolhapur_maharastra,Kolhapur,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_lonavala_maharastra,Lonavala,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_mumbai_maharastra,Mumbai,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_nagpur_maharastra,Nagpur,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_nashik_maharastra,Nashik,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_pune_maharastra,Pune,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_ratnagiri_maharastra,Ratnagiri,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_shirdi_maharastra,Shirdi,Maharastra,,city,,,,,kaggle_place_city,candidate,0.6
+dest_andro-heritage-village_manipur,Andro Heritage Village,Manipur,Northeastern India,Village,"[""Culture"",""History"",""Photography""]",October to March,24.7337,94.0414,kaggle_destination,candidate,0.7
+dest_kakching-garden_manipur,Kakching Garden,Manipur,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,24.48,93.98,kaggle_destination,candidate,0.7
+dest_keibul-lamjao-national-park_manipur,Keibul Lamjao National Park,Manipur,Northeastern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,24.48516,93.83854,kaggle_destination,candidate,0.7
+dest_loktak-lake_manipur,Loktak Lake,Manipur,Northeastern India,Valley,"[""Nature"",""Photography"",""Peaceful Retreat""]",October – March,24.55843,93.81324,kaggle_destination,candidate,0.7
+dest_moreh-border-town_manipur,Moreh Border Town,Manipur,Northeastern India,Village,"[""Nature"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Summer – Spring,24.2477,94.3031,kaggle_destination,candidate,0.7
+dest_senapati_manipur,Senapati,Manipur,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,25.39337,94.15018,kaggle_destination,candidate,0.7
+dest_tamenglong_manipur,Tamenglong,Manipur,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,24.98586,93.504,kaggle_destination,candidate,0.7
+dest_ukhrul_manipur,Ukhrul,Manipur,Northeastern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,25.09786,94.36107,kaggle_destination,candidate,0.7
+dest_cherrapunji_meghalaya,Cherrapunji,Meghalaya,,city,,,,,kaggle_place_city,candidate,0.6
+dest_jakrem_meghalaya,Jakrem,Meghalaya,Northeastern India,Valley,"[""Nature"",""Peaceful Retreat"",""Spirituality""]",September – April,25.2833,91.5667,kaggle_destination,candidate,0.7
+dest_mawlyngbna_meghalaya,Mawlyngbna,Meghalaya,Northeastern India,Village,"[""Adventure"",""Nature"",""Water Sports"",""Trek""]",September – May,25.2167,91.5333,kaggle_destination,candidate,0.7
+dest_mawphlang-sacred-grove_meghalaya,Mawphlang Sacred Grove,Meghalaya,Northeastern India,Village,"[""Culture"",""Nature"",""Forest Trail"",""Spirituality""]",September – May,25.4578,91.7589,kaggle_destination,candidate,0.7
+dest_nongriat_meghalaya,Nongriat,Meghalaya,Northeastern India,Trek,"[""Adventure"",""Nature"",""Trek"",""Waterfalls""]",September – May,25.2515,91.6811,kaggle_destination,candidate,0.7
+dest_shnongpdeng_meghalaya,Shnongpdeng,Meghalaya,Northeastern India,Village,"[""Adventure"",""Nature"",""Photography"",""Water Sports""]",October – April,25.212,92.0195,kaggle_destination,candidate,0.7
+dest_champhai_mizoram,Champhai,Mizoram,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,23.63173,93.34932,kaggle_destination,candidate,0.7
+dest_hmuifang-hills_mizoram,Hmuifang Hills,Mizoram,Northeastern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,23.44989,92.75769,kaggle_destination,candidate,0.7
+dest_lunglei_mizoram,Lunglei,Mizoram,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,22.952,92.63388,kaggle_destination,candidate,0.7
+dest_reiek-tlang_mizoram,Reiek Tlang,Mizoram,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,23.678,92.603,kaggle_destination,candidate,0.7
+dest_vantawng-falls_mizoram,Vantawng Falls,Mizoram,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,23.25692,92.76246,kaggle_destination,candidate,0.7
+dest_benreu_nagaland,Benreu,Nagaland,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,25.57419,93.85865,kaggle_destination,candidate,0.7
+dest_dzukou-valley_nagaland,Dzukou Valley,Nagaland,Northeastern India,Valley,"[""Nature"",""Wildlife"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Summer – Spring,25.55168,94.12168,kaggle_destination,candidate,0.7
+dest_dz-kou-valley_nagaland,Dzükou Valley,Nagaland,,city,,,,,kaggle_place_city,candidate,0.6
+dest_khonoma-heritage-village_nagaland,Khonoma Heritage Village,Nagaland,Northeastern India,Village,"[""Culture"",""Nature Walks"",""History""]",October to May,25.6514,94.0202,kaggle_destination,candidate,0.7
+dest_kiphire_nagaland,Kiphire,Nagaland,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,25.81171,94.8474,kaggle_destination,candidate,0.7
+dest_kisama-heritage-village_nagaland,Kisama Heritage Village,Nagaland,Northeastern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,25.61571,94.11398,kaggle_destination,candidate,0.7
+dest_mokokchung_nagaland,Mokokchung,Nagaland,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,26.47959,94.51053,kaggle_destination,candidate,0.7
+dest_mon-village_nagaland,Mon Village,Nagaland,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,26.733141,95.061508,kaggle_destination,candidate,0.7
+dest_pfutsero_nagaland,Pfutsero,Nagaland,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,25.56294,94.27951,kaggle_destination,candidate,0.7
+dest_tuophema-tourist-village_nagaland,Tuophema Tourist Village,Nagaland,Northeastern India,Trek,"[""Culture"",""Local Sightseeing"",""Peaceful Retreat""]",October to April,25.8475,94.1378,kaggle_destination,candidate,0.7
+dest_wokha_nagaland,Wokha,Nagaland,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,26.24225,94.19212,kaggle_destination,candidate,0.7
+dest_balasore_odisha,Balasore,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_berhampur_odisha,Berhampur,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bhitarkanika-mangroves_odisha,Bhitarkanika Mangroves,Odisha,Eastern India,Mountain,"[""Wildlife"",""Nature"",""Adventure""]",October to February,20.7226,86.8682,kaggle_destination,candidate,0.7
+dest_bhubaneswar_odisha,Bhubaneswar,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_chandipur-beach_odisha,Chandipur Beach,Odisha,Eastern India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,21.47,87.02,kaggle_destination,candidate,0.7
+dest_chilika_odisha,Chilika,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_cuttack_odisha,Cuttack,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_daringbadi_odisha,Daringbadi,Odisha,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,19.91608,84.11649,kaggle_destination,candidate,0.7
+dest_deomali-peak_odisha,Deomali Peak,Odisha,Eastern India,Trek,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,18.67556,82.98167,kaggle_destination,candidate,0.7
+dest_gopalpur-on-sea_odisha,Gopalpur-on-Sea,Odisha,Eastern India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,19.25989,84.90517,kaggle_destination,candidate,0.7
+dest_hirakud-reservoir_odisha,Hirakud Reservoir,Odisha,Eastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,21.63427,83.77137,kaggle_destination,candidate,0.7
+dest_jirang-monastery_odisha,Jirang Monastery,Odisha,Eastern India,Village,"[""Nature"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,19.2725871,84.2625481,kaggle_destination,candidate,0.7
+dest_kendujhar_odisha,Kendujhar,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_keonjhar_odisha,Keonjhar,Odisha,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,21.5,85.5,kaggle_destination,candidate,0.7
+dest_konark_odisha,Konark,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_koraput-valley_odisha,Koraput Valley,Odisha,Eastern India,Valley,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,18.8083,82.7083,kaggle_destination,candidate,0.7
+dest_lalitgiri_odisha,Lalitgiri,Odisha,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,20.59763,86.28735,kaggle_destination,candidate,0.7
+dest_mangalajodi_odisha,Mangalajodi,Odisha,Eastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,19.9143,85.42977,kaggle_destination,candidate,0.7
+dest_puri_odisha,Puri,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_raghurajpur-heritage-craft-village_odisha,Raghurajpur Heritage Craft Village,Odisha,Eastern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,19.88556,85.82639,kaggle_destination,candidate,0.7
+dest_rourkela_odisha,Rourkela,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_sambalpur_odisha,Sambalpur,Odisha,,city,,,,,kaggle_place_city,candidate,0.6
+dest_satkosia-gorge_odisha,Satkosia Gorge,Odisha,Eastern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,20.60412,84.90062,kaggle_destination,candidate,0.7
+dest_similipal-national-park_odisha,Similipal National Park,Odisha,Eastern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,21.83333,86.33333,kaggle_destination,candidate,0.7
+dest_taptapani-hot-springs_odisha,Taptapani Hot Springs,Odisha,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,19.48473,84.39364,kaggle_destination,candidate,0.7
+dest_auroville_puducherry,Auroville,Puducherry,,city,,,,,kaggle_place_city,candidate,0.6
+dest_puducherry_puducherry,Puducherry,Puducherry,,city,,,,,kaggle_place_city,candidate,0.6
+dest_amritsar_punjab,Amritsar,Punjab,,city,,,,,kaggle_place_city,candidate,0.6
+dest_anandpur-sahib_punjab,Anandpur Sahib,Punjab,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,31.22999,76.50058,kaggle_destination,candidate,0.7
+dest_bathinda-fort_punjab,Bathinda Fort,Punjab,Northern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,30.23,74.95194,kaggle_destination,candidate,0.7
+dest_chandigarh_punjab,Chandigarh,Punjab,,city,,,,,kaggle_place_city,candidate,0.6
+dest_harike-wetland_punjab,Harike Wetland,Punjab,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,31.15,74.97,kaggle_destination,candidate,0.7
+dest_kapurthala_punjab,Kapurthala,Punjab,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,31.38565,75.30533,kaggle_destination,candidate,0.7
+dest_kila-raipur_punjab,Kila Raipur,Punjab,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,30.76231,75.82287,kaggle_destination,candidate,0.7
+dest_ropar-wetland_punjab,Ropar Wetland,Punjab,Northern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,31.02,76.5,kaggle_destination,candidate,0.7
+dest_ajmer_rajasthan,Ajmer,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_banswara_rajasthan,Banswara,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.4915,74.35022,kaggle_destination,candidate,0.7
+dest_barmer_rajasthan,Barmer,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,25.58149,71.19249,kaggle_destination,candidate,0.7
+dest_bikaner_rajasthan,Bikaner,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bundi_rajasthan,Bundi,Rajasthan,Western India,Village,"[""Culture"",""Photography"",""Peaceful Retreat""]",October – March,25.43677,75.73615,kaggle_destination,candidate,0.7
+dest_chittorgarh_rajasthan,Chittorgarh,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_deeg-palace_rajasthan,Deeg Palace,Rajasthan,Western India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,27.47087,77.32907,kaggle_destination,candidate,0.7
+dest_dungarpur_rajasthan,Dungarpur,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.85389,73.70872,kaggle_destination,candidate,0.7
+dest_jaipur_rajasthan,Jaipur,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_jaisalmer_rajasthan,Jaisalmer,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_jawai-bandh_rajasthan,Jawai Bandh,Rajasthan,Western India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,25.11438,73.14748,kaggle_destination,candidate,0.7
+dest_jodhpur_rajasthan,Jodhpur,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_karauli_rajasthan,Karauli,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,26.51583,77.0566,kaggle_destination,candidate,0.7
+dest_kuchaman-city_rajasthan,Kuchaman City,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,27.05344,74.85135,kaggle_destination,candidate,0.7
+dest_kumbhalgarh_rajasthan,Kumbhalgarh,Rajasthan,Western India,Village,"[""Culture"",""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,25.14805,73.58275,kaggle_destination,candidate,0.7
+dest_mandawa_rajasthan,Mandawa,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,28.05584,75.14839,kaggle_destination,candidate,0.7
+dest_mihir-garh_rajasthan,Mihir Garh,Rajasthan,Western India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,26.29806,73.01889,kaggle_destination,candidate,0.7
+dest_mount-abu_rajasthan,Mount Abu,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_narlai_rajasthan,Narlai,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,25.31658,73.5351,kaggle_destination,candidate,0.7
+dest_osian_rajasthan,Osian,Rajasthan,Western India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,26.79095,72.998,kaggle_destination,candidate,0.7
+dest_pushkar_rajasthan,Pushkar,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_ramgarh_rajasthan,Ramgarh,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,28.1707,74.97769,kaggle_destination,candidate,0.7
+dest_sawai-madhopur_rajasthan,Sawai Madhopur,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_shekhawati_rajasthan,Shekhawati,Rajasthan,Western India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,28.05389,75.1517,kaggle_destination,candidate,0.7
+dest_udaipur_rajasthan,Udaipur,Rajasthan,,city,,,,,kaggle_place_city,candidate,0.6
+dest_aritar-lake_sikkim,Aritar Lake,Sikkim,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,27.1867,88.67662,kaggle_destination,candidate,0.7
+dest_borong-village_sikkim,Borong Village,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.2925,88.35944,kaggle_destination,candidate,0.7
+dest_dzongu_sikkim,Dzongu,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.53475,88.4891,kaggle_destination,candidate,0.7
+dest_gangtok_sikkim,Gangtok,Sikkim,,city,,,,,kaggle_place_city,candidate,0.6
+dest_lachen_sikkim,Lachen,Sikkim,Northeastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,27.73061,88.5495,kaggle_destination,candidate,0.7
+dest_lachung_sikkim,Lachung,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.68971,88.74259,kaggle_destination,candidate,0.7
+dest_namchi_sikkim,Namchi,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.3031,88.3786,kaggle_destination,candidate,0.7
+dest_pelling_sikkim,Pelling,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.30037,88.23565,kaggle_destination,candidate,0.7
+dest_ravangla_sikkim,Ravangla,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.30513,88.36447,kaggle_destination,candidate,0.7
+dest_temi-tea-garden_sikkim,Temi Tea Garden,Sikkim,Northeastern India,Trek,"[""Nature"",""Trekking"",""Peaceful Retreat""]",March to May & October to November,27.2343,88.4239,kaggle_destination,candidate,0.7
+dest_yuksom_sikkim,Yuksom,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.36924,88.21848,kaggle_destination,candidate,0.7
+dest_yumthang-valley_sikkim,Yumthang Valley,Sikkim,Northeastern India,Valley,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,27.8268,88.6959,kaggle_destination,candidate,0.7
+dest_zuluk_sikkim,Zuluk,Sikkim,Northeastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,27.25099,88.77502,kaggle_destination,candidate,0.7
+dest_chennai_tamil-nadu,Chennai,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_chettinad_tamil-nadu,Chettinad,Tamil Nadu,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,10.15991,78.77641,kaggle_destination,candidate,0.7
+dest_chidambaram_tamil-nadu,Chidambaram,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_coimbatore_tamil-nadu,Coimbatore,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_courtallam_tamil-nadu,Courtallam,Tamil Nadu,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,8.93288,77.27146,kaggle_destination,candidate,0.7
+dest_dhanushkodi_tamil-nadu,Dhanushkodi,Tamil Nadu,Southern India,Beach,"[""Photography"",""Nature"",""Adventure"",""Peaceful Retreat""]",November – March,9.17781,79.41776,kaggle_destination,candidate,0.7
+dest_hogenakkal-falls_tamil-nadu,Hogenakkal Falls,Tamil Nadu,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,12.11842,77.77586,kaggle_destination,candidate,0.7
+dest_kanyakumari_tamil-nadu,Kanyakumari,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kodaikanal_tamil-nadu,Kodaikanal,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kolli-hills_tamil-nadu,Kolli Hills,Tamil Nadu,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,11.32213,78.39351,kaggle_destination,candidate,0.7
+dest_kotagiri_tamil-nadu,Kotagiri,Tamil Nadu,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,11.42304,76.86582,kaggle_destination,candidate,0.7
+dest_kurusadai-island_tamil-nadu,Kurusadai Island,Tamil Nadu,Southern India,Island,"[""Wildlife"",""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,9.24619,79.20936,kaggle_destination,candidate,0.7
+dest_madurai_tamil-nadu,Madurai,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_mahabalipuram_tamil-nadu,Mahabalipuram,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_manimuthar-falls_tamil-nadu,Manimuthar Falls,Tamil Nadu,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Peaceful Retreat""]",October to January,8.6324,77.4042,kaggle_destination,candidate,0.7
+dest_masinagudi_tamil-nadu,Masinagudi,Tamil Nadu,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,11.56829,76.63897,kaggle_destination,candidate,0.7
+dest_meghamalai_tamil-nadu,Meghamalai,Tamil Nadu,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,9.67607,77.38213,kaggle_destination,candidate,0.7
+dest_ooty_tamil-nadu,Ooty,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_pichavaram-mangrove-forest_tamil-nadu,Pichavaram Mangrove Forest,Tamil Nadu,Southern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,11.41822,79.80207,kaggle_destination,candidate,0.7
+dest_poompuhar_tamil-nadu,Poompuhar,Tamil Nadu,Southern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,11.14529,79.85373,kaggle_destination,candidate,0.7
+dest_rameswaram_tamil-nadu,Rameswaram,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_thanjavur_tamil-nadu,Thanjavur,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_tirunelveli_tamil-nadu,Tirunelveli,Tamil Nadu,,city,,,,,kaggle_place_city,candidate,0.6
+dest_tranquebar_tamil-nadu,Tranquebar,Tamil Nadu,Southern India,Beach,"[""Spiritual"",""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,11.02993,79.8522,kaggle_destination,candidate,0.7
+dest_valparai_tamil-nadu,Valparai,Tamil Nadu,Southern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,10.32799,76.95573,kaggle_destination,candidate,0.7
+dest_yercaud_tamil-nadu,Yercaud,Tamil Nadu,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,11.78521,78.20754,kaggle_destination,candidate,0.7
+dest_alampur-temples_telangana,Alampur Temples,Telangana,Southern India,Village,"[""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,15.877,78.132,kaggle_destination,candidate,0.7
+dest_ananthagiri-hills_telangana,Ananthagiri Hills,Telangana,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,17.32283,77.86186,kaggle_destination,candidate,0.7
+dest_bhongir-fort_telangana,Bhongir Fort,Telangana,Southern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,17.51489,78.8924,kaggle_destination,candidate,0.7
+dest_hyderabad_telangana,Hyderabad,Telangana,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kadam-dam_telangana,Kadam Dam,Telangana,Southern India,Mountain,"[""Nature"",""Local Sightseeing"",""Peaceful Retreat""]",July to October,19.1084,78.7844,kaggle_destination,candidate,0.7
+dest_kawal-wildlife-sanctuary_telangana,Kawal Wildlife Sanctuary,Telangana,Southern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,19.11889,78.99897,kaggle_destination,candidate,0.7
+dest_laknavaram-lake_telangana,Laknavaram Lake,Telangana,Southern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,18.14802,80.06033,kaggle_destination,candidate,0.7
+dest_medak-fort_telangana,Medak Fort,Telangana,Southern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,18.04361,78.255,kaggle_destination,candidate,0.7
+dest_rachakonda-fort_telangana,Rachakonda Fort,Telangana,Southern India,Village,"[""Culture"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,17.18222,78.8025,kaggle_destination,candidate,0.7
+dest_ramappa-temple_telangana,Ramappa Temple,Telangana,Southern India,Village,"[""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,18.2593,79.94325,kaggle_destination,candidate,0.7
+dest_agartala_tripura,Agartala,Tripura,,city,,,,,kaggle_place_city,candidate,0.6
+dest_dumboor_tripura,Dumboor,Tripura,,city,,,,,kaggle_place_city,candidate,0.6
+dest_unakoti_tripura,Unakoti,Tripura,,city,,,,,kaggle_place_city,candidate,0.6
+dest_agra_uttar-pradesh,Agra,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_aligarh_uttar-pradesh,Aligarh,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_allahabad_uttar-pradesh,Allahabad,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_ayodhya_uttar-pradesh,Ayodhya,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bateshwar_uttar-pradesh,Bateshwar,Uttar Pradesh,Northern India,Village,"[""Heritage"",""Culture"",""Photography"",""Spirituality""]",October – March,26.9372,78.5372,kaggle_destination,candidate,0.7
+dest_chunar_uttar-pradesh,Chunar,Uttar Pradesh,Northern India,Village,"[""Heritage"",""Culture"",""Photography"",""Adventure""]",September – March,25.1278,82.8808,kaggle_destination,candidate,0.7
+dest_deogarh_uttar-pradesh,Deogarh,Uttar Pradesh,Northern India,Village,"[""Heritage"",""Culture"",""Photography"",""Peaceful Retreat""]",October – March,24.5222,78.2561,kaggle_destination,candidate,0.7
+dest_dudhwa-national-park_uttar-pradesh,Dudhwa National Park,Uttar Pradesh,Northern India,Village,"[""Wildlife"",""Nature"",""Forest Trail"",""Offbeat""]",November – April,28.4906,80.6603,kaggle_destination,candidate,0.7
+dest_fatehpur-sikri_uttar-pradesh,Fatehpur Sikri,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_greater-noida_uttar-pradesh,Greater Noida,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_jhansi_uttar-pradesh,Jhansi,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kampil_uttar-pradesh,Kampil,Uttar Pradesh,Northern India,Village,"[""Heritage"",""Culture"",""Spirituality""]",October – March,27.5928,79.2817,kaggle_destination,candidate,0.7
+dest_kanpur_uttar-pradesh,Kanpur,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_lucknow_uttar-pradesh,Lucknow,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_mathura_uttar-pradesh,Mathura,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_meerut_uttar-pradesh,Meerut,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_noida_uttar-pradesh,Noida,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_porbandar_uttar-pradesh,Porbandar,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_sarnath_uttar-pradesh,Sarnath,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_varanasi_uttar-pradesh,Varanasi,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_vrindavan_uttar-pradesh,Vrindavan,Uttar Pradesh,,city,,,,,kaggle_place_city,candidate,0.6
+dest_abbott-mount_uttarakhand,Abbott Mount,Uttarakhand,Northern India,Trek,"[""Nature"",""Culture"",""Peaceful Retreat""]",March to June & September to November,29.4217,80.1264,kaggle_destination,candidate,0.7
+dest_almora_uttarakhand,Almora,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_auli_uttarakhand,Auli,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_badrinath_uttarakhand,Badrinath,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_binsar_uttarakhand,Binsar,Uttarakhand,Northern India,Village,"[""Nature"",""Culture"",""Spiritual"",""Trekking"",""Bird Watching"",""Nature Walk"",""Photography""]",Summer – Spring,29.70017,79.74976,kaggle_destination,candidate,0.7
+dest_chakrata_uttarakhand,Chakrata,Uttarakhand,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,30.70132,77.87034,kaggle_destination,candidate,0.7
+dest_chopta_uttarakhand,Chopta,Uttarakhand,Northern India,Trek,"[""Adventure"",""Wildlife"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Summer – Spring,30.18019,79.36768,kaggle_destination,candidate,0.7
+dest_dehradun_uttarakhand,Dehradun,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_haridwar_uttarakhand,Haridwar,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_harsil_uttarakhand,Harsil,Uttarakhand,Northern India,Village,"[""Nature"",""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Summer – Spring,31.03691,78.75065,kaggle_destination,candidate,0.7
+dest_jim-corbett_uttarakhand,Jim Corbett,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_joshimath_uttarakhand,Joshimath,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kanatal_uttarakhand,Kanatal,Uttarakhand,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,30.41533,78.32119,kaggle_destination,candidate,0.7
+dest_kausani_uttarakhand,Kausani,Uttarakhand,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,29.33757,79.5048,kaggle_destination,candidate,0.7
+dest_kedarnath_uttarakhand,Kedarnath,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_khirsu_uttarakhand,Khirsu,Uttarakhand,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,30.17141,78.86837,kaggle_destination,candidate,0.7
+dest_landour_uttarakhand,Landour,Uttarakhand,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,30.45684,78.10224,kaggle_destination,candidate,0.7
+dest_lohaghat_uttarakhand,Lohaghat,Uttarakhand,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,29.4056,80.11535,kaggle_destination,candidate,0.7
+dest_mana-village_uttarakhand,Mana Village,Uttarakhand,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,30.96712,79.41097,kaggle_destination,candidate,0.7
+dest_mukteshwar_uttarakhand,Mukteshwar,Uttarakhand,Northern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,29.47208,79.64804,kaggle_destination,candidate,0.7
+dest_munsiyari_uttarakhand,Munsiyari,Uttarakhand,Northern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Summer – Spring,30.12249,80.24153,kaggle_destination,candidate,0.7
+dest_mussoorie_uttarakhand,Mussoorie,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_nainital_uttarakhand,Nainital,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_pangot_uttarakhand,Pangot,Uttarakhand,Northern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Summer – Spring,29.42413,79.42704,kaggle_destination,candidate,0.7
+dest_peora_uttarakhand,Peora,Uttarakhand,Northern India,Mountain,"[""Nature"",""Photography"",""Peaceful Retreat""]",October to March (for snow views) & April to June (for fruit season),29.5312,79.6247,kaggle_destination,candidate,0.7
+dest_ranikhet_uttarakhand,Ranikhet,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_rishikesh_uttarakhand,Rishikesh,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_uttarkashi_uttarakhand,Uttarkashi,Uttarakhand,,city,,,,,kaggle_place_city,candidate,0.6
+dest_bishnupur-temples_west-bengal,Bishnupur Temples,West Bengal,Eastern India,Village,"[""Spiritual"",""Meditation"",""Temple Visit"",""Heritage Walk"",""Photography""]",Winter – Spring,23.075,87.317,kaggle_destination,candidate,0.7
+dest_bolpur_west-bengal,Bolpur,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_chandraketugarh_west-bengal,Chandraketugarh,West Bengal,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,22.69752,88.6884,kaggle_destination,candidate,0.7
+dest_cooch-behar_west-bengal,Cooch Behar,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_darjeeling_west-bengal,Darjeeling,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_digha_west-bengal,Digha,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_duarsini_west-bengal,Duarsini,West Bengal,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,23.04974,86.56573,kaggle_destination,candidate,0.7
+dest_garhpanchkot_west-bengal,Garhpanchkot,West Bengal,Eastern India,Village,"[""Culture"",""History"",""Nature""]",October to March,23.6196,86.7797,kaggle_destination,candidate,0.7
+dest_henry-s-island_west-bengal,Henry's Island,West Bengal,Eastern India,Island,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,21.57943,88.28868,kaggle_destination,candidate,0.7
+dest_hooghly_west-bengal,Hooghly,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_jaldapara-national-park_west-bengal,Jaldapara National Park,West Bengal,Eastern India,Mountain,"[""Nature"",""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,26.68477,89.30472,kaggle_destination,candidate,0.7
+dest_jalpaiguri_west-bengal,Jalpaiguri,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kolkata_west-bengal,Kolkata,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_kurseong_west-bengal,Kurseong,West Bengal,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,26.88183,88.27836,kaggle_destination,candidate,0.7
+dest_lava-forest_west-bengal,Lava Forest,West Bengal,Eastern India,Mountain,"[""Wildlife"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,27.08611,88.66056,kaggle_destination,candidate,0.7
+dest_lepchajagat_west-bengal,Lepchajagat,West Bengal,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,26.9986,88.1672,kaggle_destination,candidate,0.7
+dest_lolegaon_west-bengal,Lolegaon,West Bengal,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,27.02041,88.56502,kaggle_destination,candidate,0.7
+dest_mukutmanipur_west-bengal,Mukutmanipur,West Bengal,Eastern India,Mountain,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,22.96256,86.78752,kaggle_destination,candidate,0.7
+dest_murshidabad_west-bengal,Murshidabad,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_purulia_west-bengal,Purulia,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_rishyap_west-bengal,Rishyap,West Bengal,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,27.11125,88.6532,kaggle_destination,candidate,0.7
+dest_samsing-village_west-bengal,Samsing Village,West Bengal,Eastern India,Village,"[""Nature"",""Nature Walks"",""Photography"",""Local Sightseeing"",""Bird Watching""]",Winter – Spring,26.98917,88.80361,kaggle_destination,candidate,0.7
+dest_siliguri_west-bengal,Siliguri,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_sundarbans_west-bengal,Sundarbans,West Bengal,,city,,,,,kaggle_place_city,candidate,0.6
+dest_suntalekhola_west-bengal,Suntalekhola,West Bengal,Eastern India,Trek,"[""Nature"",""Adventure"",""Trekking"",""Camping"",""Rock Climbing"",""Bird Watching""]",Winter – Spring,27.01339,88.78778,kaggle_destination,candidate,0.7
+dest_tajpur-beach_west-bengal,Tajpur Beach,West Bengal,Eastern India,Beach,"[""Beach"",""Swimming"",""Sunbathing"",""Beach Walks"",""Boat Ride""]",Winter – Spring,21.65118,87.63508,kaggle_destination,candidate,0.7

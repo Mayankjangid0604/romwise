@@ -19,11 +19,10 @@ import { getGeminiClient, GeminiProviderError, GeminiSchemaError } from "./gemin
 import { resolveDestination } from "./destination-resolver";
 import { getCandidatePlaces, bulkVerifyPlaces } from "./travel-knowledge";
 import {
-  getHardExclusions,
   aggregatePreferences,
   detectPreferenceConflicts,
+  getHardExclusions,
 } from "./preference-scoring";
-// import { TRIP_BRAIN_CATEGORIES } from "./categories";
 import type { CandidatePlace } from "./travel-knowledge";
 import type { MemberPreference } from "./preference-scoring";
 import type { ResolvedDestination } from "./destination-resolver";
@@ -137,7 +136,6 @@ function buildGroundedPrompt(
 ): string {
   const dailyBudget = Math.floor(budgetInr / dayCount);
 
-  // const hardExclusions = getHardExclusions(allPreferences);
   const aggregated = aggregatePreferences(allPreferences);
   const conflicts = detectPreferenceConflicts(allPreferences);
 

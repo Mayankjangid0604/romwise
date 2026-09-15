@@ -173,8 +173,7 @@ function makeGeminiClient(rawText: string) {
   } as never;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function geminiResponse(placeIds: string[][], dayCount: number) {
+function geminiResponse(placeIds: string[][], _dayCount: number) {
   return JSON.stringify({
     days: placeIds.map((dayIds, i) => ({
       dayNumber: i + 1,
