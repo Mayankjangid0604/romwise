@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { generatePackingList } from "@/lib/packing";
+import { getTripDuration } from "@/lib/date-utils";
 import { revalidatePath } from "next/cache";
 
 export async function generatePacking(tripId: string) {
@@ -20,10 +21,7 @@ export async function generatePacking(tripId: string) {
   );
   if (!isMember) throw new Error("Not a member of this trip");
 
-  const durationDays =
-    Math.ceil(
-      (trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24),
-    ) + 1;
+  const durationDays = getTripDuration(trip, 3);
 
   const accessibilityNotes = trip.groupMembers
     .map((m) => m.accessibilityNotes)

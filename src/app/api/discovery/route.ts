@@ -5,12 +5,33 @@ import {
   validateDiscoveryInput,
   ValidationError,
 } from "@/lib/discovery";
-import { GeminiConfigError, GeminiProviderError, GeminiSchemaError } from "@/lib/gemini";
+import { AIGatewayError } from "@/lib/ai/types";
+import { checkRateLimitDb } from "@/lib/db-rate-limit";
+import { headers } from "next/headers";
+
+async function getClientIp(): Promise<string> {
+  const h = await headers();
+  return h.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+}
 
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // SEC-001: Rate limit Gemini-backed discovery (5 / 15 min per user)
+  const ip = await getClientIp();
+  const rateLimitKey = `discovery:${session.user.id}:${ip}`;
+  const { allowed, retryAfterSeconds } = await checkRateLimitDb(rateLimitKey);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: `Too many requests. Try again in ${Math.ceil(retryAfterSeconds / 60)} minutes.` },
+      {
+        status: 429,
+        headers: { "Retry-After": String(retryAfterSeconds) },
+      },
+    );
   }
 
   let body: unknown;
@@ -37,19 +58,25 @@ export async function POST(request: NextRequest) {
     const result = await discoverDestinations(input);
     return NextResponse.json(result);
   } catch (error) {
-    if (error instanceof GeminiConfigError) {
-      return NextResponse.json(
-        { error: "AI service is not configured" },
-        { status: 503 },
-      );
-    }
-    if (error instanceof GeminiProviderError) {
+    if (error instanceof AIGatewayError) {
+      if (error.code === "AI_CONFIG_ERROR") {
+        return NextResponse.json(
+          { error: "AI service is not configured" },
+          { status: 503 },
+        );
+      }
+      if (error.code === "AI_INVALID_OUTPUT") {
+        return NextResponse.json(
+          { error: "AI returned an unexpected response format" },
+          { status: 502 },
+        );
+      }
       return NextResponse.json(
         { error: "AI service is temporarily unavailable" },
         { status: 502 },
       );
     }
-    if (error instanceof GeminiSchemaError) {
+    if (error instanceof ValidationError) {
       return NextResponse.json(
         { error: "AI returned an unexpected response format" },
         { status: 502 },

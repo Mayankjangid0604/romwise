@@ -29,7 +29,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Gateway_of_India",
       "sourceRecordId": "494788",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Elephanta Caves",
@@ -57,7 +58,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Elephanta_Caves",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 320
     },
     {
       "name": "Chhatrapati Shivaji Maharaj Terminus",
@@ -85,7 +87,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chhatrapati_Shivaji_Maharaj_Terminus",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Marine Drive (Queen's Necklace)",
@@ -113,7 +116,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Marine_Drive,_Mumbai",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chhatrapati Shivaji Maharaj Vastu Sangrahalaya",
@@ -141,7 +145,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chhatrapati_Shivaji_Maharaj_Vastu_Sangrahalaya",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 293
     },
     {
       "name": "Kala Ghoda Arts District",
@@ -170,7 +175,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Kala_Ghoda",
       "sourceRecordId": "867788",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Sanjay Gandhi National Park",
@@ -198,7 +204,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Sanjay_Gandhi_National_Park",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 124
     },
     {
       "name": "Juhu Beach",
@@ -226,7 +233,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Juhu_Beach",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Banganga Tank",
@@ -254,7 +262,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Banganga_Tank",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Dharavi",
@@ -266,7 +275,7 @@
       "area": "Dharavi",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Guided tours typically morning only",
@@ -282,7 +291,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dharavi",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Taj Mahal Palace Hotel",
@@ -294,7 +304,7 @@
       "area": "Colaba",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open 24 hours (hotel)",
@@ -311,7 +321,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Taj_Mahal_Palace_Hotel",
       "sourceRecordId": "1983963",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Haji Ali Dargah",
@@ -339,7 +350,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Haji_Ali_Dargah",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Siddhivinayak Temple",
@@ -367,7 +379,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Siddhivinayak_Temple,_Mumbai",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Victorian Gothic and Art Deco Ensembles of Mumbai",
@@ -396,7 +409,64 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Victorian_Gothic_and_Art_Deco_Ensembles_of_Mumbai",
       "sourceRecordId": "42437850",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Mumbai Vada Pav and Bhel Puri Walk",
+      "slug": "mumbai-street-food-vada-pav",
+      "lat": 18.9388,
+      "lng": 72.8354,
+      "description": "Mumbai's street food trinity: vada pav (spicy potato fritter in pav), bhel puri (puffed rice salad), and pav bhaji (spiced vegetable mash with butter-toasted rolls). Juhu Beach for bhel, Anand Stall at Vile Parle for vada pav, and Sardar for pav bhaji near Tardeo.",
+      "area": "Multiple — Juhu, Vile Parle, Tardeo",
+      "typicalCostInr": 150,
+      "costMinInr": 50,
+      "costMaxInr": 300,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Apr",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 2,
+      "accessibilityScore": 3,
+      "popularityScore": 90,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Britannia & Co — Parsi Dhansak",
+      "slug": "britannia-co-mumbai-parsi",
+      "lat": 18.9371,
+      "lng": 72.8404,
+      "description": "One of Mumbai's most iconic Parsi restaurants (est. 1923), in the Fort district. Famous for dhansak (lamb/chicken with lentils and rice), mutton berry pulao, and caramel custard. Run by the Kohinoor family, it's a living piece of Irani café culture and Bombay heritage.",
+      "area": "Fort / Ballard Estate",
+      "typicalCostInr": 500,
+      "costMinInr": 300,
+      "costMaxInr": 800,
+      "costStatus": "estimated",
+      "openingTime": "11:30",
+      "closingTime": "16:00",
+      "openingDays": "Mon–Sat (closed Sunday and holidays)",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

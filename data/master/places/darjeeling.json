@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tiger_Hill,_Darjeeling",
       "confidence": 0.92,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 20
     },
     {
       "name": "Darjeeling Himalayan Railway",
@@ -40,7 +41,7 @@
       "area": "Darjeeling Railway Station, town centre",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Multiple daily services; timetable varies by season",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Darjeeling_Himalayan_Railway",
       "confidence": 0.92,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Batasia Loop",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Batasia_Loop",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 20
     },
     {
       "name": "Happy Valley Tea Estate",
@@ -96,7 +99,7 @@
       "area": "Happy Valley, 3km from Darjeeling town",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "16:00",
       "openingDays": "Mon–Sat 08:00–16:00, Mar–Nov; closed Dec–Feb",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Happy_Valley_Tea_Estate",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Padmaja Naidu Himalayan Zoological Park",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Padmaja_Naidu_Himalayan_Zoological_Park",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 80
     },
     {
       "name": "Himalayan Mountaineering Institute",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Himalayan_Mountaineering_Institute",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 80
     },
     {
       "name": "Ghoom Monastery (Yiga Choeling Gompa)",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Yiga_Choeling_Monastery",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Peace Pagoda Darjeeling",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Darjeeling_Peace_Pagoda",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Observatory Hill (Mahakal Temple)",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Observatory_Hill,_Darjeeling",
       "confidence": 0.88,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Lloyd Botanical Garden",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Lloyd_Botanical_Garden",
       "confidence": 0.88,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chowrasta Mall",
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Darjeeling",
       "confidence": 0.88,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Darjeeling Ropeway",
@@ -320,7 +331,7 @@
       "area": "Singamari, lower end of Darjeeling",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "16:00",
       "openingDays": "Daily 08:00–16:00 (check day of; schedule can vary)",
@@ -336,7 +347,92 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Darjeeling_Ropeway",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
+    },
+    {
+      "name": "Darjeeling Tea Estate Visit and Tasting",
+      "slug": "darjeeling-tea-estate-tasting",
+      "lat": 27.041,
+      "lng": 88.2663,
+      "description": "Visit a working Darjeeling tea estate (Happy Valley, Glenburn, or Makaibari) for a guided factory tour and fresh-plucked first flush/second flush tasting. Learn about orthodox tea processing, withering, rolling, and oxidation. Best during flush seasons (Mar–May, Oct–Nov).",
+      "area": "Tea Garden Belt",
+      "typicalCostInr": 200,
+      "costMinInr": 100,
+      "costMaxInr": 400,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "16:00",
+      "openingDays": "Mon–Sat (most estates)",
+      "openingHoursStatus": "known",
+      "bestSeason": "Mar–Nov",
+      "seasonStatus": "known",
+      "durationMinutes": 90,
+      "fatigueCost": 2,
+      "accessibilityScore": 2,
+      "popularityScore": 88,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Keventers — Darjeeling's Iconic Café",
+      "slug": "keventers-darjeeling-cafe",
+      "lat": 27.041,
+      "lng": 88.2663,
+      "description": "Keventers Café on Observatory Hill road, operating since the British colonial era. Famous for thick milkshakes, pastries, and Darjeeling tea with mountain views. A beloved local institution for generations of hill-station visitors.",
+      "area": "Chowrasta / Town Centre",
+      "typicalCostInr": 150,
+      "costMinInr": 80,
+      "costMaxInr": 250,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "20:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Darjeeling Tibetan Thukpa and Momos",
+      "slug": "darjeeling-tibetan-food-thukpa",
+      "lat": 27.041,
+      "lng": 88.2663,
+      "description": "Darjeeling's Tibetan population means excellent momos (dumplings) and thukpa (noodle broth) are widely available. Best momos at Glenary's Bakery and local joints on Nehru Road. Gyatuk (Tibetan noodle soup) and sel roti (rice doughnut) are equally prized.",
+      "area": "Nehru Road / Chowrasta",
+      "typicalCostInr": 120,
+      "costMinInr": 60,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "10:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

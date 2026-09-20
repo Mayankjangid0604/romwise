@@ -14,3 +14,7 @@ export { Progress } from "./progress";
 export { EmptyState } from "./empty-state";
 export { Figure, formatInr } from "./figure";
 export { PageShell, CenteredShell } from "./page";
+export * from "./weather-widget";
+export * from "./place-card";
+export * from "./timeline";
+export * from "./recent-tracker";

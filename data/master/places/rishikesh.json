@@ -29,7 +29,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Lakshman_Jhula",
       "sourceRecordId": "22436305",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Ram Jhula",
@@ -58,14 +59,15 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Ram_Jhula",
       "sourceRecordId": "34827705",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Parmarth Niketan",
       "slug": "parmarth-niketan-rishikesh",
       "category": "spiritual",
       "lat": 30.119225,
-      "lng": 78.31220,
+      "lng": 78.3122,
       "description": "Largest ashram in Rishikesh, founded 1942, set on the eastern bank of the Ganges near Ram Jhula. Runs yoga, meditation, and spiritual education programmes. The ashram's daily Ganga Aarti at sunset (approximately 18:00–18:30, seasonally adjusted) on the ghats is the most-attended ceremony in Rishikesh — hundreds of candles and lamps are offered to the river. Open to visitors; the ghat is free. Longer residential programmes and yoga retreats are paid.",
       "area": "Swarg Ashram, Ram Jhula area",
       "costMinInr": 0,
@@ -87,7 +89,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Parmarth_Niketan",
       "sourceRecordId": "24980925",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Beatles Ashram",
@@ -97,9 +100,9 @@
       "lng": 78.312774,
       "description": "Former ashram of Maharishi Mahesh Yogi (Chaurasi Kutia), where The Beatles and other celebrities stayed in 1968 to study Transcendental Meditation. Abandoned in 1981 and reclaimed by forest; now open as a heritage site managed by the Forest Department. The campus has meditation domes, Beatles-themed murals painted by visiting artists, and overgrown but striking stone structures returning to jungle. Entry fee applies (charged by Forest Dept). Open daily; photography permitted. A 2km walk from Ram Jhula.",
       "area": "Swarg Ashram, 2km from Ram Jhula",
-      "costMinInr": 150,
-      "costMaxInr": 600,
-      "costStatus": "known",
+      "costMinInr": 100,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "17:30",
       "openingDays": "Daily 09:00–17:30",
@@ -116,7 +119,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Beatles_Ashram",
       "sourceRecordId": "57255096",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 150
     },
     {
       "name": "Nilkanth Mahadev Temple",
@@ -145,7 +149,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Nilkanth_Mahadev",
       "sourceRecordId": "27458660",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Rajaji National Park",
@@ -155,9 +160,9 @@
       "lng": 78.17277,
       "description": "Nationally protected forest spanning the Shivalik range across Haridwar, Rishikesh, and Dehradun districts — 820 sq km in total. Holds one of the most accessible elephant populations in northern India along with tigers, leopards, cheetal, and over 300 bird species. The Chilla range (accessible from Haridwar) and the Motichur range (Rishikesh side) both run jeep safaris. Season: Nov 15 – Jun 15; park closed monsoon. Entry and safari permits from the Range Officer.",
       "area": "Shivalik Range; entry via Rishikesh or Haridwar",
-      "costMinInr": null,
-      "costMaxInr": null,
-      "costStatus": "unknown",
+      "costMinInr": 800,
+      "costMaxInr": 1200,
+      "costStatus": "estimated",
       "openingTime": "06:00",
       "closingTime": "10:00",
       "openingDays": "Nov–Jun; morning (06:00–10:00) and evening (15:00–18:00) safaris",
@@ -174,7 +179,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Rajaji_National_Park",
       "sourceRecordId": "3229398",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 1000
     },
     {
       "name": "Triveni Ghat",
@@ -202,19 +208,20 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Triveni_Ghat",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "White-water Rafting, Rishikesh",
       "slug": "rafting-rishikesh",
       "category": "adventure",
-      "lat": 30.1530,
+      "lat": 30.153,
       "lng": 78.2702,
       "description": "Rishikesh is the white-water rafting capital of India; the Ganges through the Shivaliks provides Grade II–IV rapids depending on the stretch. Main run options: Shivpuri to Rishikesh (12km, ~2h, Grade II–III, accessible for beginners), Brahmapuri to Rishikesh (9km), or the longer Marine Drive to Rishikesh (26km, 2 days). Season: Sep–Oct (post-monsoon high water) and Mar–May (pre-monsoon). Dozens of licensed operators in Rishikesh; all provide rafts, helmets, and life jackets. Coordinate is Shivpuri camp area — the most popular starting point.",
       "area": "Shivpuri, 16km upstream from Rishikesh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Sep–Oct and Mar–May (main seasons); some operators run Nov–Feb",
@@ -230,14 +237,15 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Rishikesh",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Tera Manzil Temple",
       "slug": "tera-manzil-temple-rishikesh",
       "category": "spiritual",
       "lat": 30.1215,
-      "lng": 78.3130,
+      "lng": 78.313,
       "description": "Striking 13-storey pink temple on the Ganges bank adjacent to Ram Jhula, housing shrines to multiple Hindu deities (Triyambakeshwar Shiva, Vishnu, Durga, Hanuman, Ganesha and others) across its floors. The terrace on the upper floors provides panoramic views of the Ganges, Ram Jhula bridge, and the Shivalik hills. One of the most visually distinctive buildings in Rishikesh. Free to enter; open to visitors through the day.",
       "area": "Ram Jhula area, east bank",
       "costMinInr": 0,
@@ -258,7 +266,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Rishikesh",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Neer Garh Waterfall",
@@ -286,7 +295,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Rishikesh",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Kunjapuri Devi Temple",
@@ -314,7 +324,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kunjapuri_Temple",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Swarg Ashram",
@@ -342,7 +353,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Swarg_Ashram,_Rishikesh",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Rishikesh Café Culture — Lakshman Jhula",
+      "slug": "rishikesh-cafe-culture-lakshman-jhula",
+      "lat": 30.1291,
+      "lng": 78.3233,
+      "description": "The Lakshman Jhula neighbourhood is lined with rooftop cafés offering views of the Ganga and Himalayas. Serving yoga-retreat food — hummus wraps, banana pancakes, avocado toast, and fresh ginger lemon tea. Popular with international travellers and sadhus alike.",
+      "area": "Lakshman Jhula",
+      "typicalCostInr": 300,
+      "costMinInr": 150,
+      "costMaxInr": 500,
+      "costStatus": "estimated",
+      "openingTime": "07:30",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Jun",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Rishikesh Evening Aarti Prasad",
+      "slug": "rishikesh-aarti-prasad-experience",
+      "lat": 30.108,
+      "lng": 78.294,
+      "description": "After the Parmarth Niketan Ganga Aarti, local vendors offer prasad sweets and flower offerings. Street food near Ram Jhula and Triveni Ghat includes puri bhaji, samosa, and chai — best consumed while watching the post-aarti gathering.",
+      "area": "Ram Jhula / Triveni Ghat",
+      "typicalCostInr": 100,
+      "costMinInr": 40,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "17:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily evenings",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 75,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

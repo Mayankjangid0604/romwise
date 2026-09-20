@@ -29,7 +29,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_Bom_Jesus",
       "sourceRecordId": "302494",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Se Cathedral, Old Goa",
@@ -58,7 +59,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Se_Cathedral,_Goa",
       "sourceRecordId": "13574804",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Church of St. Francis of Assisi, Old Goa",
@@ -86,7 +88,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Church_of_St._Francis_of_Assisi,_Old_Goa",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Calangute Beach",
@@ -114,7 +117,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Calangute",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Baga Beach",
@@ -142,7 +146,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Baga,_Goa",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Anjuna Beach",
@@ -170,7 +175,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Anjuna",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Fort Aguada",
@@ -180,9 +186,9 @@
       "lng": 73.7735,
       "description": "17th-century Portuguese coastal fort at the confluence of Mandovi River and the Arabian Sea, built to guard against Dutch and Maratha invasions. Features an intact 4-storey lighthouse (1612) — the oldest of its kind in Asia. Panoramic sea views; moderate walking on uneven ground.",
       "area": "North Goa",
-      "costMinInr": null,
-      "costMaxInr": null,
-      "costStatus": "unknown",
+      "costMinInr": 0,
+      "costMaxInr": 0,
+      "costStatus": "free",
       "openingTime": "09:30",
       "closingTime": "17:30",
       "openingDays": "Tue–Sun",
@@ -198,7 +204,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Fort_Aguada",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Dudhsagar Falls",
@@ -208,9 +215,9 @@
       "lng": 74.3142,
       "description": "Four-tiered waterfall on the Goa-Karnataka border, one of India's tallest at approximately 310m. Accessible by 4x4 jeep safari from Mollem (Oct–Jun only). Trails close during monsoon (Jul–Sep) due to flash floods. Requires significant walking after jeep drop-off; swimming permitted in pools at the base.",
       "area": "South Goa",
-      "costMinInr": null,
-      "costMaxInr": null,
-      "costStatus": "unknown",
+      "costMinInr": 400,
+      "costMaxInr": 800,
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Oct–Jun (closed Jul–Sep monsoon)",
@@ -226,7 +233,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dudhsagar_Falls",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 600
     },
     {
       "name": "Vagator Beach",
@@ -254,7 +262,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Vagator",
       "confidence": 0.7,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chapora Fort",
@@ -282,7 +291,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chapora_Fort",
       "confidence": 0.7,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Palolem Beach",
@@ -310,7 +320,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Palolem_Beach",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Colva Beach",
@@ -338,7 +349,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Colva_Beach",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Arambol Beach",
@@ -366,7 +378,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Arambol",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Morjim Beach",
@@ -394,7 +407,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Morjim_Beach",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Shri Mangeshi Temple",
@@ -422,7 +436,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Shri_Mangeshi_Temple",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Shri Shanta Durga Temple",
@@ -450,7 +465,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Shri_Shanta_Durga_Temple",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Tambdi Surla Mahadeva Temple",
@@ -478,7 +494,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tambdi_Surla",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Anjuna Wednesday Flea Market",
@@ -506,7 +523,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Anjuna_flea_market",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Mapusa Friday Market",
@@ -534,7 +552,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mapusa",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Bondla Wildlife Sanctuary",
@@ -546,7 +565,7 @@
       "area": "Ponda",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "17:30",
       "openingDays": "Fri–Wed 09:00–17:30 (closed Thu)",
@@ -562,7 +581,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Bondla_Wildlife_Sanctuary",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Reis Magos Fort",
@@ -574,7 +594,7 @@
       "area": "North Goa",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:30",
       "closingTime": "17:00",
       "openingDays": "Tue–Sun 09:30–17:00",
@@ -590,7 +610,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Reis_Magos_Fort",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Agonda Beach",
@@ -618,7 +639,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Agonda_Beach",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Candolim Beach",
@@ -646,7 +668,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Candolim",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Tito's, Baga",
@@ -658,7 +681,7 @@
       "area": "North Goa",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "22:00",
       "closingTime": "04:00",
       "openingDays": "Daily (Oct–Apr); weekends only off-season",
@@ -674,7 +697,92 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tito%27s,_Goa",
       "confidence": 0.7,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
+    },
+    {
+      "name": "Goa Fish Curry and Rice Experience",
+      "slug": "goa-fish-curry-rice-experience",
+      "lat": 15.4909,
+      "lng": 73.8278,
+      "description": "Quintessential Goan meal of fish curry, rice, and a side of fried fish. Best experienced at local family-run restaurants (xacutis, vindaloos, cafreal). Signature flavours from coconut, kokum, and Goan spices. A must for seafood lovers.",
+      "area": "Panaji / South Goa",
+      "typicalCostInr": 350,
+      "costMinInr": 150,
+      "costMaxInr": 600,
+      "costStatus": "estimated",
+      "openingTime": "12:00",
+      "closingTime": "15:30",
+      "openingDays": "Daily lunch hours",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–May",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 90,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Goa Night Market Street Food",
+      "slug": "goa-night-market-street-food",
+      "lat": 15.5135,
+      "lng": 73.7554,
+      "description": "Arpora Saturday Night Bazaar and Anjuna Flea Market offer a lively mix of Goan street food, seafood grills, and local drinks. Great for trying bebinca (layered Goan dessert), sana (rice cake), and chorizo pao in a festive atmosphere.",
+      "area": "North Goa",
+      "typicalCostInr": 400,
+      "costMinInr": 200,
+      "costMaxInr": 700,
+      "costStatus": "estimated",
+      "openingTime": "18:00",
+      "closingTime": "23:00",
+      "openingDays": "Sat (Arpora), Wed (Anjuna) — Oct–Apr only",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Apr",
+      "seasonStatus": "known",
+      "durationMinutes": 90,
+      "fatigueCost": 2,
+      "accessibilityScore": 3,
+      "popularityScore": 85,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Goan Breakfast — Pao and Chouriço",
+      "slug": "goan-breakfast-pao-chourico",
+      "lat": 15.4909,
+      "lng": 73.8278,
+      "description": "Classic Goan breakfast of freshly baked pao (crusty rolls) with chouriço (spiced pork sausage) from local padaria (bakeries). A window into Goan-Portuguese culinary heritage. Best in Old Panaji neighbourhood bakeries in the morning hours.",
+      "area": "Panaji",
+      "typicalCostInr": 80,
+      "costMinInr": 40,
+      "costMaxInr": 150,
+      "costStatus": "estimated",
+      "openingTime": "07:30",
+      "closingTime": "10:30",
+      "openingDays": "Daily mornings",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–May",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 75,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

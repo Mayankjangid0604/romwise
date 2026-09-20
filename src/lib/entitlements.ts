@@ -1,6 +1,6 @@
 import { prisma } from "./db";
 
-const FREE_TRIP_GENERATIONS = 1;
+const FREE_TRIP_GENERATIONS = 3;
 
 export type EntitlementStatus = {
   canGenerate: boolean;

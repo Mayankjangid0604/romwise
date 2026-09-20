@@ -6,6 +6,9 @@ export type ReplanItem = {
   endTime: string;
   order: number;
   isTimeSensitive: boolean;
+  // Opening hours from DB — required to validate shifts (B-004)
+  openingTime?: string | null;
+  closingTime?: string | null;
 };
 
 export type DisruptionType = "delayed" | "skipped";
@@ -61,6 +64,30 @@ function itemDuration(item: ReplanItem): number {
   return parseTime(item.endTime) - parseTime(item.startTime);
 }
 
+/**
+ * B-004: Validate that a shifted item's new time window fits within opening hours.
+ * Returns null if valid, or a descriptive reason string if the item must be removed.
+ */
+function validateShiftAgainstOpeningHours(
+  item: ReplanItem,
+  newStartMins: number,
+  newEndMins: number,
+): string | null {
+  if (item.openingTime) {
+    const openMins = parseTime(item.openingTime);
+    if (newStartMins < openMins) {
+      return `Cannot shift to ${formatTime(newStartMins)} — ${item.title} doesn't open until ${item.openingTime}`;
+    }
+  }
+  if (item.closingTime) {
+    const closeMins = parseTime(item.closingTime);
+    if (newEndMins > closeMins) {
+      return `Cannot fit before closing time (${item.closingTime}) — activity would end at ${formatTime(newEndMins)}`;
+    }
+  }
+  return null; // valid
+}
+
 export function proposeReplan(
   items: ReplanItem[],
   disruption: DisruptionInput,
@@ -83,8 +110,6 @@ export function proposeReplan(
       hasConflict: false,
     };
   }
-
-  const _disrupted = sorted[disruptedIndex];
 
   if (disruption.type === "skipped") {
     return handleSkip(sorted, disruptedIndex, previousState);
@@ -147,14 +172,58 @@ function handleDelay(
   previousState: ReplanItem[],
 ): ReplanProposal {
   const delayed = sorted[delayIndex];
-  const delayedEnd = parseTime(delayed.endTime) + delayMinutes;
+  const newDelayedStartMins = parseTime(delayed.startTime) + delayMinutes;
+  const newDelayedEndMins = parseTime(delayed.endTime) + delayMinutes;
   const changes: ReplanChange[] = [];
   const proposed: ReplanItem[] = [];
 
-  const newDelayedStart = formatTime(
-    parseTime(delayed.startTime) + delayMinutes,
+  // B-004: validate the delay itself against opening hours
+  const delayedHoursViolation = validateShiftAgainstOpeningHours(
+    delayed,
+    newDelayedStartMins,
+    newDelayedEndMins,
   );
-  const newDelayedEnd = formatTime(delayedEnd);
+
+  if (delayedHoursViolation) {
+    // The delayed item itself cannot be rescheduled — remove it
+    changes.push({
+      itemId: delayed.id,
+      title: delayed.title,
+      action: "removed",
+      previousStartTime: delayed.startTime,
+      previousEndTime: delayed.endTime,
+      newStartTime: null,
+      newEndTime: null,
+      reason: `Removed: ${delayedHoursViolation}`,
+    });
+
+    // All other items keep their original times (no cascade from removed item)
+    for (let i = 0; i < sorted.length; i++) {
+      if (i === delayIndex) continue;
+      proposed.push({ ...sorted[i] });
+      changes.push({
+        itemId: sorted[i].id,
+        title: sorted[i].title,
+        action: "kept",
+        previousStartTime: sorted[i].startTime,
+        previousEndTime: sorted[i].endTime,
+        newStartTime: sorted[i].startTime,
+        newEndTime: sorted[i].endTime,
+        reason: "Disrupted item removed — no cascade needed",
+      });
+    }
+
+    return {
+      conflictSummary: `"${delayed.title}" removed due to opening hours constraint: ${delayedHoursViolation}`,
+      changes,
+      previousState,
+      proposedState: proposed,
+      hasConflict: true,
+    };
+  }
+
+  const newDelayedStart = formatTime(newDelayedStartMins);
+  const newDelayedEnd = formatTime(newDelayedEndMins);
 
   changes.push({
     itemId: delayed.id,
@@ -192,7 +261,7 @@ function handleDelay(
     const item = sorted[i];
     const itemStart = parseTime(item.startTime);
 
-    if (itemStart >= delayedEnd) {
+    if (itemStart >= newDelayedEndMins) {
       proposed.push({ ...item });
       changes.push({
         itemId: item.id,
@@ -207,7 +276,12 @@ function handleDelay(
       continue;
     }
 
-    if (item.isTimeSensitive) {
+    // B-004: Derive isTimeSensitive from DB opening hours (not client trust)
+    // A place is time-sensitive if it has known closing hours that are hard constraints
+    const isTimeSensitiveFromDb = !!item.closingTime;
+    const isTimeSensitive = isTimeSensitiveFromDb || item.isTimeSensitive;
+
+    if (isTimeSensitive) {
       proposed.push({ ...item });
       changes.push({
         itemId: item.id,
@@ -224,7 +298,7 @@ function handleDelay(
 
     const timeSensitiveLater = sorted
       .slice(i + 1)
-      .some((s) => s.isTimeSensitive);
+      .some((s) => s.isTimeSensitive || !!s.closingTime);
     const priority = CATEGORY_PRIORITY[item.category] ?? 5;
 
     if (timeSensitiveLater && priority <= 5) {
@@ -242,8 +316,27 @@ function handleDelay(
     }
 
     const duration = itemDuration(item);
-    const newStart = formatTime(delayedEnd);
-    const newEnd = formatTime(delayedEnd + duration);
+    const newStartMins = newDelayedEndMins;
+    const newEndMins = newDelayedEndMins + duration;
+
+    // B-004: Validate the cascaded shift against opening hours
+    const hoursViolation = validateShiftAgainstOpeningHours(item, newStartMins, newEndMins);
+    if (hoursViolation) {
+      changes.push({
+        itemId: item.id,
+        title: item.title,
+        action: "removed",
+        previousStartTime: item.startTime,
+        previousEndTime: item.endTime,
+        newStartTime: null,
+        newEndTime: null,
+        reason: `Removed: ${hoursViolation}`,
+      });
+      continue;
+    }
+
+    const newStart = formatTime(newStartMins);
+    const newEnd = formatTime(newEndMins);
 
     proposed.push({
       ...item,
@@ -272,7 +365,7 @@ function handleDelay(
 
   let conflictSummary = `"${delayed.title}" delayed by ${delayMinutes} minutes.`;
   if (removedCount > 0) {
-    conflictSummary += ` ${removedCount} lower-priority item(s) removed to protect time-sensitive activities.`;
+    conflictSummary += ` ${removedCount} item(s) removed due to time constraints or opening hours.`;
   }
   if (shiftedCount > 1) {
     conflictSummary += ` ${shiftedCount - 1} item(s) shifted later.`;

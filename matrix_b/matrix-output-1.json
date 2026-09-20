@@ -1,0 +1,23 @@
+{
+  "days": [
+    {
+      "dayNumber": 1,
+      "date": "2026-11-07T00:00:00.000Z",
+      "items": []
+    }
+  ],
+  "resolvedDestination": {
+    "id": "cmu1gnx7700029t5wqp7flh5m",
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "lat": 26.915,
+    "lng": 75.82,
+    "matchType": "exact"
+  },
+  "candidateCount": 24,
+  "usedGemini": false,
+  "usedFallback": true,
+  "season": "winter",
+  "conflicts": []
+}

@@ -70,6 +70,7 @@ export default async function RoutePage(props: {
       const lat = item.place?.lat;
       const lng = item.place?.lng;
       if (lat == null || lng == null) return null;
+      if (lat === 0 && lng === 0) return null;
       return {
         id: item.id,
         title: item.title,
@@ -112,7 +113,10 @@ export default async function RoutePage(props: {
       </div>
 
       {stops.length === 0 ? (
-        <EmptyState title="No items for this day" />
+        <EmptyState
+          title="No mappable activities for this day"
+          hint="Route mapping requires activities linked to known places with GPS coordinates. Activities without a verified place location (e.g. free-text items added manually) cannot be plotted. Try regenerating the itinerary, or edit manual items to link them to a known place."
+        />
       ) : (
         <div className="space-y-6">
           {result.backtracking.detected && (

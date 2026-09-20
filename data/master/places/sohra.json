@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nohkalikai_Falls",
       "confidence": 0.92,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 30
     },
     {
       "name": "Living Root Bridge, Nongriat",
@@ -40,7 +41,7 @@
       "area": "Nongriat village, 9km from Sohra",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open all day; hike in daylight only",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Living_root_bridges",
       "confidence": 0.92,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Mawsmai Cave",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawsmai_Cave",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 30
     },
     {
       "name": "Eco Park Sohra",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Cherrapunji",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 20
     },
     {
       "name": "Nohsngithiang Falls (Seven Sisters Falls)",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nohsngithiang_Falls",
       "confidence": 0.88,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Thangkharang Park",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Cherrapunji",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 20
     },
     {
       "name": "Arwah Cave",
@@ -180,7 +186,7 @@
       "area": "Mawmluh, 7km from Sohra",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "17:00",
       "openingDays": "Daily 08:00–17:00",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Arwah_Cave",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Dainthlen Falls",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Cherrapunji",
       "confidence": 0.78,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Wei Sawdong Falls",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Cherrapunji",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Mawkdok Dympep Valley Viewpoint",
@@ -264,7 +273,7 @@
       "area": "Mawkdok, on Shillong–Sohra highway, 15km from Sohra",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Year-round; zip-line approx 09:00–17:00 when operational",
@@ -280,7 +289,36 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Cherrapunji",
       "confidence": 0.78,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
+    },
+    {
+      "name": "Sohra Local Tungrymbai and Kwai Experience",
+      "slug": "sohra-local-food-experience",
+      "lat": 25.2582,
+      "lng": 91.7197,
+      "description": "Sohra (Cherrapunji) has modest but authentic roadside stalls serving local Khasi food between the viewpoints: tungrymbai (fermented soybean) with boiled rice, seasonal jungle vegetables, and smoked pork. A modest meal that grounds the experience of touring the waterfall circuit.",
+      "area": "Sohra Market / Viewpoint Road",
+      "typicalCostInr": 120,
+      "costMinInr": 60,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "08:00",
+      "closingTime": "18:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–May",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 65,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.7,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

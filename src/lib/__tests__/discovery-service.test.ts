@@ -1,28 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-vi.mock("@/lib/gemini", () => {
-  const GeminiConfigError = class extends Error {
-    constructor(msg: string) { super(msg); this.name = "GeminiConfigError"; }
+vi.mock("@/lib/ai/gateway", () => {
+  const AIGatewayError = class extends Error {
+    constructor(msg: string, public code: string, public isTransient: boolean = false) {
+      super(msg);
+      this.name = "AIGatewayError";
+    }
   };
-  const GeminiProviderError = class extends Error {
-    constructor(msg: string) { super(msg); this.name = "GeminiProviderError"; }
-  };
-  const GeminiSchemaError = class extends Error {
-    constructor(msg: string) { super(msg); this.name = "GeminiSchemaError"; }
-  };
-
-  return {
-    GeminiConfigError,
-    GeminiProviderError,
-    GeminiSchemaError,
-    getGeminiClient: vi.fn(),
-  };
+  return { AIGatewayError, AIGateway: { generateStructured: vi.fn() } };
 });
 
-import { discoverDestinations, type DiscoveryInput } from "../discovery";
-import { getGeminiClient, GeminiProviderError, GeminiSchemaError } from "../gemini";
+import { discoverDestinations, type DiscoveryInput, ValidationError } from "../discovery";
+import { AIGateway } from "../ai/gateway";
+import { AIGatewayError } from "../ai/types";
 
-const mockGetClient = vi.mocked(getGeminiClient);
+const mockGenerateStructured = vi.mocked(AIGateway.generateStructured);
 
 const VALID_AI_RESPONSE = JSON.stringify({
   destinations: [
@@ -56,14 +48,27 @@ const VALID_AI_RESPONSE = JSON.stringify({
   ],
 });
 
-function setupMockClient(responseText: string) {
-  mockGetClient.mockReturnValue({
-    models: {
-      generateContent: vi.fn().mockResolvedValue({
-        text: responseText,
-      }),
-    },
-  } as never);
+function setupMockClient(responseText: string, parseAsJson: boolean = true) {
+  if (!parseAsJson) {
+    mockGenerateStructured.mockRejectedValue(new AIGatewayError("Not valid JSON", "AI_INVALID_OUTPUT"));
+    return;
+  }
+  let data;
+  try {
+    data = JSON.parse(responseText.replace(/^```(?:json)?\s*/, "").replace(/\s*```$/, ""));
+  } catch (e) {
+    data = responseText; // Let validate function handle bad structure if it parsed successfully
+  }
+  
+  mockGenerateStructured.mockResolvedValue({
+    data,
+    usage: { inputTokens: 10, outputTokens: 10, totalTokens: 20, estimatedCost: 0, currency: "USD" },
+    latencyMs: 100,
+    provider: "gemini",
+    model: "gemini-2.5-flash",
+    requestId: "mock-id",
+    fallbackUsed: false,
+  });
 }
 
 const INPUT: DiscoveryInput = {
@@ -90,33 +95,29 @@ describe("discoverDestinations", () => {
     expect(result.destinations).toHaveLength(3);
   });
 
-  it("throws GeminiProviderError on API failure", async () => {
-    mockGetClient.mockReturnValue({
-      models: {
-        generateContent: vi.fn().mockRejectedValue(new Error("Network error")),
-      },
-    } as never);
+  it("throws AIGatewayError on API failure", async () => {
+    mockGenerateStructured.mockRejectedValue(new AIGatewayError("Network error", "AI_PROVIDER_ERROR", true));
 
     await expect(discoverDestinations(INPUT)).rejects.toThrow(
-      GeminiProviderError,
+      AIGatewayError,
     );
   });
 
-  it("throws GeminiProviderError on empty response", async () => {
-    setupMockClient("");
+  it("throws AIGatewayError on empty response", async () => {
+    mockGenerateStructured.mockRejectedValue(new AIGatewayError("Empty response", "AI_PROVIDER_ERROR"));
     await expect(discoverDestinations(INPUT)).rejects.toThrow(
-      GeminiProviderError,
+      AIGatewayError,
     );
   });
 
-  it("throws GeminiSchemaError on invalid JSON", async () => {
-    setupMockClient("not json at all");
+  it("throws AIGatewayError on invalid JSON", async () => {
+    setupMockClient("not json at all", false);
     await expect(discoverDestinations(INPUT)).rejects.toThrow(
-      GeminiSchemaError,
+      AIGatewayError,
     );
   });
 
-  it("throws GeminiSchemaError on wrong number of destinations", async () => {
+  it("throws AIGatewayError on wrong number of destinations", async () => {
     const bad = JSON.stringify({
       destinations: [
         {
@@ -132,16 +133,16 @@ describe("discoverDestinations", () => {
     });
     setupMockClient(bad);
     await expect(discoverDestinations(INPUT)).rejects.toThrow(
-      GeminiSchemaError,
+      AIGatewayError,
     );
   });
 
-  it("throws GeminiSchemaError when matchScore is out of range", async () => {
+  it("throws AIGatewayError when matchScore is out of range", async () => {
     const parsed = JSON.parse(VALID_AI_RESPONSE);
     parsed.destinations[0].matchScore = 200;
     setupMockClient(JSON.stringify(parsed));
     await expect(discoverDestinations(INPUT)).rejects.toThrow(
-      GeminiSchemaError,
+      AIGatewayError,
     );
   });
 });

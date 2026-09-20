@@ -1,0 +1,52 @@
+{
+  "days": [
+    {
+      "dayNumber": 1,
+      "date": "2026-11-07T04:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnl7e00dq9tust6pntr7w",
+          "title": "Amer Fort",
+          "description": "11km north of Jaipur, this 16th-century hilltop fort complex is Jaipur's most visited landmark. Features the ornate Sheesh Mahal (Hall of Mirrors), Diwan-i-Aam, Sukh Niwas and panoramic Aravalli views. Accessible by foot, jeep or elephant ride from the main gate. ASI-protected UNESCO site. Budget 2–3 hours.",
+          "category": "history",
+          "startTime": "10:00",
+          "endTime": "12:30",
+          "estimatedCostInr": 325,
+          "costSource": "db",
+          "lat": 26.9855,
+          "lng": 75.8513,
+          "reasoning": "Start the morning fresh by exploring the magnificent 16th-century hilltop Amer Fort and its stunning Sheesh Mahal.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1godnk00839t5wbus3hqbm",
+          "title": "City Palace",
+          "description": "Royal palace complex at the heart of old Jaipur, partly a museum and partly the residence of the Jaipur royal family. Features Mubarak Mahal, Chandra Mahal, Diwan-i-Khas and a courtyard with two large silver urns (the world's largest silver objects). Well-integrated with Jantar Mantar; visit both in sequence.",
+          "category": "history",
+          "startTime": "12:47",
+          "endTime": "14:17",
+          "estimatedCostInr": 450,
+          "costSource": "db",
+          "lat": 26.9257,
+          "lng": 75.8236,
+          "reasoning": "Head into the Old City midday to tour the grand City Palace complex, experiencing royal heritage and architecture.",
+          "order": 2
+        }
+      ]
+    }
+  ],
+  "resolvedDestination": {
+    "id": "cmu1gnx7700029t5wqp7flh5m",
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "lat": 26.915,
+    "lng": 75.82,
+    "matchType": "exact"
+  },
+  "candidateCount": 24,
+  "usedGemini": true,
+  "usedFallback": false,
+  "season": "winter",
+  "conflicts": []
+}

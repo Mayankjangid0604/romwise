@@ -12,7 +12,7 @@
       "area": "Mawlynnong village",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Year-round; village active all day",
@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawlynnong",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Riwai Living Root Bridge",
@@ -40,7 +41,7 @@
       "area": "Riwai village, 3km from Mawlynnong",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open all day",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Living_root_bridges",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Bangladesh Viewpoint",
@@ -68,7 +70,7 @@
       "area": "Mawlynnong escarpment, 1km south of village",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open all day (best morning clarity Oct–Nov)",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawlynnong",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Bamboo Sky Walk",
@@ -96,7 +99,7 @@
       "area": "Mawlynnong village centre",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "07:00",
       "closingTime": "17:00",
       "openingDays": "Daily 07:00–17:00",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawlynnong",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Balancing Rock",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawlynnong",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "St. Mary's Church, Mawlynnong",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawlynnong",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Mawlynnong Stream and Falls",
@@ -196,7 +202,36 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawlynnong",
       "confidence": 0.72,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Mawlynnong Home Kitchen — Organic Village Meals",
+      "slug": "mawlynnong-home-kitchen",
+      "lat": 25.2018,
+      "lng": 91.9253,
+      "description": "Asia's cleanest village offers home-kitchen meals hosted by local Khasi families. Simple but deeply satisfying: boiled rice with pork, smoked beef or chicken, jungle greens, and fermented bamboo shoots. An intimate way to experience Khasi village culture.",
+      "area": "Mawlynnong Village",
+      "typicalCostInr": 150,
+      "costMinInr": 80,
+      "costMaxInr": 250,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "18:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Apr",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 72,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.75,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

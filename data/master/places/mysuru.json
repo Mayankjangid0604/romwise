@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mysore_Palace",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 235
     },
     {
       "name": "Chamundi Hills",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chamundi_Hills",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "St. Philomena's Cathedral",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/St._Philomena%27s_Cathedral,_Mysore",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Devaraja Market",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Devaraja_Market",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Brindavan Gardens",
@@ -124,7 +128,7 @@
       "area": "Srirangapatna",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "06:30",
       "closingTime": "21:00",
       "openingDays": "Daily 06:30–21:00; fountain show after dusk",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Brindavan_Gardens",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Srirangapatna",
@@ -152,7 +157,7 @@
       "area": "Mandya District",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Sites open 09:00–17:00",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Srirangapatna",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Mysuru Zoo",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mysuru_Zoo",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 140
     },
     {
       "name": "Jaganmohan Palace & Art Gallery",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jaganmohan_Palace",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 90
     },
     {
       "name": "Nagarhole National Park",
@@ -236,7 +244,7 @@
       "area": "Kodagu/Mysuru border",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "06:00",
       "closingTime": "18:00",
       "openingDays": "Daily 06:00–10:00 and 15:00–18:00 (safari hours only)",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nagarhole_National_Park",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Silk Weaving Factories",
@@ -280,7 +289,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mysore_silk",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Mysuru Mysore Pak and Filter Coffee",
+      "slug": "mysuru-mysore-pak-filter-coffee",
+      "lat": 12.2958,
+      "lng": 76.6394,
+      "description": "Mysore Pak (the iconic ghee-laden gram flour sweet, invented in the palace kitchen) from Guru Sweets on Sayyaji Rao Road is a mandatory experience. Pair with strong Brahmin-style filter coffee at any local darshini (South Indian café). A complete Mysuru flavour journey.",
+      "area": "Devaraja Market / Sayyaji Rao Road",
+      "typicalCostInr": 100,
+      "costMinInr": 50,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "08:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Mysuru Obbattu and South Indian Thali",
+      "slug": "mysuru-south-indian-thali",
+      "lat": 12.2958,
+      "lng": 76.6394,
+      "description": "A South Indian thali at Mylari Hotel (legendary for soft dosa and fresh coconut chutney) or RRR Restaurant (famous for unlimited meals). Obbattu (sweet flatbread with jaggery and lentil filling) is a Karnataka classic. Mysuru's temple-town food culture is deeply vegetarian and incredibly flavourful.",
+      "area": "Nazarbad / Vinoba Road",
+      "typicalCostInr": 120,
+      "costMinInr": 60,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "07:30",
+      "closingTime": "15:00",
+      "openingDays": "Daily (lunch cutoff ~15:00)",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

@@ -1,128 +1,45 @@
-import {
-  getGeminiClient,
-  GeminiProviderError,
-  GeminiSchemaError,
-} from "./gemini";
+import { z } from "zod";
+import { AIGateway } from "./ai/gateway";
+import { AIGatewayError } from "./ai/types";
 import { ValidationError } from "./discovery";
 
-export type TravelerProfile = {
-  name: string;
-  pace: "easy" | "balanced" | "full";
-  interests: string[];
-  priorities: string[];
-  foodPreferences: string[];
-  accessibility: string[];
-};
+export const travelerProfileSchema = z.object({
+  name: z.string().trim().min(1),
+  pace: z.enum(["easy", "balanced", "full"]),
+  interests: z.array(z.string().trim()),
+  priorities: z.array(z.string().trim()),
+  foodPreferences: z.array(z.string().trim()),
+  accessibility: z.array(z.string().trim())
+});
 
-export type GroupAlignmentInput = {
-  travelers: TravelerProfile[];
-};
+export const groupAlignmentInputSchema = z.object({
+  travelers: z.array(travelerProfileSchema).min(2).max(20)
+});
 
-export type GroupAlignmentResponse = {
-  coreTension: string;
-  compromiseSuggestion: string;
-  harmonyScore: number;
-};
+export const groupAlignmentResponseSchema = z.object({
+  coreTension: z.string().trim().min(1),
+  compromiseSuggestion: z.string().trim().min(1),
+  harmonyScore: z.number().min(0).max(100).transform(Math.round)
+});
+
+export type TravelerProfile = z.infer<typeof travelerProfileSchema>;
+export type GroupAlignmentInput = z.infer<typeof groupAlignmentInputSchema>;
+export type GroupAlignmentResponse = z.infer<typeof groupAlignmentResponseSchema>;
 
 export function validateGroupAlignmentInput(input: unknown): GroupAlignmentInput {
-  if (!input || typeof input !== "object") {
-    throw new ValidationError("Request body must be a JSON object");
+  const result = groupAlignmentInputSchema.safeParse(input);
+  if (!result.success) {
+    throw new ValidationError(`Invalid group alignment input: ${result.error.message}`);
   }
-  const obj = input as Record<string, unknown>;
-
-  if (!Array.isArray(obj.travelers)) {
-    throw new ValidationError("'travelers' must be an array");
-  }
-  if (obj.travelers.length < 2) {
-    throw new ValidationError("At least 2 traveler profiles are required");
-  }
-  if (obj.travelers.length > 20) {
-    throw new ValidationError("Maximum 20 traveler profiles allowed");
-  }
-
-  const travelers = obj.travelers.map((t: unknown, i: number) => {
-    if (!t || typeof t !== "object") {
-      throw new ValidationError(`Traveler ${i} must be an object`);
-    }
-    const traveler = t as Record<string, unknown>;
-
-    if (typeof traveler.name !== "string" || traveler.name.trim().length === 0) {
-      throw new ValidationError(`Traveler ${i}: 'name' is required`);
-    }
-    if (!["easy", "balanced", "full"].includes(traveler.pace as string)) {
-      throw new ValidationError(
-        `Traveler ${i}: 'pace' must be easy, balanced, or full`,
-      );
-    }
-
-    const stringArrayFields = [
-      "interests",
-      "priorities",
-      "foodPreferences",
-      "accessibility",
-    ] as const;
-    for (const field of stringArrayFields) {
-      if (!Array.isArray(traveler[field])) {
-        throw new ValidationError(`Traveler ${i}: '${field}' must be an array`);
-      }
-      for (let j = 0; j < (traveler[field] as unknown[]).length; j++) {
-        if (typeof (traveler[field] as unknown[])[j] !== "string") {
-          throw new ValidationError(
-            `Traveler ${i}: '${field}[${j}]' must be a string`,
-          );
-        }
-      }
-    }
-
-    return {
-      name: (traveler.name as string).trim(),
-      pace: traveler.pace as TravelerProfile["pace"],
-      interests: (traveler.interests as string[]).map((s) => s.trim()),
-      priorities: (traveler.priorities as string[]).map((s) => s.trim()),
-      foodPreferences: (traveler.foodPreferences as string[]).map((s) => s.trim()),
-      accessibility: (traveler.accessibility as string[]).map((s) => s.trim()),
-    };
-  });
-
-  return { travelers };
+  return result.data;
 }
 
-export function validateGroupAlignmentResponse(
-  data: unknown,
-): GroupAlignmentResponse {
-  if (!data || typeof data !== "object") {
-    throw new GeminiSchemaError("AI response is not an object");
+export function validateGroupAlignmentResponse(data: unknown): GroupAlignmentResponse {
+  const result = groupAlignmentResponseSchema.safeParse(data);
+  if (!result.success) {
+    throw new ValidationError(`Invalid AI response: ${result.error.message}`);
   }
-  const obj = data as Record<string, unknown>;
-
-  if (
-    typeof obj.coreTension !== "string" ||
-    obj.coreTension.trim().length === 0
-  ) {
-    throw new GeminiSchemaError(
-      "'coreTension' must be a non-empty string",
-    );
-  }
-  if (
-    typeof obj.compromiseSuggestion !== "string" ||
-    obj.compromiseSuggestion.trim().length === 0
-  ) {
-    throw new GeminiSchemaError(
-      "'compromiseSuggestion' must be a non-empty string",
-    );
-  }
-  if (typeof obj.harmonyScore !== "number") {
-    throw new GeminiSchemaError("'harmonyScore' must be a number");
-  }
-  if (obj.harmonyScore < 0 || obj.harmonyScore > 100) {
-    throw new GeminiSchemaError("'harmonyScore' must be 0-100");
-  }
-
-  return {
-    coreTension: (obj.coreTension as string).trim(),
-    compromiseSuggestion: (obj.compromiseSuggestion as string).trim(),
-    harmonyScore: Math.round(obj.harmonyScore as number),
-  };
+  return result.data;
 }
 
 const GROUP_ALIGNMENT_PROMPT = `You are a group travel harmony analyst. Given profiles of multiple travelers, analyze potential conflicts and suggest compromises.
@@ -144,8 +61,6 @@ Rules:
 export async function analyzeGroupAlignment(
   input: GroupAlignmentInput,
 ): Promise<GroupAlignmentResponse> {
-  const client = getGeminiClient();
-
   const profilesSummary = input.travelers
     .map(
       (t) =>
@@ -153,30 +68,14 @@ export async function analyzeGroupAlignment(
     )
     .join("\n");
 
-  let rawText: string;
+  const result = await AIGateway.generateStructured<unknown>({
+    prompt: `${GROUP_ALIGNMENT_PROMPT}\n\nTraveler profiles:\n${profilesSummary}`,
+    context: { task: "group_alignment" },
+  });
+
   try {
-    const response = await client.models.generateContent({
-      model: "gemini-3.6-flash",
-      contents: `${GROUP_ALIGNMENT_PROMPT}\n\nTraveler profiles:\n${profilesSummary}`,
-    });
-    rawText = response.text ?? "";
+    return validateGroupAlignmentResponse(result.data);
   } catch (error) {
-    throw new GeminiProviderError(
-      `Gemini API call failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-    );
+    throw new AIGatewayError("Failed to validate group alignment response", "AI_INVALID_OUTPUT", false);
   }
-
-  if (!rawText.trim()) {
-    throw new GeminiProviderError("Gemini returned an empty response");
-  }
-
-  let parsed: unknown;
-  try {
-    const cleaned = rawText.replace(/^```(?:json)?\s*/, "").replace(/\s*```$/, "");
-    parsed = JSON.parse(cleaned);
-  } catch {
-    throw new GeminiSchemaError("Gemini response is not valid JSON");
-  }
-
-  return validateGroupAlignmentResponse(parsed);
 }

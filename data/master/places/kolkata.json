@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Victoria_Memorial,_Kolkata",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 115
     },
     {
       "name": "Howrah Bridge",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Howrah_Bridge",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Dakshineswar Kali Temple",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dakshineswar_Kali_Temple",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Indian Museum, Kolkata",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Indian_Museum",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 260
     },
     {
       "name": "College Street",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/College_Street,_Kolkata",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Kumartuli",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kumartuli",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Belur Math",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Belur_Math",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Marble Palace",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Marble_Palace,_Kolkata",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Park Street Cemetery",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Park_Street_Cemetery,_Kolkata",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Botanical Garden, Kolkata",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Acharya_Jagadish_Chandra_Bose_Indian_Botanic_Garden",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 20
     },
     {
       "name": "Kalighat Kali Temple",
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kalighat_Kali_Temple",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Eden Gardens",
@@ -320,7 +331,7 @@
       "area": "Maidan",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open for matches and tours; match schedule varies",
@@ -336,7 +347,92 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Eden_Gardens",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
+    },
+    {
+      "name": "Kolkata Kathi Roll — Park Street",
+      "slug": "kolkata-kathi-roll-experience",
+      "lat": 22.5448,
+      "lng": 88.3548,
+      "description": "Kolkata invented the kathi roll — a roti wrapped around egg, chicken, or paneer with onions, chutney, and lime. Nizam's (1932) is the original. Other greats: Kusum Rolls on Park Street. A handheld meal eaten walking — quintessential Calcutta street culture.",
+      "area": "Park Street / New Market",
+      "typicalCostInr": 120,
+      "costMinInr": 60,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "11:00",
+      "closingTime": "23:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 90,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Kolkata Rosogolla and Mishti Doi",
+      "slug": "kolkata-rosogolla-mishti-doi",
+      "lat": 22.5726,
+      "lng": 88.3639,
+      "description": "West Bengal's most iconic sweets: rosogolla (soft white sponge balls in sugar syrup) and mishti doi (sweetened fermented yoghurt in clay pots). Balaram Mullick & Sons (est. 1885) and K.C. Das (originators of industrialised rosogolla) are legendary. Essential Kolkata food experience.",
+      "area": "Multiple — Bhowanipore, College Street, New Market",
+      "typicalCostInr": 80,
+      "costMinInr": 40,
+      "costMaxInr": 150,
+      "costStatus": "estimated",
+      "openingTime": "08:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 88,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Kolkata Biryani at Arsalan",
+      "slug": "kolkata-biryani-arsalan",
+      "lat": 22.5523,
+      "lng": 88.3723,
+      "description": "Kolkata biryani (Nawabi style) features a potato — a unique adaptation made when Nawab Wajid Ali Shah was exiled to Calcutta. Arsalan, Royal, and Shiraz are the pilgrimage restaurants for this biryani style. The potato absorbs saffron and meat juices beautifully.",
+      "area": "Park Circus / Entally",
+      "typicalCostInr": 300,
+      "costMinInr": 150,
+      "costMaxInr": 500,
+      "costStatus": "estimated",
+      "openingTime": "12:00",
+      "closingTime": "23:30",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 85,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

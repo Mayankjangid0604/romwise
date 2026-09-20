@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Elephant_Falls",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 20
     },
     {
       "name": "Ward's Lake",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Ward%27s_Lake",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 10
     },
     {
       "name": "Shillong Peak",
@@ -68,7 +70,7 @@
       "area": "Upper Shillong, 10km south",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "16:00",
       "openingDays": "Daily approx 09:00–16:00 (subject to IAF; closed on certain days)",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Shillong_Peak",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Don Bosco Centre for Indigenous Cultures",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Don_Bosco_Centre_for_Indigenous_Cultures",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 150
     },
     {
       "name": "Umiam Lake",
@@ -124,7 +128,7 @@
       "area": "Barapani, 15km north of Shillong",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Lake viewable year-round; Water Sports Complex seasonal (approx Oct–May)",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Umiam_Lake",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Mawphlang Sacred Forest",
@@ -152,7 +157,7 @@
       "area": "Mawphlang village, 23km south of Shillong",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "16:00",
       "openingDays": "Daily 09:00–16:00 (guided visits; guide fees apply)",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mawphlang_Sacred_Forest",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Laitlum Canyons",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Smit,_Meghalaya",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Cathedral of Mary Help of Christians",
@@ -224,19 +231,20 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Cathedral_of_Mary_Help_of_Christians,_Shillong",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Shillong Golf Course",
       "slug": "shillong-golf-course",
       "category": "local_experience",
-      "lat": 25.5730,
+      "lat": 25.573,
       "lng": 91.8924,
       "description": "18-hole natural golf course established in 1898 by British officers, among the oldest natural grass courses in Asia and sometimes cited as the oldest in the region. Set in the heart of Shillong at 1500m altitude, the course is surrounded by pine trees and open to visitors for day golf (with caddie hire). The adjacent Polo Ground is the venue for Shillong's winter football and polo season. Non-golfers can walk the pine-tree boundary. Entry for golf is paid; the surrounding area is free to view.",
       "area": "Polo Ground, central Shillong",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "06:00",
       "closingTime": "18:00",
       "openingDays": "Daily 06:00–18:00 (fee for golf; viewing area free)",
@@ -252,13 +260,14 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Shillong_Golf_Course",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Lady Hydari Park",
       "slug": "lady-hydari-park-shillong",
       "category": "nature",
-      "lat": 25.5730,
+      "lat": 25.573,
       "lng": 91.8795,
       "description": "Government-maintained botanical garden and mini-zoo in the heart of Shillong, named after Lady Hydari (wife of the first Governor of Assam). The garden has lawns, flowerbeds, and a greenhouse. The small zoo section houses deer, porcupines, clouded leopard, and several Northeast bird species. A gentle family-friendly half-day outing near the city centre. Entry fee applies; zoo section included.",
       "area": "Lachumiere, Shillong",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Lady_Hydari_Park",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 20
     },
     {
       "name": "State Museum of Meghalaya",
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Meghalaya",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 10
     },
     {
       "name": "Nohwet Rock, Mawkdok Valley",
@@ -320,7 +331,7 @@
       "area": "Mawkdok, Shillong–Sohra road, 28km from Shillong",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Year-round (zip-line approx 09:00–17:00 when operational)",
@@ -336,7 +347,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Cherrapunji",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
+    },
+    {
+      "name": "Shillong Jadoh and Local Khasi Food",
+      "slug": "shillong-jadoh-khasi-food",
+      "lat": 25.5788,
+      "lng": 91.8933,
+      "description": "Jadoh (red rice cooked with pork) is the signature dish of Khasi cuisine. Try also doh-khleh (pork/beef salad with onion and ginger), tungrymbai (fermented soya bean chutney), and boiled vegetables with spiced sauce. Trattoria restaurant and local Khasi eateries in Laitumkhrah are best for authentic food.",
+      "area": "Laitumkhrah / Police Bazaar",
+      "typicalCostInr": 200,
+      "costMinInr": 100,
+      "costMaxInr": 350,
+      "costStatus": "estimated",
+      "openingTime": "08:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Apr",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Shillong Cloud 9 — Café Culture",
+      "slug": "shillong-cafe-culture",
+      "lat": 25.5788,
+      "lng": 91.8933,
+      "description": "Shillong is India's rock music capital and has a vibrant café scene. Cloud 9 Café and Dylan's Café are staples for live music evenings, fresh coffee, and Western snacks. The city's unique Khasi-Christian-colonial heritage gives its café culture a distinct character unlike anywhere else in India.",
+      "area": "Police Bazaar / Laitumkhrah",
+      "typicalCostInr": 200,
+      "costMinInr": 100,
+      "costMaxInr": 350,
+      "costStatus": "estimated",
+      "openingTime": "10:00",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Apr",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 78,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

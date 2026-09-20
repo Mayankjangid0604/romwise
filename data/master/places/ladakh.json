@@ -10,9 +10,9 @@
       "lng": 77.5823,
       "description": "Nine-storey royal palace built in the 17th century by King Sengge Namgyal, modelled on the Potala Palace in Lhasa. Now a partly ruined but intact shell managed by ASI; good views over Leh bazaar and the valley. The climb from the old city is steep on uneven lanes. Budget 1 hour. The adjacent Namgyal Tsemo Gompa is a further 15-min steep walk above.",
       "area": "Leh Old Town",
-      "costMinInr": 15,
-      "costMaxInr": 250,
-      "costStatus": "known",
+      "costMinInr": 100,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
       "openingTime": "07:00",
       "closingTime": "16:00",
       "openingDays": "Daily 07:00–16:00 (May–Oct only)",
@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Leh_Palace",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Shanti Stupa",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Shanti_Stupa,_Leh",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Hemis Monastery",
@@ -68,7 +70,7 @@
       "area": "Hemis, 45km south of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Daily (approx 08:00–13:00 and 14:00–18:00; hours vary)",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hemis_Monastery",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Thiksey Monastery",
@@ -96,7 +99,7 @@
       "area": "Thikse, 17km east of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "06:00",
       "closingTime": "18:00",
       "openingDays": "Daily 06:00–18:00 (seasonal; best May–Sep)",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Thikse_Monastery",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Namgyal Tsemo Gompa",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Namgyal_Tsemo_Gompa",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Magnetic Hill",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Magnetic_Hill,_Ladakh",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Khardung La Pass",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Khardung_La",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Spituk Monastery",
@@ -208,7 +215,7 @@
       "area": "Spituk, 8km west of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Daily (approx 07:00–18:00; seasonal)",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Spituk_Monastery",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Hall of Fame Museum",
@@ -236,7 +244,7 @@
       "area": "Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "13:00",
       "openingDays": "Mon–Sat 09:00–13:00 and 14:00–17:00 (closed Sun)",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hall_of_Fame_(Leh)",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Leh Main Bazaar",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Leh",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Stok Palace",
@@ -292,7 +302,7 @@
       "area": "Stok Village, 15km south of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "18:00",
       "openingDays": "Daily 08:00–18:00 (May–Oct)",
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Stok_Palace",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Alchi Monastery",
@@ -320,7 +331,7 @@
       "area": "Alchi Village, 70km west of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "13:00",
       "openingDays": "Daily 08:00–13:00 and 14:00–18:00",
@@ -336,7 +347,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Alchi_Monastery",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Likir Monastery",
@@ -348,7 +360,7 @@
       "area": "Likir Village, 52km west of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Daily approx 08:00–17:00 (seasonal)",
@@ -364,7 +376,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Likir_Monastery",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Lamayuru Monastery",
@@ -376,7 +389,7 @@
       "area": "Lamayuru, 127km west of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Daily approx 07:00–17:00 (seasonal; closed in winter)",
@@ -392,7 +405,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Lamayuru_Monastery",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Gurudwara Pathar Sahib",
@@ -420,7 +434,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Gurudwara_Pathar_Sahib",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Indus–Zanskar Confluence",
@@ -448,7 +463,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Zanskar_River",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chang La Pass",
@@ -476,7 +492,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chang_La",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Basgo Palace",
@@ -504,7 +521,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Basgo",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Phyang Monastery",
@@ -516,7 +534,7 @@
       "area": "Phyang Village, 16km NW of Leh",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Daily approx 07:00–17:00 (seasonal)",
@@ -532,7 +550,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Phyang_Monastery",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Stakna Monastery",
@@ -560,7 +579,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Stakna_Monastery",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Ladakhi Thukpa and Skyu",
+      "slug": "ladakh-thukpa-skyu-food",
+      "lat": 34.1526,
+      "lng": 77.5771,
+      "description": "Traditional Ladakhi cuisine at Leh Old Town dhabas: thukpa (hearty noodle broth with vegetables or meat), skyu (thick hand-rolled pasta with root vegetables), and tsampa (roasted barley flour porridge). Tibetan flatbread tingmo goes with almost everything. Warming and high-altitude appropriate.",
+      "area": "Leh Old Town",
+      "typicalCostInr": 200,
+      "costMinInr": 80,
+      "costMaxInr": 350,
+      "costStatus": "estimated",
+      "openingTime": "08:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily (Jun–Oct main season)",
+      "openingHoursStatus": "known",
+      "bestSeason": "Jun–Oct",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Leh Market Café and Butter Tea",
+      "slug": "leh-market-butter-tea-cafe",
+      "lat": 34.1666,
+      "lng": 77.5785,
+      "description": "Leh Main Bazaar cafés offer butter tea (pos cha — salted yak butter tea), chhang (barley beer), and fresh apricot juice — all local to Ladakh. The apricot orchards of Ladakh produce juice and jam of extraordinary quality. A chance to try hyperlocal Himalayan beverages.",
+      "area": "Leh Main Bazaar",
+      "typicalCostInr": 80,
+      "costMinInr": 40,
+      "costMaxInr": 150,
+      "costStatus": "estimated",
+      "openingTime": "07:00",
+      "closingTime": "20:00",
+      "openingDays": "Daily (Jun–Oct)",
+      "openingHoursStatus": "known",
+      "bestSeason": "Jun–Oct",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 75,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

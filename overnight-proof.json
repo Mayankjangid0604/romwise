@@ -1,0 +1,100 @@
+{
+  "days": [
+    {
+      "dayNumber": 1,
+      "date": "2026-11-07T08:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnl7e00dq9tust6pntr7w",
+          "title": "Amer Fort",
+          "description": "11km north of Jaipur, this 16th-century hilltop fort complex is Jaipur's most visited landmark. Features the ornate Sheesh Mahal (Hall of Mirrors), Diwan-i-Aam, Sukh Niwas and panoramic Aravalli views. Accessible by foot, jeep or elephant ride from the main gate. ASI-protected UNESCO site. Budget 2–3 hours.",
+          "category": "history",
+          "startTime": "14:00",
+          "endTime": "16:30",
+          "estimatedCostInr": 325,
+          "costSource": "db",
+          "lat": 26.9855,
+          "lng": 75.8513,
+          "reasoning": "Start the morning fresh at the iconic 16th-century Amer Fort in northern Jaipur.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1lnljc00dy9tus72ak6d3h",
+          "title": "Jal Mahal",
+          "description": "18th-century palace appearing to float in the centre of Man Sagar Lake, 6km north of Jaipur on the Amer road. Palace interior is not open to visitors; the attraction is the view from the lakeside gardens and road. Best photographed at sunrise or sunset. Free viewpoint from the lake embankment.",
+          "category": "sightseeing",
+          "startTime": "16:40",
+          "endTime": "17:10",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9488,
+          "lng": 75.8476,
+          "reasoning": "Quick stop nearby to view the stunning floating Jal Mahal on the Amer Road.",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "date": "2026-11-08T08:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnlvb00e69tus25pgtopx",
+          "title": "Galta Ji (Monkey Temple)",
+          "description": "Complex of Hindu temples and kunds (natural water tanks) built into a mountain gorge 10km east of Jaipur. Home to hundreds of rhesus macaques. Features Galta temple, Surya Mandir and an old haveli. Free entry; steep path with 200+ stairs. Best visited in the morning when monkeys are most active.",
+          "category": "spiritual",
+          "startTime": "08:00",
+          "endTime": "09:30",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9216,
+          "lng": 75.8661,
+          "reasoning": "Morning visit to Galta Ji (Monkey Temple) when the rhesus macaques are most active.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1lnlyb00e89tus6jh4usbe",
+          "title": "Johari Bazaar",
+          "description": "Jaipur's main jewellery street in the old walled city (Old Town), famous for gold, gems and kundan/meenakari jewellery. Also the best viewpoint for photographing Hawa Mahal from across the street. Lined with traditional havelis; busy during morning hours. Free to browse.",
+          "category": "shopping",
+          "startTime": "10:00",
+          "endTime": "11:00",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9198,
+          "lng": 75.8209,
+          "reasoning": "Stroll through Johari Bazaar for jewellery shopping and classic Hawa Mahal views.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu53cgmc00ieurhu0t2v9x8g",
+          "title": "Jaipur Street Food Walk",
+          "description": "Johari Bazaar and Bapu Bazaar areas host Jaipur's best street food: kachori-sabzi, mirchi bada (chilli fritter), pyaz kachori, dahi jalebi, and Rajasthani ghevar (lattice sweet). Best explored on foot in the late morning.",
+          "category": "dining",
+          "startTime": "11:10",
+          "endTime": "12:40",
+          "estimatedCostInr": 200,
+          "costSource": "db",
+          "lat": 26.9241,
+          "lng": 75.8268,
+          "reasoning": "Indulge in a Jaipur Street Food Walk around the Old City bazaars for lunch.",
+          "order": 3
+        }
+      ]
+    }
+  ],
+  "resolvedDestination": {
+    "id": "cmu1gnx7700029t5wqp7flh5m",
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "lat": 26.915,
+    "lng": 75.82,
+    "matchType": "exact"
+  },
+  "candidateCount": 24,
+  "usedGemini": true,
+  "usedFallback": false,
+  "season": "winter",
+  "conflicts": []
+}

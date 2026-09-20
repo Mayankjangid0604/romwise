@@ -98,9 +98,12 @@ export default function DiscoveryPage() {
             {result.destinations.map((dest, i) => (
               <Card key={i}>
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="font-display text-xl font-semibold text-ink-900">
+                  <Link
+                    href={`/discovery/${encodeURIComponent(dest.name)}?context=${encodeURIComponent(dest.rationale)}`}
+                    className="font-display text-xl font-semibold text-ink-900 hover:text-lagoon-700 transition-colors"
+                  >
                     {dest.name}
-                  </h3>
+                  </Link>
                   <Badge tone="lagoon" className="shrink-0 px-3 py-1">
                     <span className="font-mono tabular">{dest.matchScore}%</span>
                     <span className="ml-1">match</span>
@@ -151,12 +154,18 @@ export default function DiscoveryPage() {
                   </div>
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-ink-100">
+                <div className="mt-5 pt-4 border-t border-ink-100 flex items-center gap-4">
                   <Link
-                    href={`/trips/new?destination=${encodeURIComponent(dest.name)}`}
+                    href={`/discovery/${encodeURIComponent(dest.name)}?context=${encodeURIComponent(dest.rationale)}`}
                     className="inline-flex items-center gap-1.5 text-[0.875rem] font-medium text-lagoon-700 hover:text-lagoon-800 transition-colors"
                   >
-                    Plan a trip here &rarr;
+                    Explore destination →
+                  </Link>
+                  <Link
+                    href={`/trips/new?destination=${encodeURIComponent(dest.name)}`}
+                    className="inline-flex items-center gap-1.5 text-[0.875rem] text-ink-500 hover:text-ink-700 transition-colors"
+                  >
+                    Skip to trip form
                   </Link>
                 </div>
               </Card>

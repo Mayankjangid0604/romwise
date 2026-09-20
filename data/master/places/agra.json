@@ -29,7 +29,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Taj_Mahal",
       "sourceRecordId": "82976",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 675
     },
     {
       "name": "Agra Fort",
@@ -58,7 +59,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Agra_Fort",
       "sourceRecordId": "1115045",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 345
     },
     {
       "name": "Fatehpur Sikri",
@@ -86,7 +88,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Fatehpur_Sikri",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 325
     },
     {
       "name": "Itmad-ud-Daulah",
@@ -115,7 +118,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Itmad_Ud_Daulah",
       "sourceRecordId": "2563872",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 170
     },
     {
       "name": "Mehtab Bagh",
@@ -144,7 +148,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Mehtab_Bagh",
       "sourceRecordId": "18396886",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 170
     },
     {
       "name": "Sikandra — Akbar's Tomb",
@@ -172,7 +177,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Sikandra,_Agra",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 170
     },
     {
       "name": "Jama Masjid Agra",
@@ -201,7 +207,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Jama_Mosque,_Agra",
       "sourceRecordId": "19552420",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chini Ka Rauza",
@@ -230,7 +237,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Chini_Ka_Rauza",
       "sourceRecordId": "19630628",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Aram Bagh",
@@ -259,7 +267,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Aram_Bagh,_Agra",
       "sourceRecordId": "10049524",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 115
     },
     {
       "name": "Kinari Bazaar",
@@ -287,7 +296,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kinari_Bazaar",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Agra Petha and Sweets Experience",
+      "slug": "agra-petha-sweets",
+      "lat": 27.1767,
+      "lng": 78.0081,
+      "description": "Agra is famous for petha — a translucent sweet made from ash gourd, in 20+ flavours including angoori (grape-shaped), kesar (saffron), and paan. Visit Panchi Petha Stores near Sadar Bazaar for the freshest variety. Also try Agra's samosa and bedai breakfast.",
+      "area": "Sadar Bazaar",
+      "typicalCostInr": 150,
+      "costMinInr": 50,
+      "costMaxInr": 300,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Mughal Cuisine Dining Experience",
+      "slug": "agra-mughal-cuisine-dining",
+      "lat": 27.1767,
+      "lng": 78.0081,
+      "description": "Agra's restaurants near the Taj Mahal offer classic Mughal-style meals: biryani, dum pukht (slow-cooked meat), shahi paneer, and mutton korma. Peshawri and Esphahan (ITC Mughal) are renowned fine-dining options; budget travellers visit Dasaprakash for pure-veg Mughal-inspired dishes.",
+      "area": "Taj Ganj / Hotel Zone",
+      "typicalCostInr": 600,
+      "costMinInr": 200,
+      "costMaxInr": 1500,
+      "costStatus": "estimated",
+      "openingTime": "12:00",
+      "closingTime": "23:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 75,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 78,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

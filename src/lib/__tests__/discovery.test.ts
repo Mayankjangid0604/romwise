@@ -4,7 +4,7 @@ import {
   validateDiscoveryResponse,
   ValidationError,
 } from "../discovery";
-import { GeminiSchemaError } from "../gemini";
+
 
 describe("validateDiscoveryInput", () => {
   it("accepts valid input", () => {
@@ -79,11 +79,11 @@ describe("validateDiscoveryResponse", () => {
   });
 
   it("rejects null", () => {
-    expect(() => validateDiscoveryResponse(null)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(null)).toThrow(ValidationError);
   });
 
   it("rejects missing destinations array", () => {
-    expect(() => validateDiscoveryResponse({})).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse({})).toThrow(ValidationError);
   });
 
   it("rejects wrong number of destinations (2)", () => {
@@ -91,31 +91,31 @@ describe("validateDiscoveryResponse", () => {
       validateDiscoveryResponse({
         destinations: [VALID_DESTINATION, VALID_DESTINATION],
       }),
-    ).toThrow(GeminiSchemaError);
+    ).toThrow(ValidationError);
   });
 
   it("rejects wrong number of destinations (4)", () => {
     const resp = makeValidResponse();
     resp.destinations.push({ ...VALID_DESTINATION, name: "Extra" } as never);
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rejects empty name", () => {
     const resp = makeValidResponse();
     (resp.destinations[0] as Record<string, unknown>).name = "";
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rejects missing rationale", () => {
     const resp = makeValidResponse();
     delete (resp.destinations[1] as Record<string, unknown>).rationale;
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rejects empty activities array", () => {
     const resp = makeValidResponse();
     (resp.destinations[0] as Record<string, unknown>).activities = [];
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rejects more than 5 activities", () => {
@@ -123,25 +123,25 @@ describe("validateDiscoveryResponse", () => {
     (resp.destinations[0] as Record<string, unknown>).activities = [
       "a", "b", "c", "d", "e", "f",
     ];
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rejects matchScore out of range (negative)", () => {
     const resp = makeValidResponse();
     (resp.destinations[0] as Record<string, unknown>).matchScore = -5;
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rejects matchScore out of range (>100)", () => {
     const resp = makeValidResponse();
     (resp.destinations[2] as Record<string, unknown>).matchScore = 150;
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rejects non-number matchScore", () => {
     const resp = makeValidResponse();
     (resp.destinations[0] as Record<string, unknown>).matchScore = "high";
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 
   it("rounds matchScore to integer", () => {
@@ -154,6 +154,6 @@ describe("validateDiscoveryResponse", () => {
   it("rejects non-string activity", () => {
     const resp = makeValidResponse();
     (resp.destinations[0] as Record<string, unknown>).activities = [123];
-    expect(() => validateDiscoveryResponse(resp)).toThrow(GeminiSchemaError);
+    expect(() => validateDiscoveryResponse(resp)).toThrow(ValidationError);
   });
 });

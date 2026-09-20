@@ -12,7 +12,7 @@
       "area": "Diskit, Nubra Valley",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "18:00",
       "openingDays": "Daily 08:00–18:00 (Jun–Sep; limited in shoulder months)",
@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Diskit_Monastery",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Hunder Sand Dunes",
@@ -40,7 +41,7 @@
       "area": "Hunder, Nubra Valley",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open all day (best Jun–Sep)",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hunder",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Turtuk Village",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Turtuk",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Panamik Hot Springs",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Panamik",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Samtanling Gompa",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Sumur,_Ladakh",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Yarab Tso",
@@ -168,7 +173,36 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nubra_Valley",
       "confidence": 0.65,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Nubra Valley Local Ladakhi Apricot and Meals",
+      "slug": "nubra-valley-local-apricot-meals",
+      "lat": 34.5333,
+      "lng": 77.55,
+      "description": "The Nubra Valley is Ladakh's apricot-growing region. Local guesthouses serve Ladakhi thukpa, skyu, and fresh apricot jam with roti. Dried apricots (khubani) are sold roadside and are extraordinarily sweet. Hundar and Diskit villages have simple family-run guesthouses with home-cooked meals.",
+      "area": "Hundar / Diskit",
+      "typicalCostInr": 200,
+      "costMinInr": 100,
+      "costMaxInr": 350,
+      "costStatus": "estimated",
+      "openingTime": "07:30",
+      "closingTime": "21:00",
+      "openingDays": "Daily (Jun–Oct main season)",
+      "openingHoursStatus": "known",
+      "bestSeason": "Jun–Sep",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 72,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

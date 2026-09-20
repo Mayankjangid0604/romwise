@@ -129,7 +129,8 @@ describe("resolveDestination", () => {
         .mockResolvedValueOnce(JAIPUR); // fuzzy/partial
       mockAlias.findFirst.mockResolvedValueOnce(null);
 
-      const result = await resolveDestination("Jai");
+      // Pass true for allowFuzzy
+      const result = await resolveDestination("Jai", true);
 
       expect(result).not.toBeNull();
       expect(result!.matchType).toBe("fuzzy");

@@ -12,7 +12,7 @@
       "area": "Old City",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Boat rides: approx 10:00–18:00",
@@ -29,7 +29,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Lake_Pichola",
       "sourceRecordId": "17709850",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "City Palace, Udaipur",
@@ -57,7 +58,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/City_Palace,_Udaipur",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 475
     },
     {
       "name": "Lake Palace",
@@ -69,7 +71,7 @@
       "area": "Lake Pichola",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open to guests of Taj Hotel; non-guests need reservation",
@@ -86,7 +88,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Lake_Palace",
       "sourceRecordId": "14877867",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Jag Mandir Palace",
@@ -98,7 +101,7 @@
       "area": "Lake Pichola",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "10:00",
       "closingTime": "18:00",
       "openingDays": "Daily 10:00–18:00",
@@ -115,7 +118,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Jag_Mandir_Palace",
       "sourceRecordId": "17709725",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Fateh Sagar Lake",
@@ -143,7 +147,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Fateh_Sagar_Lake",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Sajjangarh Palace (Monsoon Palace)",
@@ -155,7 +160,7 @@
       "area": "Bandela Hills",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "18:00",
       "openingDays": "Daily 09:00–18:00",
@@ -171,7 +176,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Sajjangarh_Palace",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Jagdish Temple",
@@ -200,7 +206,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Jagdish_Temple,_Udaipur",
       "sourceRecordId": "27695675",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Saheliyon-ki-Bari",
@@ -229,7 +236,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Saheliyon-ki-Bari",
       "sourceRecordId": "18064073",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 30
     },
     {
       "name": "Bagore Ki Haveli",
@@ -258,7 +266,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Bagore_Ki_Haveli",
       "sourceRecordId": "27769530",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 105
     },
     {
       "name": "Ambrai Ghat",
@@ -287,7 +296,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Ambrai_Ghat",
       "sourceRecordId": "53626792",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Shiv Niwas Palace",
@@ -299,7 +309,7 @@
       "area": "City Palace Complex",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Hotel; tea/dining by reservation",
@@ -316,7 +326,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Shiv_Niwas_Palace",
       "sourceRecordId": "14878004",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Ahar Cenotaphs",
@@ -345,7 +356,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Ahar_Cenotaphs",
       "sourceRecordId": "27102497",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Vintage and Classic Car Museum",
@@ -357,7 +369,7 @@
       "area": "Moti Magri Road",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "18:00",
       "openingDays": "Daily 09:00–18:00",
@@ -374,7 +386,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Vintage_and_Classic_Car_Museum",
       "sourceRecordId": "50554912",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Kumbhalgarh Fort",
@@ -402,7 +415,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kumbhalgarh",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 320
     },
     {
       "name": "Ranakpur Jain Temples",
@@ -414,7 +428,7 @@
       "area": "Pali District",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "17:00",
       "openingDays": "Daily 09:00–17:00; Jain worshippers from 06:00",
@@ -430,7 +444,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Ranakpur_Jain_temple",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Udaipur Lake View Rooftop Dining",
+      "slug": "udaipur-lake-view-rooftop-dining",
+      "lat": 24.576,
+      "lng": 73.6835,
+      "description": "The Pichola lakefront is studded with rooftop restaurants with views of Lake Palace and City Palace. Must-try: Rajasthani thali with bajre ki roti, ker sangri, laal maas (chilli lamb), and churma. Ambrai and Upre at Lake Pichola are the most scenic.",
+      "area": "Hanuman Ghat / Lal Ghat",
+      "typicalCostInr": 600,
+      "costMinInr": 300,
+      "costMaxInr": 1200,
+      "costStatus": "estimated",
+      "openingTime": "12:00",
+      "closingTime": "23:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 90,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 88,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Udaipur Old City Bazaar Street Food",
+      "slug": "udaipur-old-city-street-food",
+      "lat": 24.5826,
+      "lng": 73.6867,
+      "description": "Bada Bazaar and the lanes around City Palace offer local Rajasthani street food: dal baati (wheat balls with lentil soup), churma (sweet crumble), mirchi vada, and the local Mawa Kachori (sweet deep-fried pastry). Evening is the best time when the bazaar lights up.",
+      "area": "Bada Bazaar / City Palace area",
+      "typicalCostInr": 150,
+      "costMinInr": 60,
+      "costMaxInr": 250,
+      "costStatus": "estimated",
+      "openingTime": "10:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 2,
+      "accessibilityScore": 3,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

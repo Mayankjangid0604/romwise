@@ -7,21 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ── Authentication ────────────────────────────────────────────────────────────
-
 model User {
-  id              String        @id @default(cuid())
-  email           String?       @unique
-  phone           String?       @unique
-  name            String
-  passwordHash    String?
-  phoneVerified   Boolean       @default(false)
-  tripGenerations Int           @default(0)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  trips           Trip[]
-  groupMembers    GroupMember[]
-  otpCodes        OtpCode[]
+  id                   String                @id @default(cuid())
+  email                String?               @unique
+  phone                String?               @unique
+  name                 String
+  passwordHash         String?
+  phoneVerified        Boolean               @default(false)
+  tripGenerations      Int                   @default(0)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  role                 String                @default("user")
+  comments             Comment[]
+  Expense              Expense[]
+  expenseParticipants  ExpenseParticipant[]
+  favoriteDestinations FavoriteDestination[]
+  favoritePlaces       FavoritePlace[]
+  groupMembers         GroupMember[]
+  otpCodes             OtpCode[]
+  recentActivities     RecentActivity[]
+  trips                Trip[]
+  votes                Vote[]
 }
 
 model OtpCode {
@@ -38,11 +44,6 @@ model OtpCode {
   @@index([phone, verified])
 }
 
-// ── Geographic reference (administrative districts) ────────────────────────────
-// Source: India district registry built from Wikipedia + Census 2011 + OSM
-// These are NOT tourist destinations — they are administrative divisions.
-// Coordinates are approximate area centroids, not navigation points.
-
 model District {
   id           String              @id @default(cuid())
   name         String
@@ -58,52 +59,40 @@ model District {
   @@index([state])
 }
 
-// ── Travel destinations ────────────────────────────────────────────────────────
-// A tourist destination — may or may not correspond to an administrative district.
-// Examples: Jaipur, Rishikesh, Goa, Manali, Havelock Island
-
 model TravelDestination {
-  id              String             @id @default(cuid())
-  name            String
-  slug            String             @unique
-  state           String
-  country         String             @default("India")
-  lat             Float
-  lng             Float
-  description     String?
-  // region | state | tourism_region | city | town | valley | island | national_park
-  // wildlife_reserve | lake | heritage_site | beach | mountain | hill_station
-  // pilgrimage | circuit | other
-  destinationType String?
-  // Hierarchy: null = top-level; set to parent slug's id for sub-destinations
-  parentDestinationId String?
-  parent              TravelDestination?  @relation("DestinationHierarchy", fields: [parentDestinationId], references: [id], onDelete: SetNull)
-  children            TravelDestination[] @relation("DestinationHierarchy")
-  // Optional link to the administrative district this destination sits within
-  districtId      String?
-  district        District?          @relation(fields: [districtId], references: [id], onDelete: SetNull)
-  // Provenance
-  sourceUrl       String?
-  sourceName      String?
-  // curated | wikipedia_geosearch | wikidata | osm | official | ai_enriched
-  sourceType      String?
-  sourceRecordId  String?
-  lastVerifiedAt  DateTime?
-  // 0.0–1.0: overall confidence in destination record
-  confidence      Float?
-  aliases         DestinationAlias[]
-  places          Place[]
-  trips           Trip[]
-  // seed | verified | needs_review | deprecated
-  dataStatus      String             @default("seed")
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  id                   String                @id @default(cuid())
+  name                 String
+  slug                 String                @unique
+  state                String
+  country              String                @default("India")
+  lat                  Float
+  lng                  Float
+  description          String?
+  districtId           String?
+  dataStatus           String                @default("seed")
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  confidence           Float?
+  destinationType      String?
+  sourceName           String?
+  sourceUrl            String?
+  lastVerifiedAt       DateTime?
+  parentDestinationId  String?
+  sourceRecordId       String?
+  sourceType           String?
+  aliases              DestinationAlias[]
+  favoriteDestinations FavoriteDestination[]
+  images               Image[]
+  places               Place[]
+  district             District?             @relation(fields: [districtId], references: [id])
+  parent               TravelDestination?    @relation("DestinationHierarchy", fields: [parentDestinationId], references: [id])
+  children             TravelDestination[]   @relation("DestinationHierarchy")
+  trips                Trip[]
 
   @@index([state])
   @@index([parentDestinationId])
 }
 
-// Alternate names that resolve to a canonical TravelDestination
 model DestinationAlias {
   id            String            @id @default(cuid())
   alias         String            @unique
@@ -111,78 +100,56 @@ model DestinationAlias {
   destination   TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 }
 
-// ── Places / Points of Interest ───────────────────────────────────────────────
-// Real places within a travel destination.
-// These are the unit of truth for itinerary generation.
-
 model Place {
-  id                  String            @id @default(cuid())
-  name                String
-  slug                String            @unique
-  destinationId       String
-  destination         TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-  area                String?
-  description         String?
-  address             String?
-  // Must be one of PLACE_CATEGORIES in src/lib/categories.ts
-  category            String
-  lat                 Float
-  lng                 Float
-  // Cost fields
-  typicalCostInr      Int?
-  costMinInr          Int?
-  costMaxInr          Int?
-  // free | known_range | unknown | estimated | verified
-  costStatus          String?
-  durationMinutes     Int?
-  // "HH:MM" format, null if unknown
-  openingTime         String?
-  closingTime         String?
-  // e.g. "Mon-Sat", "Tue-Sun", "daily"
-  openingDays         String?
-  // verified | partial | unknown
-  openingHoursStatus  String?
-  // e.g. "Oct-Mar" or "year-round"
-  bestSeason          String?
-  // verified | partial | unknown
-  seasonStatus        String?
-  vibes               String?
-  // e.g. "couples,families,photographers"
-  bestFor             String?
-  // 1–5 (1 = very easy, 5 = very demanding)
-  fatigueCost         Int?
-  // 1–5 (1 = not accessible, 5 = fully accessible), null if unknown
-  accessibilityScore  Int?
-  // 0–100
-  popularityScore     Int               @default(50)
-  hiddenGem           Boolean           @default(false)
-  // Provenance
-  sourceUrl           String?
-  sourceName          String?
-  sourceRecordId      String?
-  // 0.0–1.0
-  confidence          Float?
-  lastVerifiedAt      DateTime?
-  // seed | verified | needs_review | deprecated
-  dataStatus          String            @default("seed")
-  // curated | ai_enriched | imported | official | fixture | osm | wikidata | wikipedia_geosearch
-  sourceType          String            @default("curated")
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
-  itineraryItems      ItineraryItem[]
+  id                 String            @id @default(cuid())
+  name               String
+  slug               String            @unique
+  destinationId      String
+  area               String?
+  description        String?
+  category           String
+  lat                Float
+  lng                Float
+  typicalCostInr     Int?
+  durationMinutes    Int?
+  openingTime        String?
+  closingTime        String?
+  bestSeason         String?
+  vibes              String?
+  accessibilityScore Int?
+  popularityScore    Int               @default(50)
+  hiddenGem          Boolean           @default(false)
+  dataStatus         String            @default("seed")
+  sourceType         String            @default("curated")
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  address            String?
+  bestFor            String?
+  confidence         Float?
+  costMaxInr         Int?
+  costMinInr         Int?
+  costStatus         String?
+  fatigueCost        Int?
+  lastVerifiedAt     DateTime?
+  openingDays        String?
+  openingHoursStatus String?
+  seasonStatus       String?
+  sourceName         String?
+  sourceRecordId     String?
+  sourceUrl          String?
+  FavoritePlace      FavoritePlace[]
+  images              Image[]
+  itineraryItems     ItineraryItem[]
+  destination        TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 
   @@index([destinationId])
   @@index([category])
   @@index([dataStatus])
 }
 
-// ── Data source registry ───────────────────────────────────────────────────────
-// Tracks external sources used during data ingestion.
-
 model DataSource {
   id          String    @id @default(cuid())
   name        String    @unique
-  // official | osm | wikidata | curated | community | api
   type        String
   url         String?
   license     String?
@@ -192,31 +159,35 @@ model DataSource {
   createdAt   DateTime  @default(now())
 }
 
-// ── Trips ─────────────────────────────────────────────────────────────────────
-
 model Trip {
-  id             String             @id @default(cuid())
-  title          String
-  destination    String
-  startDate      DateTime
-  endDate        DateTime
-  // GROUP_TOTAL: total budget for the entire trip across all travelers and all days.
-  // NOT per-person. NOT per-day. Divide by numDays for daily budget; display ÷ travelers for per-person context.
-  budgetInr      Int
-  maxTravelers   Int                @default(20)
-  paceLevel      String             @default("balanced")
-  // draft | planning | stale
-  status         String             @default("draft")
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
-  creatorId      String
-  creator        User               @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  destinationId  String?
-  destinationRef TravelDestination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
-  groupMembers   GroupMember[]
-  itineraryDays  ItineraryDay[]
-  packingItems   PackingItem[]
-  staySelection  StaySelection?
+  id                 String              @id @default(cuid())
+  title              String
+  destination        String
+  startDate          DateTime?
+  endDate            DateTime?
+  budgetInr          Int
+  maxTravelers       Int                 @default(20)
+  paceLevel          String              @default("balanced")
+  status             String              @default("draft")
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  creatorId          String
+  destinationId      String?
+  dateStatus         String              @default("unknown")
+  endTime            String?
+  startTime          String?
+  timeStatus         String              @default("UNKNOWN")
+  tripType           String              @default("MULTI_DAY")
+  expenses           Expense[]
+  groupMembers       GroupMember[]
+  itineraryDays      ItineraryDay[]
+  packingItems       PackingItem[]
+  staySelection      StaySelection?
+  travelSegments     TravelSegment[]
+  creator            User                @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  destinationRef     TravelDestination?  @relation(fields: [destinationId], references: [id])
+  tripAccommodations TripAccommodation[]
+  tripShares         TripShare[]
 }
 
 model GroupMember {
@@ -226,9 +197,10 @@ model GroupMember {
   accessibilityNotes  String               @default("")
   joinedAt            DateTime             @default(now())
   userId              String
-  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   tripId              String
+  status              String               @default("joined")
   trip                Trip                 @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   travelerPreferences TravelerPreference[]
 
   @@unique([userId, tripId])
@@ -288,8 +260,211 @@ model ItineraryItem {
   reasoning        String
   order            Int
   itineraryDayId   String
-  itineraryDay     ItineraryDay @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)
-  // Optional link to a known Place — null means item is not grounded to a known POI
   placeId          String?
-  place            Place?       @relation(fields: [placeId], references: [id], onDelete: SetNull)
+  costSource       String       @default("unknown")
+  comments         Comment[]
+  itineraryDay     ItineraryDay @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)
+  place            Place?       @relation(fields: [placeId], references: [id])
+  votes            Vote[]
+}
+
+model AIUsage {
+  id            String   @id @default(cuid())
+  userId        String?
+  tripId        String?
+  task          String
+  provider      String
+  model         String
+  requestId     String?
+  inputTokens   Int?
+  outputTokens  Int?
+  totalTokens   Int?
+  estimatedCost Float?
+  currency      String   @default("USD")
+  latencyMs     Int
+  status        String
+  errorType     String?
+  fallbackUsed  Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@index([task])
+  @@index([tripId])
+  @@index([userId])
+}
+
+model Comment {
+  id              String        @id @default(cuid())
+  itineraryItemId String
+  userId          String
+  content         String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([itineraryItemId])
+  @@index([userId])
+}
+
+model Expense {
+  id                 String               @id @default(cuid())
+  tripId             String
+  payerId            String
+  amountInr          Int
+  description        String
+  category           String               @default("other")
+  date               DateTime             @default(now())
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  payer              User                 @relation(fields: [payerId], references: [id], onDelete: Cascade)
+  trip               Trip                 @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  ExpenseParticipant ExpenseParticipant[]
+
+  @@index([payerId])
+  @@index([tripId])
+}
+
+model ExpenseParticipant {
+  id        String  @id @default(cuid())
+  expenseId String
+  userId    String
+  owedInr   Int
+  expense   Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([expenseId, userId])
+}
+
+model FavoriteDestination {
+  id            String            @id
+  userId        String
+  destinationId String
+  createdAt     DateTime          @default(now())
+  destination   TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+}
+
+model FavoritePlace {
+  id        String   @id @default(cuid())
+  userId    String
+  placeId   String
+  createdAt DateTime @default(now())
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, placeId])
+}
+
+model Image {
+  id            String             @id @default(cuid())
+  url           String
+  source        String?
+  sourceId      String?
+  altText       String?
+  width         Int?
+  height        Int?
+  credit        String?
+  status        String             @default("ACTIVE")
+  destinationId String?
+  placeId       String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  destination   TravelDestination? @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  place         Place?             @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@index([destinationId])
+  @@index([placeId])
+}
+
+model RateLimitEntry {
+  key       String   @id
+  count     Int      @default(0)
+  resetAt   DateTime
+  updatedAt DateTime @updatedAt
+}
+
+model RecentActivity {
+  id            String   @id @default(cuid())
+  userId        String
+  type          String
+  tripId        String?
+  destinationId String?
+  viewedAt      DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model TravelSegment {
+  id                   String    @id @default(cuid())
+  tripId               String
+  type                 String
+  mode                 String
+  originName           String?
+  originLatitude       Float?
+  originLongitude      Float?
+  destinationName      String?
+  destinationLatitude  Float?
+  destinationLongitude Float?
+  departureDate        DateTime?
+  departureTime        String?
+  arrivalDate          DateTime?
+  arrivalTime          String?
+  carrier              String?
+  serviceNumber        String?
+  bookingReference     String?
+  notes                String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  trip                 Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+model TripAccommodation {
+  id               String    @id @default(cuid())
+  tripId           String
+  name             String
+  location         String?
+  latitude         Float?
+  longitude        Float?
+  checkInDate      DateTime?
+  checkOutDate     DateTime?
+  checkInTime      String?
+  checkOutTime     String?
+  bookingReference String?
+  notes            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  trip             Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+model TripShare {
+  id        String    @id @default(cuid())
+  tripId    String
+  token     String    @unique
+  role      String    @default("viewer")
+  expiresAt DateTime?
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  trip      Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([tripId])
+}
+
+model Vote {
+  id              String        @id @default(cuid())
+  itineraryItemId String
+  userId          String
+  value           Int
+  createdAt       DateTime      @default(now())
+  itineraryItem   ItineraryItem @relation(fields: [itineraryItemId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([itineraryItemId, userId])
 }

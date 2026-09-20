@@ -56,6 +56,13 @@ export async function verifyOtp(phone: string, code: string): Promise<VerifyResu
     return { valid: false, reason: "too_many_attempts" };
   }
 
+  // SEC-003: Increment attempt counter before evaluating expiry/validity
+  // to prevent attackers from making unlimited attempts on expired OTPs.
+  await prisma.otpCode.update({
+    where: { id: otp.id },
+    data: { attempts: { increment: 1 } },
+  });
+
   if (otp.expiresAt < new Date()) {
     return { valid: false, reason: "expired" };
   }
@@ -63,10 +70,6 @@ export async function verifyOtp(phone: string, code: string): Promise<VerifyResu
   const isValid = (TEST_BYPASS && code === TEST_CODE) || (await compare(code, otp.codeHash));
 
   if (!isValid) {
-    await prisma.otpCode.update({
-      where: { id: otp.id },
-      data: { attempts: { increment: 1 } },
-    });
     return { valid: false, reason: "invalid" };
   }
 

@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Eravikulam_National_Park",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 210
     },
     {
       "name": "Mattupetty Dam and Lake",
@@ -40,7 +41,7 @@
       "area": "Mattupetty",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open all day; boat rides 09:30–17:00",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mattupetty_Dam",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Tea Museum, Munnar",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tea_Museum,_Munnar",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 138
     },
     {
       "name": "Top Station Viewpoint",
@@ -96,7 +99,7 @@
       "area": "Bodinayakanur",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open all day",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Top_Station",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Chinnar Wildlife Sanctuary",
@@ -124,7 +128,7 @@
       "area": "Marayur",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "07:00",
       "closingTime": "17:00",
       "openingDays": "Daily 07:00–17:00",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chinnar_Wildlife_Sanctuary",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Anamudi Peak",
@@ -152,7 +157,7 @@
       "area": "Eravikulam",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Trekking permits required from Forest Dept; Dec–Apr only",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Anamudi",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Attukal Waterfalls",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Munnar",
       "confidence": 0.7,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Kolukkumalai Tea Estate",
@@ -208,7 +215,7 @@
       "area": "Suryanelli",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Factory: Mon–Sat; jeep tours on request",
@@ -224,7 +231,36 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kolukkumalai",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
+    },
+    {
+      "name": "Munnar Tea and Spice Trail Café",
+      "slug": "munnar-tea-spice-trail-cafe",
+      "lat": 10.0892,
+      "lng": 77.0595,
+      "description": "High-altitude Munnar's tea estate cafés serve freshly brewed single-estate teas and locally grown cardamom and pepper. KTDC-run Santhigiri café at Top Station and TATA Tea Museum café are popular stops. Pair with banana fritters or puttu (steamed rice cake).",
+      "area": "Munnar Town / Tea Estates",
+      "typicalCostInr": 150,
+      "costMinInr": 80,
+      "costMaxInr": 250,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "18:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–May",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

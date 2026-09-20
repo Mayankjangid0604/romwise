@@ -43,37 +43,6 @@ describe("haversineKm", () => {
   });
 });
 
-describe("syntheticCoordinates", () => {
-  it("returns coordinates near the default center", () => {
-    const { lat, lng } = syntheticCoordinates("Beach visit", "sightseeing");
-    expect(lat).toBeGreaterThan(20.0);
-    expect(lat).toBeLessThan(21.0);
-    expect(lng).toBeGreaterThan(78.0);
-    expect(lng).toBeLessThan(80.0);
-  });
-
-  it("returns coordinates near a custom center when provided", () => {
-    const center = { lat: 15.4909, lng: 73.8278 };
-    const { lat, lng } = syntheticCoordinates("Beach visit", "sightseeing", center);
-    expect(lat).toBeGreaterThan(15.0);
-    expect(lat).toBeLessThan(16.0);
-    expect(lng).toBeGreaterThan(73.0);
-    expect(lng).toBeLessThan(74.0);
-  });
-
-  it("is deterministic", () => {
-    const a = syntheticCoordinates("Temple tour", "culture");
-    const b = syntheticCoordinates("Temple tour", "culture");
-    expect(a).toEqual(b);
-  });
-
-  it("different titles produce different coordinates", () => {
-    const a = syntheticCoordinates("Beach visit", "sightseeing");
-    const b = syntheticCoordinates("Mountain hike", "adventure");
-    expect(a.lat === b.lat && a.lng === b.lng).toBe(false);
-  });
-});
-
 describe("optimizeRoute", () => {
   it("returns empty result for no stops", () => {
     const result = optimizeRoute([]);

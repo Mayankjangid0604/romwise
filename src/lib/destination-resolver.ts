@@ -25,6 +25,7 @@ export type ResolvedDestination = {
  */
 export async function resolveDestination(
   query: string,
+  allowFuzzy: boolean = false
 ): Promise<ResolvedDestination | null> {
   const normalized = query.trim();
   if (!normalized) return null;
@@ -80,26 +81,28 @@ export async function resolveDestination(
 
   // 3. Partial/fuzzy name match (contains query, case-insensitive)
   // Only used as a last resort — confidence is lower.
-  let partial = await prisma.travelDestination.findFirst({
-    where: { name: { contains: normalized, mode: "insensitive" } },
-    orderBy: { name: "asc" },
-  });
-  if (!partial && baseName !== normalized) {
-    partial = await prisma.travelDestination.findFirst({
-      where: { name: { contains: baseName, mode: "insensitive" } },
+  if (allowFuzzy) {
+    let partial = await prisma.travelDestination.findFirst({
+      where: { name: { contains: normalized, mode: "insensitive" } },
       orderBy: { name: "asc" },
     });
-  }
-  if (partial) {
-    return {
-      id: partial.id,
-      name: partial.name,
-      state: partial.state,
-      country: partial.country,
-      lat: partial.lat,
-      lng: partial.lng,
-      matchType: "fuzzy",
-    };
+    if (!partial && baseName !== normalized) {
+      partial = await prisma.travelDestination.findFirst({
+        where: { name: { contains: baseName, mode: "insensitive" } },
+        orderBy: { name: "asc" },
+      });
+    }
+    if (partial) {
+      return {
+        id: partial.id,
+        name: partial.name,
+        state: partial.state,
+        country: partial.country,
+        lat: partial.lat,
+        lng: partial.lng,
+        matchType: "fuzzy",
+      };
+    }
   }
 
   return null;

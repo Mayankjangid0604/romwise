@@ -29,7 +29,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Red_Fort",
       "sourceRecordId": "1681410",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 318
     },
     {
       "name": "Qutub Minar",
@@ -57,7 +58,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Qutb_Minar",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 318
     },
     {
       "name": "Humayun's Tomb",
@@ -85,7 +87,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Humayun%27s_Tomb",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 318
     },
     {
       "name": "Jama Masjid",
@@ -114,7 +117,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Jama_Masjid,_Delhi",
       "sourceRecordId": "1392566",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Lotus Temple",
@@ -142,7 +146,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Lotus_Temple",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chandni Chowk",
@@ -171,7 +176,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Chandni_Chowk",
       "sourceRecordId": "571250",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "India Gate",
@@ -200,7 +206,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/India_Gate",
       "sourceRecordId": "720662",
       "confidence": 0.95,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Akshardham Temple, Delhi",
@@ -228,7 +235,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Akshardham_(Delhi)",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Lodi Garden",
@@ -256,7 +264,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Lodi_Garden",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Hauz Khas Village",
@@ -284,7 +293,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hauz_Khas_Village",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "National Museum of India",
@@ -313,7 +323,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/National_Museum_of_India",
       "sourceRecordId": "4465722",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 310
     },
     {
       "name": "Dilli Haat",
@@ -341,7 +352,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dilli_Haat",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 65
     },
     {
       "name": "Gurdwara Sis Ganj Sahib",
@@ -370,7 +382,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Gurdwara_Sis_Ganj_Sahib",
       "sourceRecordId": "4922500",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Nizamuddin Dargah",
@@ -398,7 +411,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nizamuddin_Dargah",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Kartavya Path (Rajpath)",
@@ -426,7 +440,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kartavya_Path",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Partition Museum, Delhi",
@@ -438,7 +453,7 @@
       "area": "Old Delhi",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "10:00",
       "closingTime": "18:00",
       "openingDays": "Tue–Sun 10:00–18:00",
@@ -455,7 +470,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Partition_Museum,_Delhi",
       "sourceRecordId": "74115669",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "National Gallery of Modern Art, New Delhi",
@@ -484,7 +500,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/National_Gallery_of_Modern_Art",
       "sourceRecordId": "1583092",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 260
     },
     {
       "name": "National War Memorial",
@@ -513,7 +530,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/National_War_Memorial_(India)",
       "sourceRecordId": "43622616",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Mehrauli Archaeological Park",
@@ -541,7 +559,92 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mehrauli_Archaeological_Park",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Karim's Restaurant, Old Delhi",
+      "slug": "karims-restaurant-delhi",
+      "lat": 28.6508,
+      "lng": 77.2337,
+      "description": "Delhi's most famous Mughal-style restaurant, operating since 1913 near Jama Masjid. Renowned for mutton burra kebab, nihari (slow-cooked mutton stew), and naan. A living culinary heritage institution.",
+      "area": "Old Delhi / Matia Mahal",
+      "typicalCostInr": 400,
+      "costMinInr": 200,
+      "costMaxInr": 700,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "23:30",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 2,
+      "accessibilityScore": 3,
+      "popularityScore": 95,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Old Delhi Street Food Walk — Chandni Chowk",
+      "slug": "old-delhi-chandni-chowk-food",
+      "lat": 28.6561,
+      "lng": 77.2303,
+      "description": "Chandni Chowk is India's most celebrated street food corridor. Must-try: paratha wali gali (stuffed parathas), jalebi from Oldman's Jalebi, chole bhature, dahi bhalla, and the legendary rabri at Natraj. Best experienced on foot with a guide.",
+      "area": "Old Delhi",
+      "typicalCostInr": 300,
+      "costMinInr": 150,
+      "costMaxInr": 500,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily (some stalls close Monday)",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 90,
+      "fatigueCost": 3,
+      "accessibilityScore": 2,
+      "popularityScore": 92,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Delhi Dilli Haat Craft Food Court",
+      "slug": "dilli-haat-delhi-food",
+      "lat": 28.5713,
+      "lng": 77.2085,
+      "description": "Government-run open-air craft market with rotating stalls from different Indian states. The food court offers authentic regional cuisine — Kashmiri wazwan, Rajasthani dal baati, Kerala fish curry, and North-East India specialities. Entry charged separately.",
+      "area": "INA Market, South Delhi",
+      "typicalCostInr": 350,
+      "costMinInr": 30,
+      "costMaxInr": 600,
+      "costStatus": "estimated",
+      "openingTime": "10:30",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 90,
+      "fatigueCost": 2,
+      "accessibilityScore": 4,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

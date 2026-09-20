@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/The_Ridge,_Shimla",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Jakhu Temple",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jakhu_Temple",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Viceregal Lodge",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Viceregal_Lodge,_Shimla",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 30
     },
     {
       "name": "Mall Road Shimla",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/The_Mall,_Shimla",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Kalka–Shimla Railway",
@@ -124,7 +128,7 @@
       "area": "Shimla Railway Station, Cart Road",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Multiple daily services; timetable varies by season",
@@ -140,14 +144,15 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kalka%E2%80%93Shimla_Railway",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Christ Church Shimla",
       "slug": "christ-church-shimla",
       "category": "culture",
       "lat": 31.1058,
-      "lng": 77.1720,
+      "lng": 77.172,
       "description": "Neo-Gothic Anglican church at the eastern end of The Ridge, completed 1857 — the second oldest church in North India and an iconic symbol of colonial Shimla. Five original stained-glass windows representing Faith, Hope, Charity, Fortitude and Patience were created by Lockwood Kipling (father of Rudyard Kipling). The building is constructed of local stone; the tower is a prominent Shimla landmark. Still holds regular services. Free to enter outside service times.",
       "area": "The Ridge, Central Shimla",
       "costMinInr": 0,
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Christ_Church,_Shimla",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chadwick Falls",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chadwick_Falls",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Kufri",
@@ -208,7 +215,7 @@
       "area": "Kufri, 16km east of Shimla",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Year-round (skiing Jan–Mar; zoo 09:00–17:00)",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kufri",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Tara Devi Temple",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tara_Devi_Temple,_Shimla",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "State Museum Shimla",
@@ -280,7 +289,36 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Himachal_Pradesh_State_Museum",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 10
+    },
+    {
+      "name": "Shimla Mall Road Dining",
+      "slug": "shimla-mall-road-dining",
+      "lat": 31.1048,
+      "lng": 77.1734,
+      "description": "The pedestrian Mall Road offers a range of dining from Himachali dhabas to colonial-era restaurants. Must-try: siddu, chha gosht (lamb in spiced yoghurt), and Himachali sepu vadi. Wake & Bake Café and Café Sol are popular for breakfast and coffee.",
+      "area": "Mall Road",
+      "typicalCostInr": 300,
+      "costMinInr": 150,
+      "costMaxInr": 600,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

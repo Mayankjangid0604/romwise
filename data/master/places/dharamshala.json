@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tsuglagkhang",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Namgyal Monastery",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Namgyal_Monastery",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Tibet Museum, McLeod Ganj",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tibet_Museum",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 10
     },
     {
       "name": "Bhagsu Waterfall",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Bhagsu_Falls",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Triund Trek",
@@ -124,7 +128,7 @@
       "area": "Above McLeod Ganj, trail from Gallu Devi",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open year-round; challenging Nov–Mar due to snow",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Triund",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Norbulingka Institute",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Norbulingka_Institute",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Dharamshala Cricket Stadium",
@@ -180,7 +186,7 @@
       "area": "Lower Dharamshala",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Viewable from road anytime; internal access varies by match schedule",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/HPCA_Stadium",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "St. John in the Wilderness Church",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/St._John_in_the_Wilderness_Church,_Dharamshala",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Kangra Fort",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kangra_Fort",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 163
     },
     {
       "name": "Masrur Rock-cut Temples",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Masrur_Temples",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 163
     },
     {
       "name": "Dal Lake Dharamshala",
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dal_Lake,_Dharamshala",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Library of Tibetan Works and Archives",
@@ -336,7 +347,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Library_of_Tibetan_Works_and_Archives",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 10
+    },
+    {
+      "name": "McLeod Ganj Tibetan Kitchen",
+      "slug": "dharamshala-tibetan-kitchen-mcleod",
+      "lat": 32.2432,
+      "lng": 76.3217,
+      "description": "McLeod Ganj is Dharamshala's Tibetan-in-exile hub, making it home to some of India's best momos, thukpa, and tsampa. Tibetan Kitchen restaurant near the Dalai Lama temple is a community staple. Try gyathuk (clear broth noodles) and sha momo (steamed meat dumplings).",
+      "area": "McLeod Ganj",
+      "typicalCostInr": 200,
+      "costMinInr": 100,
+      "costMaxInr": 350,
+      "costStatus": "estimated",
+      "openingTime": "10:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Apr–Jun, Sep–Nov",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 85,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Dharamshala Kangra Chai Culture",
+      "slug": "dharamshala-kangra-chai-culture",
+      "lat": 32.2196,
+      "lng": 76.3233,
+      "description": "The Kangra Valley below Dharamshala grows Himachal Pradesh's own tea. Local chai stalls near the cricket ground and bazaar offer spiced Kangra tea — distinct from Darjeeling with its own flavour profile. Pair with a Himachali snack like madra or babru (black gram stuffed bread).",
+      "area": "Lower Dharamshala / Kangra Road",
+      "typicalCostInr": 50,
+      "costMinInr": 20,
+      "costMaxInr": 100,
+      "costStatus": "estimated",
+      "openingTime": "07:00",
+      "closingTime": "20:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Mar–Jun, Sep–Nov",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 72,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.75,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

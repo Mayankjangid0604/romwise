@@ -1,22 +1,23 @@
-import {
-  getGeminiClient,
-  GeminiProviderError,
-  GeminiSchemaError,
-} from "./gemini";
+import { z } from "zod";
+import { AIGateway } from "./ai/gateway";
+import { AIGatewayError } from "./ai/types";
 
-export type DestinationSuggestion = {
-  name: string;
-  rationale: string;
-  climate: string;
-  bestTravelTime: string;
-  suggestedBudgetLevel: string;
-  activities: string[];
-  matchScore: number;
-};
+export const destinationSuggestionSchema = z.object({
+  name: z.string().trim().min(1),
+  rationale: z.string().trim().min(1),
+  climate: z.string().trim().min(1),
+  bestTravelTime: z.string().trim().min(1),
+  suggestedBudgetLevel: z.enum(["Budget", "Mid-range", "Luxury"]),
+  activities: z.array(z.string().trim().min(1)).min(1).max(5),
+  matchScore: z.number().min(0).max(100).transform(Math.round)
+});
 
-export type DiscoveryResponse = {
-  destinations: [DestinationSuggestion, DestinationSuggestion, DestinationSuggestion];
-};
+export const discoveryResponseSchema = z.object({
+  destinations: z.array(destinationSuggestionSchema).length(3)
+});
+
+export type DestinationSuggestion = z.infer<typeof destinationSuggestionSchema>;
+export type DiscoveryResponse = z.infer<typeof discoveryResponseSchema>;
 
 export type DiscoveryInput = {
   description: string;
@@ -37,88 +38,11 @@ export function validateDiscoveryInput(input: unknown): DiscoveryInput {
 }
 
 export function validateDiscoveryResponse(data: unknown): DiscoveryResponse {
-  if (!data || typeof data !== "object") {
-    throw new GeminiSchemaError("AI response is not an object");
+  const result = discoveryResponseSchema.safeParse(data);
+  if (!result.success) {
+    throw new ValidationError(`Invalid AI response: ${result.error.message}`);
   }
-
-  const obj = data as Record<string, unknown>;
-
-  if (!Array.isArray(obj.destinations)) {
-    throw new GeminiSchemaError("AI response missing 'destinations' array");
-  }
-
-  if (obj.destinations.length !== 3) {
-    throw new GeminiSchemaError(
-      `Expected exactly 3 destinations, got ${obj.destinations.length}`,
-    );
-  }
-
-  const destinations = obj.destinations.map((d: unknown, i: number) => {
-    if (!d || typeof d !== "object") {
-      throw new GeminiSchemaError(`Destination ${i} is not an object`);
-    }
-    const dest = d as Record<string, unknown>;
-
-    const requiredStrings = [
-      "name",
-      "rationale",
-      "climate",
-      "bestTravelTime",
-      "suggestedBudgetLevel",
-    ] as const;
-
-    for (const field of requiredStrings) {
-      if (typeof dest[field] !== "string" || (dest[field] as string).trim().length === 0) {
-        throw new GeminiSchemaError(
-          `Destination ${i}: '${field}' must be a non-empty string`,
-        );
-      }
-    }
-
-    if (!Array.isArray(dest.activities)) {
-      throw new GeminiSchemaError(
-        `Destination ${i}: 'activities' must be an array`,
-      );
-    }
-    if (dest.activities.length === 0 || dest.activities.length > 5) {
-      throw new GeminiSchemaError(
-        `Destination ${i}: 'activities' must have 1-5 items`,
-      );
-    }
-    for (let j = 0; j < dest.activities.length; j++) {
-      if (
-        typeof dest.activities[j] !== "string" ||
-        (dest.activities[j] as string).trim().length === 0
-      ) {
-        throw new GeminiSchemaError(
-          `Destination ${i}: activity ${j} must be a non-empty string`,
-        );
-      }
-    }
-
-    if (typeof dest.matchScore !== "number") {
-      throw new GeminiSchemaError(
-        `Destination ${i}: 'matchScore' must be a number`,
-      );
-    }
-    if (dest.matchScore < 0 || dest.matchScore > 100) {
-      throw new GeminiSchemaError(
-        `Destination ${i}: 'matchScore' must be 0-100`,
-      );
-    }
-
-    return {
-      name: (dest.name as string).trim(),
-      rationale: (dest.rationale as string).trim(),
-      climate: (dest.climate as string).trim(),
-      bestTravelTime: (dest.bestTravelTime as string).trim(),
-      suggestedBudgetLevel: (dest.suggestedBudgetLevel as string).trim(),
-      activities: (dest.activities as string[]).map((a) => a.trim()),
-      matchScore: Math.round(dest.matchScore as number),
-    };
-  });
-
-  return { destinations: destinations as DiscoveryResponse["destinations"] };
+  return result.data;
 }
 
 export class ValidationError extends Error {
@@ -156,34 +80,101 @@ Rules:
 export async function discoverDestinations(
   input: DiscoveryInput,
 ): Promise<DiscoveryResponse> {
-  const client = getGeminiClient();
+  const result = await AIGateway.generateStructured<unknown>({
+    prompt: `${DISCOVERY_PROMPT}\n\nTrip description: ${input.description}`,
+    context: { task: "destination_discovery" },
+  });
 
-  let rawText: string;
   try {
-    const response = await client.models.generateContent({
-      model: "gemini-3.6-flash",
-      contents: `${DISCOVERY_PROMPT}\n\nTrip description: ${input.description}`,
-    });
-    rawText = response.text ?? "";
+    return validateDiscoveryResponse(result.data);
   } catch (error) {
-    throw new GeminiProviderError(
-      `Gemini API call failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-    );
+    throw new AIGatewayError("Failed to validate discovery response", "AI_INVALID_OUTPUT", false);
   }
+}
 
-  if (!rawText.trim()) {
-    throw new GeminiProviderError("Gemini returned an empty response");
+// ── Destination Detail ────────────────────────────────────────────────────────
+
+export const mustVisitPlaceSchema = z.object({
+  name: z.string().trim().min(1),
+  category: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+  bestFor: z.string().trim().min(1),
+  tipForVisiting: z.string().trim().min(1)
+});
+
+export const destinationDetailsSchema = z.object({
+  name: z.string().trim().min(1),
+  tagline: z.string().trim().min(1),
+  overview: z.string().trim().min(1),
+  vibe: z.string().trim().min(1),
+  bestMonths: z.array(z.string().trim().min(1)).min(2).max(4),
+  suggestedDays: z.object({ min: z.number().min(1), max: z.number().min(1) }),
+  mustVisitPlaces: z.array(mustVisitPlaceSchema).min(4).max(6),
+  localCuisine: z.array(z.string().trim().min(1)).min(3).max(5),
+  practicalTips: z.array(z.string().trim().min(1)).min(3).max(5),
+  budgetLevelLabel: z.enum(["Budget", "Mid-range", "Luxury"]),
+  averageDailyBudgetInr: z.number().min(0)
+});
+
+export type MustVisitPlace = z.infer<typeof mustVisitPlaceSchema>;
+export type DestinationDetails = z.infer<typeof destinationDetailsSchema>;
+
+const DESTINATION_DETAILS_PROMPT = `You are an expert travel writer. Given a destination name, produce a rich, accurate travel guide.
+
+Respond with ONLY valid JSON matching this exact structure (no markdown, no code fences, no extra text):
+{
+  "name": "Full destination name",
+  "tagline": "A punchy one-line tagline for the destination",
+  "overview": "2-3 sentences describing the destination — geography, character, why people love it",
+  "vibe": "1-2 sentences capturing the emotional feel and atmosphere of the place",
+  "bestMonths": ["October", "November"],
+  "suggestedDays": { "min": 3, "max": 7 },
+  "mustVisitPlaces": [
+    {
+      "name": "Place name",
+      "category": "e.g. Temple / Lake / Market / Viewpoint / Trek",
+      "description": "What it is and why it matters",
+      "bestFor": "Who this place is ideal for",
+      "tipForVisiting": "A practical tip for visiting"
+    }
+  ],
+  "localCuisine": ["Dish 1", "Dish 2", "up to 5 items"],
+  "practicalTips": ["Tip 1", "Tip 2", "up to 5 tips"],
+  "budgetLevelLabel": "Mid-range",
+  "averageDailyBudgetInr": 3000
+}
+
+Rules:
+- mustVisitPlaces: 4-6 items
+- localCuisine: 3-5 items
+- practicalTips: 3-5 practical, traveler-specific tips
+- budgetLevelLabel: one of "Budget", "Mid-range", "Luxury"
+- averageDailyBudgetInr: realistic per-person per-day budget in Indian Rupees
+- All string fields must be non-empty
+- bestMonths: 2-4 months, short names like "October"`;
+
+export function validateDestinationDetailsResponse(data: unknown): DestinationDetails {
+  const result = destinationDetailsSchema.safeParse(data);
+  if (!result.success) {
+    throw new ValidationError(`Invalid destination details response: ${result.error.message}`);
   }
+  return result.data;
+}
 
-  let parsed: unknown;
+export async function getDestinationDetails(
+  destinationName: string,
+  context?: string
+): Promise<DestinationDetails> {
+  const promptExtension = context ? `\n\nContext about why this was suggested: ${context}` : "";
+
+  const result = await AIGateway.generateStructured<DestinationDetails>({
+    prompt: `${DESTINATION_DETAILS_PROMPT}\n\nDestination: ${destinationName}${promptExtension}`,
+    context: { task: "destination_details" },
+  });
+
   try {
-    const cleaned = rawText.replace(/^```(?:json)?\s*/, "").replace(/\s*```$/, "");
-    parsed = JSON.parse(cleaned);
-  } catch {
-    throw new GeminiSchemaError(
-      "Gemini response is not valid JSON",
-    );
+    return validateDestinationDetailsResponse(result.data);
+  } catch (error) {
+    throw new AIGatewayError("Failed to validate destination details response", "AI_INVALID_OUTPUT", false);
   }
-
-  return validateDiscoveryResponse(parsed);
 }

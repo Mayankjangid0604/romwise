@@ -1,27 +1,111 @@
-1. Missing Destination Data Issue:
-When trying to generate an itinerary for a trip (e.g., "kashmir trip" for "Gulmarg, India"), the application throws the error: "Destination 'Gulmarg, India' is not in the travel knowledge database. No itinerary can be generated."
-Cause: The application currently relies on a seeded database of destinations and places (currently only containing Jaipur, Rishikesh, and Goa from the dev fixtures). If a user selects or enters a destination that is not pre-populated in the `TravelDestination` table, the itinerary generation fails.
-Potential Fixes:
-- Implement dynamic data fetching for unrecognised destinations using an external API or AI to create the destination and places on the fly.
-- Run a full database seed pipeline (like the `india-districts` data pipeline mentioned in `package.json`) to populate a comprehensive list of destinations before usage. (Note: `npm run data:import` does import Gulmarg, but it needs to be run).
-- Add better error handling/fallback to gracefully inform the user or provide a generic AI-generated itinerary when the destination is missing from the local database.
+================================================================================
+ROAMWISE — ISSUE REGISTER
+================================================================================
 
-2. Linting Errors:
-- `npm run lint` fails with 1 error and 8 warnings.
-- Error: `prefer-const` in `src/lib/trip-brain.ts` line 231 (`cleaned` is never reassigned).
-- Warnings: 8 instances of unused variables (e.g., `PlaceRecord`, `header`, `PhoneAuthState`, `center`, `dayCount`, `disrupted`, `TRIP_BRAIN_CATEGORIES`, `hardExclusions`).
+ISSUE-001
+ID:          ISSUE-001
+Title:       Accommodation model duplication — StaySelection vs TripAccommodation
+Category:    Architecture / Database
+Priority:    Medium
+Status:      Open — intentionally documented, NOT yet migrated
 
-3. DB Seed Script Broken:
-- `npm run db:seed` fails because `prisma/seed.ts` depends on a CSV file located in a sibling directory that doesn't exist: `/Users/hardik/Desktop/WORK/navigate/india-districts/out/all_districts.csv`. 
-- Fix: Bundle the necessary district data within the project or fetch it remotely instead of relying on an external local path.
+Description:
+  Two overlapping accommodation models exist in prisma/schema.prisma.
 
-4. Data Validation Warnings:
-- `npm run data:validate` completes but reports 3 warnings:
-  - `darjeeling.json`: Darjeeling Himalayan Railway coordinates match the destination center.
-  - `pangong-lake.json`: Pangong Tso coordinates match the destination center.
-  - `shimla.json`: Kalka-Shimla Railway coordinates match the destination center.
-- Fix: Ensure that these places have precise coordinates that do not perfectly overlap the destination centroid, which might cause map marker overlapping or routing issues.
+  StaySelection (legacy / simpler):
+    Fields: hotelName, costPerNightInr, totalCostInr, nights, lat, lng
+    Relation: Trip @unique (max 1 per trip)
+    Usage: src/app/actions/stay.ts, stay/page.tsx, budget/page.tsx
+    DB records: 1 row (LIVE — cannot be dropped without data migration)
 
-5. Dynamic Destinations Not Supported:
-- Even after running `npm run data:import`, certain destinations like "Dehradun Local & Maldevta Circuit, India" trigger the same error: "Destination ... is not in the travel knowledge database".
-- Fix: The static JSON data approach (`data/master/destinations.json`) is not exhaustive. The system needs to support dynamic destination resolution (e.g. hitting Google Places API on the fly if a destination isn't found locally) to support all user queries.
+  TripAccommodation (newer / richer):
+    Fields: name, location, latitude, longitude, checkInDate, checkOutDate,
+            checkInTime, checkOutTime, bookingReference, notes
+    Relation: Trip[] (multiple per trip)
+    Usage: src/app/api/trips/[id]/stay/route.ts, trips/[id]/page.tsx
+    DB records: 0 rows (Foundation)
+
+  Decision: TripAccommodation is the canonical long-term model. StaySelection
+  remains live because it has 1 DB record and the stay UI references it.
+  A migration is required before removing StaySelection.
+
+Expected: Single canonical accommodation model (TripAccommodation) across all code.
+Current:  Both models coexist; StaySelection drives stay/budget UI, TripAccommodation drives API.
+
+Files:
+  prisma/schema.prisma (StaySelection line 229, TripAccommodation line 426)
+  src/app/actions/stay.ts
+  src/app/trips/[id]/stay/page.tsx
+  src/app/trips/[id]/budget/page.tsx
+  src/app/api/trips/[id]/stay/route.ts
+  src/app/trips/[id]/page.tsx
+  src/lib/trip-validation.ts
+
+Acceptance Criteria:
+  1. Prisma migration maps StaySelection data to TripAccommodation
+  2. All UI/API references updated to TripAccommodation
+  3. StaySelection removed from schema
+  4. stay.test.ts updated
+  5. npm run build succeeds, all tests pass
+  6. StaySelection has 0 DB records after migration
+
+--------------------------------------------------------------------------------
+ISSUE-002
+ID:          ISSUE-002
+Title:       Group Alignment API route was missing
+Category:    Backend / Security
+Priority:    High
+Status:      RESOLVED — Phase 1.1 (2026-09-20)
+
+Description:
+  src/app/api/group-alignment/route.ts did not exist on disk, despite the
+  service layer (src/lib/group-alignment.ts), middleware (src/proxy.ts),
+  and security tests all asserting its existence.
+  This caused 2 FAIL in security.test.ts.
+
+Resolution:
+  Route created at src/app/api/group-alignment/route.ts.
+  Wired to analyzeGroupAlignment() service. Includes: auth check (401),
+  rate limiting, JSON validation, full error handling (no secrets leaked).
+  Security tests: 16/16 passing.
+
+Acceptance Criteria: MET.
+
+--------------------------------------------------------------------------------
+ISSUE-003
+ID:          ISSUE-003
+Title:       6 lint errors blocked production build
+Category:    Code Quality / Build
+Priority:    High
+Status:      RESOLVED — Phase 1.2 (2026-09-20)
+
+Description:
+  npm run lint reported 6 errors (no-explicit-any x5, prefer-const x1)
+  across: generate-audit-full.ts, src/app/api/recent/route.ts,
+  tests/e2e/phase-d-favorites.spec.ts, tests/e2e/phase-d-recent.spec.ts.
+
+Resolution:
+  All fixed with real types (unknown + narrowing, Prisma User type, const).
+  npm run lint: 0 errors, 0 warnings.
+
+Acceptance Criteria: MET.
+
+--------------------------------------------------------------------------------
+ISSUE-004
+ID:          ISSUE-004
+Title:       RecentActivity P2003 FK race condition in E2E tests
+Category:    Backend / Reliability / Testing
+Priority:    High
+Status:      RESOLVED — Phase 1.3 (2026-09-20)
+
+Description:
+  POST /api/recent threw P2003 during E2E tests. E2E afterEach deleted the
+  test user; in-flight API requests fired after deletion, hitting FK violation.
+
+Resolution in src/app/api/recent/route.ts:
+  Before create(), check prisma.user.findUnique() to confirm user exists.
+  If missing, return 200 silently. Additional P2003 guard wraps the INSERT.
+  Update path already had P2025 guard; its any catch typed to unknown.
+
+Acceptance Criteria: MET — confirmed via 10-iteration playwright repeat run.
+================================================================================

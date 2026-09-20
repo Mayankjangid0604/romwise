@@ -1,0 +1,99 @@
+"use client";
+
+import { useState } from "react";
+import { Clock } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableItem, SortableItemType } from "./sortable-item";
+import { TransitLink } from "./transit-link";
+import { Timeline, TimelineItem } from "@/components/ui/timeline";
+
+export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
+  const [items, setItems] = useState(day.items);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 }, // 5px movement required before drag starts
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  async function handleDragEnd(event: import("@dnd-kit/core").DragEndEvent) {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setItems((items: SortableItemType[]) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        
+        const newItems = arrayMove(items, oldIndex, newIndex);
+        
+        // Optimistic update
+        // Call API to persist the order
+        fetch(`/api/trips/${tripId}/reorder`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dayId: day.id,
+            items: newItems.map((item, idx: number) => ({ id: item.id, order: idx }))
+          }),
+        }).catch(err => console.error("Failed to reorder", err));
+
+        return newItems;
+      });
+    }
+  }
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={items.map((i) => i.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        {isShortTrip && items.length > 0 && (
+          <div className="mb-4 text-sm font-medium text-lagoon-700 bg-lagoon-50 border border-lagoon-100 px-3 py-1.5 rounded-md inline-flex items-center gap-2">
+            <Clock className="w-4 h-4" />
+            {items[0].startTime} — {items[items.length - 1].endTime}
+          </div>
+        )}
+        <Timeline>
+          {items.map((item: SortableItemType, index: number) => {
+            const nextItem = items[index + 1];
+            return (
+              <TimelineItem 
+                key={item.id}
+                title=""
+              >
+                <SortableItem id={item.id} item={item} tripId={tripId} dayNumber={day.dayNumber} />
+                {nextItem && item.place?.lat && nextItem.place?.lat && (
+                  <TransitLink 
+                    from={{ lat: item.place.lat, lng: item.place.lng }} 
+                    to={{ lat: nextItem.place.lat, lng: nextItem.place.lng }} 
+                  />
+                )}
+              </TimelineItem>
+            );
+          })}
+        </Timeline>
+      </SortableContext>
+    </DndContext>
+  );
+}

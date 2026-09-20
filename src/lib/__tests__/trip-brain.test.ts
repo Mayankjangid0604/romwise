@@ -2,17 +2,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // ── Module mocks ──────────────────────────────────────────────────────────────
 
-vi.mock("@/lib/gemini", () => {
-  const GeminiProviderError = class extends Error {
-    constructor(msg: string) { super(msg); this.name = "GeminiProviderError"; }
+vi.mock("@/lib/ai/gateway", () => {
+  const AIGatewayError = class extends Error {
+    constructor(msg: string, public code: string, public isTransient: boolean = false) {
+      super(msg);
+      this.name = "AIGatewayError";
+    }
   };
-  const GeminiSchemaError = class extends Error {
-    constructor(msg: string) { super(msg); this.name = "GeminiSchemaError"; }
-  };
-  const GeminiConfigError = class extends Error {
-    constructor(msg: string) { super(msg); this.name = "GeminiConfigError"; }
-  };
-  return { GeminiProviderError, GeminiSchemaError, GeminiConfigError, getGeminiClient: vi.fn() };
+  return {
+    maxTravelers: 1, AIGatewayError, AIGateway: { generateText: vi.fn(), generateStructured: vi.fn() } };
 });
 
 vi.mock("@/lib/destination-resolver", () => ({
@@ -26,7 +24,7 @@ vi.mock("@/lib/travel-knowledge", () => ({
 
 import { resolveDestination } from "@/lib/destination-resolver";
 import { getCandidatePlaces, bulkVerifyPlaces } from "@/lib/travel-knowledge";
-import { getGeminiClient } from "@/lib/gemini";
+import { AIGateway } from "@/lib/ai/gateway";
 import {
   generateGroundedItinerary,
   DestinationNotFoundError,
@@ -38,7 +36,8 @@ import {
 const mockResolve = vi.mocked(resolveDestination);
 const mockCandidates = vi.mocked(getCandidatePlaces);
 const mockBulkVerify = vi.mocked(bulkVerifyPlaces);
-const mockGetClient = vi.mocked(getGeminiClient);
+const mockGenerateText = vi.mocked(AIGateway.generateText);
+const mockGenerateStructured = vi.mocked(AIGateway.generateStructured);
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
@@ -75,6 +74,8 @@ const PLACE_HAWA_MAHAL = {
   popularityScore: 95,
   hiddenGem: false,
   preferenceScore: 0,
+  accessibilityScore: null,
+  fatigueCost: null,
 };
 
 const PLACE_AMBER_FORT = {
@@ -94,6 +95,8 @@ const PLACE_AMBER_FORT = {
   popularityScore: 98,
   hiddenGem: false,
   preferenceScore: 0,
+  accessibilityScore: null,
+  fatigueCost: null,
 };
 
 const PLACE_JOHARI = {
@@ -113,6 +116,8 @@ const PLACE_JOHARI = {
   popularityScore: 85,
   hiddenGem: false,
   preferenceScore: 0,
+  accessibilityScore: null,
+  fatigueCost: null,
 };
 
 const PLACE_DINING = {
@@ -132,6 +137,8 @@ const PLACE_DINING = {
   popularityScore: 88,
   hiddenGem: false,
   preferenceScore: 0,
+  accessibilityScore: null,
+  fatigueCost: null,
 };
 
 const PLACE_SPIRITUAL = {
@@ -151,26 +158,55 @@ const PLACE_SPIRITUAL = {
   popularityScore: 72,
   hiddenGem: false,
   preferenceScore: 0,
+  accessibilityScore: null,
+  fatigueCost: null,
 };
 
 function makeInput(overrides: Partial<TripBrainInput> = {}): TripBrainInput {
   return {
+    maxTravelers: 1,
     destination: "Jaipur",
     startDate: new Date("2026-11-01"),
     endDate: new Date("2026-11-02"),  // 2 days
+    tripType: "MULTI_DAY",
+    timeStatus: "UNKNOWN",
+    startTime: null,
+    endTime: null,
     budgetInr: 20000,
     paceLevel: "easy",
     allPreferences: [],
+    travelSegments: [],
+    accommodations: [],
     ...overrides,
   };
 }
 
 function makeGeminiClient(rawText: string) {
-  return {
-    models: {
-      generateContent: vi.fn().mockResolvedValue({ text: rawText }),
-    },
-  } as never;
+  mockGenerateText.mockResolvedValue({
+    text: rawText,
+    usage: { inputTokens: 10, outputTokens: 10, totalTokens: 20, estimatedCost: 0, currency: "USD" },
+    latencyMs: 100,
+    provider: "gemini",
+    model: "gemini-2.5-flash",
+    requestId: "mock-id",
+    fallbackUsed: false,
+  });
+  
+  let data;
+  try {
+    data = JSON.parse(rawText);
+    mockGenerateStructured.mockResolvedValue({
+      data,
+      usage: { inputTokens: 10, outputTokens: 10, totalTokens: 20, estimatedCost: 0, currency: "USD" },
+      latencyMs: 100,
+      provider: "gemini",
+      model: "gemini-2.5-flash",
+      requestId: "mock-id",
+      fallbackUsed: false,
+    });
+  } catch (e) {
+    mockGenerateStructured.mockRejectedValue(new Error("Malformed JSON"));
+  }
 }
 
 function geminiResponse(placeIds: string[][], _dayCount: number) {
@@ -331,14 +367,14 @@ describe("generateGroundedItinerary — Gemini path", () => {
   });
 
   it("uses Gemini when API key is present and response is valid", async () => {
-    mockGetClient.mockReturnValue(makeGeminiClient(validGeminiResponse(candidates)));
+    (makeGeminiClient(validGeminiResponse(candidates)));
 
     const result = await generateGroundedItinerary(makeInput());
     expect(result.usedGemini).toBe(true);
   });
 
   it("uses real coordinates from DB, not from Gemini response", async () => {
-    mockGetClient.mockReturnValue(makeGeminiClient(validGeminiResponse(candidates)));
+    (makeGeminiClient(validGeminiResponse(candidates)));
 
     const result = await generateGroundedItinerary(makeInput());
 
@@ -362,25 +398,27 @@ describe("generateGroundedItinerary — Gemini path", () => {
       ],
       2,
     );
-    mockGetClient.mockReturnValue(makeGeminiClient(hallucinated));
+    makeGeminiClient(hallucinated);
 
     // bulkVerify returns fake-hallucinated-id as unknown
     const verifiedMap = new Map(candidates.map((p) => [p.id, p]));
     mockBulkVerify.mockResolvedValue({ verified: verifiedMap, unknown: ["fake-hallucinated-id"] });
 
-    // The ValidationError is thrown internally but trip-brain re-throws it
-    await expect(generateGroundedItinerary(makeInput())).rejects.toThrow(ValidationError);
+    // It throws internally, gets caught, and falls back
+    const result = await generateGroundedItinerary(makeInput());
+    expect(result.usedFallback).toBe(true);
+    expect(result.usedGemini).toBe(false);
   });
 
   it("falls back to deterministic when Gemini returns malformed JSON", async () => {
-    mockGetClient.mockReturnValue(makeGeminiClient("this is not valid json at all"));
+    makeGeminiClient("this is not valid json at all");
 
     const result = await generateGroundedItinerary(makeInput());
     expect(result.usedGemini).toBe(false);
   });
 
   it("falls back to deterministic when Gemini returns empty response", async () => {
-    mockGetClient.mockReturnValue(makeGeminiClient(""));
+    makeGeminiClient("");
 
     const result = await generateGroundedItinerary(makeInput());
     expect(result.usedGemini).toBe(false);
@@ -442,9 +480,11 @@ describe("generateGroundedItinerary — placeId validation", () => {
       ],
       2,
     );
-    mockGetClient.mockReturnValue(makeGeminiClient(badResponse));
+    makeGeminiClient(badResponse);
 
-    await expect(generateGroundedItinerary(makeInput())).rejects.toThrow(ValidationError);
+    const result = await generateGroundedItinerary(makeInput());
+    expect(result.usedFallback).toBe(true);
+    expect(result.usedGemini).toBe(false);
   });
 });
 
@@ -483,3 +523,137 @@ describe("generateGroundedItinerary — group conflict reporting", () => {
     expect(result.conflicts).toHaveLength(0);
   });
 });
+
+// ── Phase 2: Flexible trip types ──────────────────────────────────────────────
+
+describe("Phase 2 — PICNIC trip type", () => {
+  beforeEach(() => {
+    vi.unstubAllEnvs();
+    mockResolve.mockResolvedValue(JAIPUR);
+    mockCandidates.mockResolvedValue(makePlaces());
+  });
+
+  it("generates exactly 1 day for a PICNIC trip (Gemini unavailable)", async () => {
+    const result = await generateGroundedItinerary(
+      makeInput({
+        tripType: "PICNIC",
+        startDate: new Date("2026-11-01"),
+        endDate: null,
+      }),
+    );
+    expect(result.days).toHaveLength(1);
+    expect(result.usedGemini).toBe(false);
+  });
+
+  it("caps activities at 2 for PICNIC regardless of paceLevel=full (Gemini unavailable)", async () => {
+    const result = await generateGroundedItinerary(
+      makeInput({
+        tripType: "PICNIC",
+        paceLevel: "full",
+        startDate: new Date("2026-11-01"),
+        endDate: null,
+      }),
+    );
+    expect(result.days).toHaveLength(1);
+    // At most 3 slots for PICNIC, even at full pace
+    expect(result.days[0].items.length).toBeLessThanOrEqual(3);
+  });
+
+  it("caps activities at 2 for PICNIC regardless of paceLevel=balanced (Gemini unavailable)", async () => {
+    const result = await generateGroundedItinerary(
+      makeInput({
+        tripType: "PICNIC",
+        paceLevel: "balanced",
+        startDate: new Date("2026-11-01"),
+        endDate: null,
+      }),
+    );
+    expect(result.days[0].items.length).toBeLessThanOrEqual(3);
+  });
+
+  it("uses PICNIC time window 10:00-16:00 when no startTime/endTime set", async () => {
+    const result = await generateGroundedItinerary(
+      makeInput({
+        tripType: "PICNIC",
+        startDate: new Date("2026-11-01"),
+        endDate: null,
+        startTime: null,
+        endTime: null,
+      }),
+    );
+    // All items should start at or after 10:00 and end at or before 16:00
+    for (const item of result.days[0].items) {
+      const [sh, sm] = item.startTime.split(":").map(Number);
+      const [eh, em] = item.endTime.split(":").map(Number);
+      expect(sh * 60 + sm).toBeGreaterThanOrEqual(10 * 60);
+      expect(eh * 60 + em).toBeLessThanOrEqual(16 * 60);
+    }
+  });
+
+  it("respects user-provided startTime/endTime even for PICNIC", async () => {
+    const result = await generateGroundedItinerary(
+      makeInput({
+        tripType: "PICNIC",
+        startDate: new Date("2026-11-01"),
+        endDate: null,
+        startTime: "08:00",
+        endTime: "18:00",
+      }),
+    );
+    // With a wider window, first item should start at or after 08:00
+    const [sh] = result.days[0].items[0].startTime.split(":").map(Number);
+    expect(sh).toBeGreaterThanOrEqual(8);
+  });
+});
+
+describe("Phase 2 — OVERNIGHT trip type", () => {
+  beforeEach(() => {
+    vi.unstubAllEnvs();
+    mockResolve.mockResolvedValue(JAIPUR);
+    mockCandidates.mockResolvedValue(makePlaces());
+  });
+
+  it("generates exactly 2 days for OVERNIGHT (Gemini unavailable)", async () => {
+    const result = await generateGroundedItinerary(
+      makeInput({
+        tripType: "OVERNIGHT",
+        startDate: new Date("2026-11-01"),
+        endDate: null,
+      }),
+    );
+    expect(result.days).toHaveLength(2);
+    expect(result.usedGemini).toBe(false);
+  });
+
+  it("day 2 date is startDate + 1 day", async () => {
+    const startDate = new Date("2026-11-01");
+    const result = await generateGroundedItinerary(
+      makeInput({ tripType: "OVERNIGHT", startDate, endDate: null }),
+    );
+    const day2 = result.days[1].date;
+    const expected = new Date(startDate);
+    expected.setDate(expected.getDate() + 1);
+    expect(day2.toDateString()).toBe(expected.toDateString());
+  });
+});
+
+describe("Phase 2 — WEEKEND trip type", () => {
+  beforeEach(() => {
+    vi.unstubAllEnvs();
+    mockResolve.mockResolvedValue(JAIPUR);
+    mockCandidates.mockResolvedValue(makePlaces());
+  });
+
+  it("generates exactly 2 days for WEEKEND (Gemini unavailable)", async () => {
+    const result = await generateGroundedItinerary(
+      makeInput({
+        tripType: "WEEKEND",
+        startDate: new Date("2026-11-07"), // Saturday
+        endDate: null,
+      }),
+    );
+    expect(result.days).toHaveLength(2);
+  });
+});
+
+

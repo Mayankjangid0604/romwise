@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Trip" ADD COLUMN     "dateStatus" TEXT NOT NULL DEFAULT 'unknown',
+ALTER COLUMN "startDate" DROP NOT NULL,
+ALTER COLUMN "endDate" DROP NOT NULL;

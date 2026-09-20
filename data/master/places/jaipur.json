@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Amer_Fort",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 325
     },
     {
       "name": "Hawa Mahal",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hawa_Mahal",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 125
     },
     {
       "name": "Jantar Mantar",
@@ -85,7 +87,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Jantar_Mantar,_Jaipur",
       "sourceRecordId": "2605334",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 125
     },
     {
       "name": "City Palace, Jaipur",
@@ -114,7 +117,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
       "sourceRecordId": "24028167",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 450
     },
     {
       "name": "Jal Mahal",
@@ -142,7 +146,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jal_Mahal",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Jaigarh Fort",
@@ -170,7 +175,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jaigarh_Fort",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 185
     },
     {
       "name": "Nahargarh Fort",
@@ -199,7 +205,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Nahargarh_Fort",
       "sourceRecordId": "6739523",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 125
     },
     {
       "name": "Albert Hall Museum",
@@ -228,7 +235,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Albert_Hall_Museum",
       "sourceRecordId": "27666079",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 170
     },
     {
       "name": "Galta Ji (Monkey Temple)",
@@ -256,7 +264,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Galta_(Hindu_pilgrimage_site)",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Johari Bazaar",
@@ -284,7 +293,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Johari_Bazaar",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Chokhi Dhani",
@@ -294,9 +304,9 @@
       "lng": 75.7904,
       "description": "Ethno-resort 20km south of Jaipur offering an evening village experience with Rajasthani folk dance, music, puppet shows, camel rides and a traditional thali dinner. Popular with families and domestic tourists. Evening-only venue; plan 3–4 hours. Entry includes dinner.",
       "area": "Tonk Road",
-      "costMinInr": 800,
-      "costMaxInr": 1200,
-      "costStatus": "known",
+      "costMinInr": 900,
+      "costMaxInr": 1500,
+      "costStatus": "estimated",
       "openingTime": "17:30",
       "closingTime": "23:00",
       "openingDays": "Daily 17:30–23:00",
@@ -312,7 +322,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chokhi_Dhani",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 1200
     },
     {
       "name": "Birla Mandir",
@@ -341,7 +352,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Birla_Mandir,_Jaipur",
       "sourceRecordId": "19100407",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Govind Dev Ji Temple",
@@ -370,7 +382,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Govind_Dev_Ji_Temple",
       "sourceRecordId": "8343944",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Rambagh Palace",
@@ -382,7 +395,7 @@
       "area": "Bhawani Singh Road",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": null,
@@ -399,7 +412,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Rambagh_Palace,_Jaipur",
       "sourceRecordId": "9251821",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Raj Mandir Cinema",
@@ -428,7 +442,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Raj_Mandir_Cinema",
       "sourceRecordId": "27034417",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Moti Dungri",
@@ -457,7 +472,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Moti_Dungri",
       "sourceRecordId": "51663807",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Ram Niwas Garden",
@@ -469,7 +485,7 @@
       "area": "New Gate",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "20:00",
       "openingDays": "Daily 08:00–20:00",
@@ -486,7 +502,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Ram_Niwas_Garden",
       "sourceRecordId": "23013121",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Sisodia Rani Garden",
@@ -498,7 +515,7 @@
       "area": "Agra Road",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "17:30",
       "openingDays": "Daily 08:00–17:30",
@@ -514,7 +531,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Sisodia_Rani_Palace_and_Garden",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Jawahar Kala Kendra",
@@ -526,7 +544,7 @@
       "area": "Jawahar Lal Nehru Marg",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "10:00",
       "closingTime": "18:00",
       "openingDays": "Tue–Sun 10:00–18:00",
@@ -542,7 +560,93 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jawahar_Kala_Kendra",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
+    },
+    {
+      "name": "Chokhi Dhani Village Restaurant",
+      "slug": "chokhi-dhani-jaipur-dining",
+      "lat": 26.7982,
+      "lng": 75.8562,
+      "description": "Rajasthani thali at Chokhi Dhani, a village-themed ethnic resort. Unlimited traditional meal with dal baati churma, ker sangri, gatte ki sabzi, bajre ki roti, and local desserts. Cultural performances (folk dance, puppet shows) accompany dinner.",
+      "area": "South Jaipur",
+      "typicalCostInr": 1200,
+      "costMinInr": 900,
+      "costMaxInr": 1500,
+      "costStatus": "estimated",
+      "openingTime": "17:30",
+      "closingTime": "23:00",
+      "openingDays": "Daily evenings",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 120,
+      "fatigueCost": 2,
+      "accessibilityScore": 4,
+      "popularityScore": 92,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "sourceUrl": "https://www.chokhidhani.com/",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Lassiwala — Old City Lassi",
+      "slug": "lassiwala-jaipur",
+      "lat": 26.9171,
+      "lng": 75.8197,
+      "description": "Iconic roadside stall at MI Road serving thick, creamy rabri lassi in clay kulhads since 1944. A Jaipur institution. Expect queues after 10am. Only open until stock finishes — typically by noon. Cash only.",
+      "area": "MI Road, Old City",
+      "typicalCostInr": 80,
+      "costMinInr": 60,
+      "costMaxInr": 100,
+      "costStatus": "estimated",
+      "openingTime": "07:30",
+      "closingTime": "12:30",
+      "openingDays": "Daily (closes when stock finishes)",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 88,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Jaipur Street Food Walk",
+      "slug": "jaipur-street-food-walk",
+      "lat": 26.9241,
+      "lng": 75.8268,
+      "description": "Johari Bazaar and Bapu Bazaar areas host Jaipur's best street food: kachori-sabzi, mirchi bada (chilli fritter), pyaz kachori, dahi jalebi, and Rajasthani ghevar (lattice sweet). Best explored on foot in the late morning.",
+      "area": "Old City Bazaar",
+      "typicalCostInr": 200,
+      "costMinInr": 100,
+      "costMaxInr": 350,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "13:00",
+      "openingDays": "Daily mornings",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 90,
+      "fatigueCost": 2,
+      "accessibilityScore": 3,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

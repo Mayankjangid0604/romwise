@@ -1,0 +1,94 @@
+{
+  "days": [
+    {
+      "dayNumber": 1,
+      "date": "2026-11-07T02:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnl7e00dq9tust6pntr7w",
+          "title": "Amer Fort",
+          "description": "11km north of Jaipur, this 16th-century hilltop fort complex is Jaipur's most visited landmark. Features the ornate Sheesh Mahal (Hall of Mirrors), Diwan-i-Aam, Sukh Niwas and panoramic Aravalli views. Accessible by foot, jeep or elephant ride from the main gate. ASI-protected UNESCO site. Budget 2–3 hours.",
+          "category": "history",
+          "startTime": "08:00",
+          "endTime": "10:30",
+          "estimatedCostInr": 325,
+          "costSource": "db",
+          "lat": 26.9855,
+          "lng": 75.8513,
+          "reasoning": "Start the morning early exploring Jaipur's most famous historic hilltop fort, Amer Fort.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1lnljc00dy9tus72ak6d3h",
+          "title": "Jal Mahal",
+          "description": "18th-century palace appearing to float in the centre of Man Sagar Lake, 6km north of Jaipur on the Amer road. Palace interior is not open to visitors; the attraction is the view from the lakeside gardens and road. Best photographed at sunrise or sunset. Free viewpoint from the lake embankment.",
+          "category": "sightseeing",
+          "startTime": "10:40",
+          "endTime": "11:10",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9488,
+          "lng": 75.8476,
+          "reasoning": "Stop by the picturesque Jal Mahal for stunning morning views on the way back from Amer.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu53cgjn00icurhui7kjcont",
+          "title": "Lassiwala — Old City Lassi",
+          "description": "Iconic roadside stall at MI Road serving thick, creamy rabri lassi in clay kulhads since 1944. A Jaipur institution. Expect queues after 10am. Only open until stock finishes — typically by noon. Cash only.",
+          "category": "dining",
+          "startTime": "11:21",
+          "endTime": "11:51",
+          "estimatedCostInr": 80,
+          "costSource": "db",
+          "lat": 26.9171,
+          "lng": 75.8197,
+          "reasoning": "Head into the Old City to enjoy a refreshing, traditional rabri lassi at the iconic Lassiwala.",
+          "order": 3
+        },
+        {
+          "placeId": "cmu1godnk00839t5wbus3hqbm",
+          "title": "City Palace",
+          "description": "Royal palace complex at the heart of old Jaipur, partly a museum and partly the residence of the Jaipur royal family. Features Mubarak Mahal, Chandra Mahal, Diwan-i-Khas and a courtyard with two large silver urns (the world's largest silver objects). Well-integrated with Jantar Mantar; visit both in sequence.",
+          "category": "history",
+          "startTime": "12:01",
+          "endTime": "13:31",
+          "estimatedCostInr": 450,
+          "costSource": "db",
+          "lat": 26.9257,
+          "lng": 75.8236,
+          "reasoning": "Explore the majestic City Palace right in the heart of the Old City during the afternoon.",
+          "order": 4
+        },
+        {
+          "placeId": "cmu53cgh300iaurhuuy4mapo8",
+          "title": "Chokhi Dhani Village Restaurant",
+          "description": "Rajasthani thali at Chokhi Dhani, a village-themed ethnic resort. Unlimited traditional meal with dal baati churma, ker sangri, gatte ki sabzi, bajre ki roti, and local desserts. Cultural performances (folk dance, puppet shows) accompany dinner.",
+          "category": "dining",
+          "startTime": "17:30",
+          "endTime": "19:30",
+          "estimatedCostInr": 1200,
+          "costSource": "db",
+          "lat": 26.7982,
+          "lng": 75.8562,
+          "reasoning": "Conclude the day with a rich Rajasthani thali dinner and cultural performances at Chokhi Dhani.",
+          "order": 5
+        }
+      ]
+    }
+  ],
+  "resolvedDestination": {
+    "id": "cmu1gnx7700029t5wqp7flh5m",
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "lat": 26.915,
+    "lng": 75.82,
+    "matchType": "exact"
+  },
+  "candidateCount": 24,
+  "usedGemini": true,
+  "usedFallback": false,
+  "season": "winter",
+  "conflicts": []
+}

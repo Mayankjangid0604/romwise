@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { rankHotels } from "@/lib/stay";
+import { getTripDuration } from "@/lib/date-utils";
 import { computeBudgetSummary, type BudgetItem } from "@/lib/budget";
 import { HotelSelectButton, HotelRemoveButton } from "./stay-actions";
 import {
@@ -41,11 +42,7 @@ export default async function StayPage(props: {
   );
   if (!isMember) redirect("/dashboard");
 
-  const nights =
-    Math.ceil(
-      (trip.endDate.getTime() - trip.startDate.getTime()) /
-        (1000 * 60 * 60 * 24),
-    );
+  const nights = Math.max(1, getTripDuration(trip, 3) - 1);
 
   const budgetItems: BudgetItem[] = trip.itineraryDays.flatMap((day) =>
     day.items.map((item) => ({
@@ -68,6 +65,7 @@ export default async function StayPage(props: {
   const ranked = rankHotels({
     nights,
     remainingBudgetInr: remainingAfterActivities,
+    centerCoordinate: center,
     stopCoordinates,
   });
 
@@ -81,9 +79,8 @@ export default async function StayPage(props: {
       />
 
       <Alert tone="caution" className="mb-6">
-        These are <strong>sample hotels for demonstration purposes</strong>. They
-        do not reflect real availability, pricing, or reviews. Real hotel
-        integration is planned for a future phase.
+        These are <strong>simulated recommendations</strong> based on typical area pricing. They
+        do not reflect real-time availability or user reviews.
       </Alert>
 
       {trip.staySelection && (

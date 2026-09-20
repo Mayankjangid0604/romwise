@@ -53,16 +53,8 @@ export function syntheticCoordinates(
   title: string,
   category: string,
   center?: { lat: number; lng: number },
-): { lat: number; lng: number } {
-  const centerLat = center?.lat ?? DEFAULT_CENTER_LAT;
-  const centerLng = center?.lng ?? DEFAULT_CENTER_LNG;
-  const h = hashString(title + category);
-  const latOffset = ((h % 10000) / 10000 - 0.5) * 2 * SPREAD;
-  const lngOffset = (((h >> 8) % 10000) / 10000 - 0.5) * 2 * SPREAD;
-  return {
-    lat: Math.round((centerLat + latOffset) * 10000) / 10000,
-    lng: Math.round((centerLng + lngOffset) * 10000) / 10000,
-  };
+): { lat: number; lng: number } | null {
+  return null; // B-003: Disallow fake coordinates in production
 }
 
 export function haversineKm(
@@ -83,7 +75,7 @@ export function haversineKm(
   return Math.round(R * c * 100) / 100;
 }
 
-function estimateTravelMinutes(distanceKm: number): number {
+export function estimateTravelMinutes(distanceKm: number): number {
   const avgSpeedKmh = 25;
   return Math.round((distanceKm / avgSpeedKmh) * 60);
 }

@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Gangtok",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Enchey Monastery",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Enchey_Monastery",
       "confidence": 0.88,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Do-Drul Chorten Stupa",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Do-Drul_Chorten",
       "confidence": 0.88,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Namgyal Institute of Tibetology",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Namgyal_Institute_of_Tibetology",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 10
     },
     {
       "name": "Gangtok Ropeway",
@@ -124,7 +128,7 @@
       "area": "Deorali to Tashiling, above Gangtok",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "16:00",
       "openingDays": "Daily 09:00–16:00 (check day of; may close for maintenance)",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Gangtok",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
     },
     {
       "name": "Tashi Viewpoint",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Gangtok",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Banjhakri Falls and Energy Park",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Gangtok",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Rumtek Monastery",
@@ -208,7 +215,7 @@
       "area": "Rumtek, 23km southwest of Gangtok",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "18:00",
       "openingDays": "Daily 08:00–18:00 (permit required; checkpoint hours may differ)",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Rumtek_Monastery",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Tsomgo Lake",
@@ -236,7 +244,7 @@
       "area": "35km east of Gangtok, East Sikkim",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "16:00",
       "openingDays": "Daily 08:00–16:00 (permit required; subject to army/weather closures)",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tsomgo_Lake",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Nathu La Pass",
@@ -264,7 +273,7 @@
       "area": "55km east of Gangtok, India-China border",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:30",
       "closingTime": "14:00",
       "openingDays": "Mon, Wed, Thu, Sat, Sun 08:30–14:00 (permit required; closed during military/weather advisories)",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nathula",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Old Bazaar Gangtok",
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Gangtok",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Tsuk La Khang Royal Chapel",
@@ -320,7 +331,7 @@
       "area": "Royal Palace Complex, Gangtok",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open on major Buddhist festivals; limited regular access (confirm locally)",
@@ -336,7 +347,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Tsuklakhang",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 100
+    },
+    {
+      "name": "Gangtok Momos and Thukpa",
+      "slug": "gangtok-momos-thukpa",
+      "lat": 27.3314,
+      "lng": 88.6138,
+      "description": "Sikkim is momo heaven. Gangtok's MG Road area has dedicated momo restaurants and local dhabas. Try kothey (pan-fried momos), jhol momos (in soup), and ningro (fiddlehead fern) stir-fry — a uniquely Sikkimese ingredient. Pair with thukpa (noodle broth) or chhurpi soup (fermented cheese).",
+      "area": "MG Marg / Old Market",
+      "typicalCostInr": 150,
+      "costMinInr": 60,
+      "costMaxInr": 250,
+      "costStatus": "estimated",
+      "openingTime": "10:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Mar–Jun, Sep–Dec",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 85,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Gangtok Sikkimese Thali",
+      "slug": "gangtok-sikkimese-thali",
+      "lat": 27.3314,
+      "lng": 88.6138,
+      "description": "A Sikkimese thali introduces the region's mountain cuisine: gundruk ko achar (fermented leafy greens), dhindo (millet porridge), sel roti (crispy rice ring), and fermented bamboo shoot preparations. Taste of Sikkim restaurant near Police Bazaar offers the most comprehensive thali experience.",
+      "area": "Police Bazaar",
+      "typicalCostInr": 250,
+      "costMinInr": 120,
+      "costMaxInr": 400,
+      "costStatus": "estimated",
+      "openingTime": "12:00",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Mar–Jun, Sep–Dec",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 78,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

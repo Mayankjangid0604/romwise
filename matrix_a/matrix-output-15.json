@@ -1,0 +1,342 @@
+{
+  "days": [
+    {
+      "dayNumber": 1,
+      "date": "2026-11-09T02:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu53cgjn00icurhui7kjcont",
+          "title": "Lassiwala — Old City Lassi",
+          "description": "Iconic roadside stall at MI Road serving thick, creamy rabri lassi in clay kulhads since 1944. A Jaipur institution. Expect queues after 10am. Only open until stock finishes — typically by noon. Cash only.",
+          "category": "dining",
+          "startTime": "08:00",
+          "endTime": "08:30",
+          "estimatedCostInr": 80,
+          "costSource": "db",
+          "lat": 26.9171,
+          "lng": 75.8197,
+          "reasoning": "Start the morning with an iconic rabri lassi on MI Road.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1godnk00839t5wbus3hqbm",
+          "title": "City Palace",
+          "description": "Royal palace complex at the heart of old Jaipur, partly a museum and partly the residence of the Jaipur royal family. Features Mubarak Mahal, Chandra Mahal, Diwan-i-Khas and a courtyard with two large silver urns (the world's largest silver objects). Well-integrated with Jantar Mantar; visit both in sequence.",
+          "category": "history",
+          "startTime": "09:30",
+          "endTime": "11:00",
+          "estimatedCostInr": 450,
+          "costSource": "db",
+          "lat": 26.9257,
+          "lng": 75.8236,
+          "reasoning": "Explore the royal heritage at the City Palace complex.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu1godko00819t5wiadfwq4j",
+          "title": "Jantar Mantar",
+          "description": "UNESCO World Heritage astronomical observatory built 1724–1738 by Maharaja Jai Singh II. Contains 19 instruments including the world's largest stone sundial (Samrat Yantra), accurate to 2 seconds. Adjacent to City Palace. Budget 45–60 minutes to understand the instruments with a guide.",
+          "category": "history",
+          "startTime": "11:10",
+          "endTime": "12:10",
+          "estimatedCostInr": 125,
+          "costSource": "db",
+          "lat": 26.92472,
+          "lng": 75.82444,
+          "reasoning": "Visit the adjacent Jantar Mantar astronomical observatory.",
+          "order": 3
+        },
+        {
+          "placeId": "cmu1godz7008b9t5wguew6n4m",
+          "title": "Govind Dev Ji Temple",
+          "description": "18th-century temple dedicated to Lord Krishna within the City Palace gardens. Among the most revered Krishna temples in Rajasthan with multiple aarti sessions daily drawing large crowds. Best visited during aarti times (5:45am, 7:30am, 9:30am, 11am, 5:45pm, 7:30pm, 8:45pm). Free entry.",
+          "category": "spiritual",
+          "startTime": "12:20",
+          "endTime": "13:05",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9288302,
+          "lng": 75.8239547,
+          "reasoning": "Experience the afternoon aarti at Govind Dev Ji Temple.",
+          "order": 4
+        },
+        {
+          "placeId": "cmu587t0o0005urlu0l1v00l1",
+          "title": "Laxmi Mishthan Bhandar (LMB)",
+          "description": "Visit Laxmi Mishthan Bhandar (LMB)",
+          "category": "restaurant",
+          "startTime": "13:15",
+          "endTime": "14:15",
+          "estimatedCostInr": 500,
+          "costSource": "db",
+          "lat": 26.9239,
+          "lng": 75.8267,
+          "reasoning": "Enjoy a traditional Rajasthani dinner at LMB in the old city.",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "date": "2026-11-10T02:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnl7e00dq9tust6pntr7w",
+          "title": "Amer Fort",
+          "description": "11km north of Jaipur, this 16th-century hilltop fort complex is Jaipur's most visited landmark. Features the ornate Sheesh Mahal (Hall of Mirrors), Diwan-i-Aam, Sukh Niwas and panoramic Aravalli views. Accessible by foot, jeep or elephant ride from the main gate. ASI-protected UNESCO site. Budget 2–3 hours.",
+          "category": "history",
+          "startTime": "08:00",
+          "endTime": "10:30",
+          "estimatedCostInr": 325,
+          "costSource": "db",
+          "lat": 26.9855,
+          "lng": 75.8513,
+          "reasoning": "Begin the morning exploring the magnificent hilltop Amer Fort.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1lnljc00dy9tus72ak6d3h",
+          "title": "Jal Mahal",
+          "description": "18th-century palace appearing to float in the centre of Man Sagar Lake, 6km north of Jaipur on the Amer road. Palace interior is not open to visitors; the attraction is the view from the lakeside gardens and road. Best photographed at sunrise or sunset. Free viewpoint from the lake embankment.",
+          "category": "sightseeing",
+          "startTime": "17:21",
+          "endTime": "17:51",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9488,
+          "lng": 75.8476,
+          "reasoning": "Stop by the scenic lakeside viewpoint of Jal Mahal on the way back.",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "dayNumber": 3,
+      "date": "2026-11-11T02:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnlvb00e69tus25pgtopx",
+          "title": "Galta Ji (Monkey Temple)",
+          "description": "Complex of Hindu temples and kunds (natural water tanks) built into a mountain gorge 10km east of Jaipur. Home to hundreds of rhesus macaques. Features Galta temple, Surya Mandir and an old haveli. Free entry; steep path with 200+ stairs. Best visited in the morning when monkeys are most active.",
+          "category": "spiritual",
+          "startTime": "08:00",
+          "endTime": "09:30",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9216,
+          "lng": 75.8661,
+          "reasoning": "Visit Galta Ji Monkey Temple early in the morning when active.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1lnmmg00eo9tus8uhl1n8d",
+          "title": "Sisodia Rani Garden",
+          "description": "18th-century terraced garden and small palace 8km east of Jaipur, built by Maharaja Jai Singh II for his Sisodia Rajput queen. Features murals depicting the life of Krishna, fountains and tiered garden terraces. A quiet alternative to busy city monuments; popular with families.",
+          "category": "nature",
+          "startTime": "09:40",
+          "endTime": "10:40",
+          "estimatedCostInr": 50,
+          "costSource": "db",
+          "lat": 26.8854,
+          "lng": 75.8703,
+          "reasoning": "Stroll through the peaceful terraced grounds of Sisodia Rani Garden.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu1godwa00899t5wmdxb9a27",
+          "title": "Birla Mandir",
+          "description": "Modern white-marble temple built in 1988, dedicated to Lord Vishnu (Laxmi Narayan). Features intricate marble carvings and large stained-glass windows depicting Hindu epics. Located at the base of Moti Dungri hill; illuminated beautifully at night. Free entry; no photography inside.",
+          "category": "spiritual",
+          "startTime": "10:53",
+          "endTime": "11:33",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.8921,
+          "lng": 75.8155,
+          "reasoning": "Admire the intricate marble architecture of Birla Mandir.",
+          "order": 3
+        },
+        {
+          "placeId": "cmu1goeaw008j9t5w4kdxpek9",
+          "title": "Moti Dungri",
+          "description": "10th-century hilltop Ganesh temple on Moti Dungri (Pearl Hill) with commanding views over Jaipur. Pilgrims ascend a long staircase to reach the temple. Particularly auspicious on Wednesdays (Ganesh's day) and during Ganesh Chaturthi. Free entry; steep climb.",
+          "category": "spiritual",
+          "startTime": "11:43",
+          "endTime": "12:28",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.894621,
+          "lng": 75.81674,
+          "reasoning": "Ascend Moti Dungri for hilltop views and the Ganesh temple.",
+          "order": 4
+        },
+        {
+          "placeId": "cmu587t740007urlunqrslfsf",
+          "title": "Tapri Central",
+          "description": "Visit Tapri Central",
+          "category": "cafe",
+          "startTime": "12:38",
+          "endTime": "14:08",
+          "estimatedCostInr": 400,
+          "costSource": "db",
+          "lat": 26.8926,
+          "lng": 75.808,
+          "reasoning": "Relax with evening tea and snacks at Tapri Central.",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "dayNumber": 4,
+      "date": "2026-11-12T02:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnlae00ds9tusfwgc3twc",
+          "title": "Hawa Mahal",
+          "description": "Five-storey red-sandstone facade with 953 small latticed windows (jharokhas), built in 1799 to allow royal ladies to observe street life unseen. The interior is modest but the rooftop offers good views over the old city. The exterior view from Johari Bazaar across the street is the classic photograph. Budget 30–45 minutes inside.",
+          "category": "history",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "estimatedCostInr": 125,
+          "costSource": "db",
+          "lat": 26.9239,
+          "lng": 75.8267,
+          "reasoning": "Start the morning admiring the iconic facade of Hawa Mahal.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu53cgmc00ieurhu0t2v9x8g",
+          "title": "Jaipur Street Food Walk",
+          "description": "Johari Bazaar and Bapu Bazaar areas host Jaipur's best street food: kachori-sabzi, mirchi bada (chilli fritter), pyaz kachori, dahi jalebi, and Rajasthani ghevar (lattice sweet). Best explored on foot in the late morning.",
+          "category": "dining",
+          "startTime": "09:55",
+          "endTime": "11:25",
+          "estimatedCostInr": 200,
+          "costSource": "db",
+          "lat": 26.9241,
+          "lng": 75.8268,
+          "reasoning": "Sample delicious local street food during a walk in the bazaars.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu1lnlyb00e89tus6jh4usbe",
+          "title": "Johari Bazaar",
+          "description": "Jaipur's main jewellery street in the old walled city (Old Town), famous for gold, gems and kundan/meenakari jewellery. Also the best viewpoint for photographing Hawa Mahal from across the street. Lined with traditional havelis; busy during morning hours. Free to browse.",
+          "category": "shopping",
+          "startTime": "11:35",
+          "endTime": "12:35",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9198,
+          "lng": 75.8209,
+          "reasoning": "Browse traditional jewellery and crafts in Johari Bazaar.",
+          "order": 3
+        },
+        {
+          "placeId": "cmu1goe7y008h9t5w5brm294a",
+          "title": "Rambagh Palace",
+          "description": "Former royal residence of the Maharaja of Jaipur, now a luxury Taj hotel. Grounds and courtyards open to non-guests for a fee; afternoon tea is the classic visit option. Large polo grounds and Rajput architecture. Viewable from outside for free.",
+          "category": "sightseeing",
+          "startTime": "12:45",
+          "endTime": "13:45",
+          "estimatedCostInr": 100,
+          "costSource": "db",
+          "lat": 26.8981,
+          "lng": 75.8081,
+          "reasoning": "Experience the royal opulence and architecture of Rambagh Palace.",
+          "order": 4
+        },
+        {
+          "placeId": "cmu1goe24008d9t5wbg5gjb8f",
+          "title": "Raj Mandir Cinema",
+          "description": "Ornate movie palace opened in 1976 and considered one of India's most grand cinema halls, nicknamed the Pride of Asia. Meringue-shaped interior with 1300 seats and elaborate plasterwork. Screening Hindi films; booking in advance recommended. A genuinely local cultural experience.",
+          "category": "local_experience",
+          "startTime": "13:55",
+          "endTime": "16:55",
+          "estimatedCostInr": 200,
+          "costSource": "db",
+          "lat": 26.9154985,
+          "lng": 75.8101639,
+          "reasoning": "Watch a film in grand style at the iconic Raj Mandir Cinema.",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "dayNumber": 5,
+      "date": "2026-11-13T02:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1goe51008f9t5wgc17uw8t",
+          "title": "Ram Niwas Garden",
+          "description": "Public garden established by Maharaja Ram Singh II in 1868, housing the Albert Hall Museum and a zoo. Pleasant open-air space for a morning or evening walk. Adjacent to the old city walls; a good transition point between the old and new city.",
+          "category": "nature",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "estimatedCostInr": 50,
+          "costSource": "db",
+          "lat": 26.91528,
+          "lng": 75.81869,
+          "reasoning": "Enjoy a refreshing morning walk through Ram Niwas Garden.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1godqh00859t5wj4bzrxoj",
+          "title": "Albert Hall Museum",
+          "description": "Rajasthan's oldest museum, housed in an Indo-Saracenic building in Ram Niwas Garden. Houses Egyptian mummies, miniature paintings, metal artefacts, costumes and decorative art. Open until 22:00 making it suitable for an evening visit after forts and palaces. Budget 60–90 minutes.",
+          "category": "culture",
+          "startTime": "09:00",
+          "endTime": "10:15",
+          "estimatedCostInr": 170,
+          "costSource": "db",
+          "lat": 26.91179,
+          "lng": 75.81953,
+          "reasoning": "Explore historical artifacts and Egyptian mummies at Albert Hall Museum.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu1lnmpf00eq9tusa8je7hiw",
+          "title": "Jawahar Kala Kendra",
+          "description": "Cultural centre designed by architect Charles Correa, inspired by the Navagraha (nine planets) mandala plan of Jaipur's original layout. Houses galleries, an open-air amphitheatre and regularly hosts performances, craft exhibitions and art shows. Architecture itself is worth a visit.",
+          "category": "culture",
+          "startTime": "10:25",
+          "endTime": "11:25",
+          "estimatedCostInr": 100,
+          "costSource": "db",
+          "lat": 26.9077,
+          "lng": 75.804,
+          "reasoning": "Discover art and unique architecture at Jawahar Kala Kendra.",
+          "order": 3
+        },
+        {
+          "placeId": "cmu1lnl7e00dq9tust6pntr7w",
+          "title": "Amer Fort",
+          "description": "11km north of Jaipur, this 16th-century hilltop fort complex is Jaipur's most visited landmark. Features the ornate Sheesh Mahal (Hall of Mirrors), Diwan-i-Aam, Sukh Niwas and panoramic Aravalli views. Accessible by foot, jeep or elephant ride from the main gate. ASI-protected UNESCO site. Budget 2–3 hours.",
+          "category": "history",
+          "startTime": "11:49",
+          "endTime": "14:19",
+          "estimatedCostInr": 325,
+          "costSource": "db",
+          "lat": 26.9855,
+          "lng": 75.8513,
+          "reasoning": "Revisit Amer Fort to catch any missed details or viewpoints.",
+          "order": 4
+        }
+      ]
+    }
+  ],
+  "resolvedDestination": {
+    "id": "cmu1gnx7700029t5wqp7flh5m",
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "lat": 26.915,
+    "lng": 75.82,
+    "matchType": "exact"
+  },
+  "candidateCount": 24,
+  "usedGemini": true,
+  "usedFallback": false,
+  "season": "winter",
+  "conflicts": []
+}

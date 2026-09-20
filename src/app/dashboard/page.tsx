@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { SignOutButton } from "./sign-out-button";
+import { formatTripDates } from "@/lib/date-utils";
 import {
   PageShell,
   PageHeader,
@@ -18,10 +19,27 @@ export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
-  const trips = await prisma.trip.findMany({
-    where: { creatorId: session.user.id },
-    orderBy: { createdAt: "desc" },
+  const [trips, recentActivitiesRaw] = await Promise.all([
+    prisma.trip.findMany({
+      where: { creatorId: session.user.id },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.recentActivity.findMany({
+      where: { userId: session.user.id, type: "VIEW_TRIP", tripId: { not: null } },
+      orderBy: { viewedAt: "desc" },
+      take: 3,
+    })
+  ]);
+
+  const recentTripIds = recentActivitiesRaw.map(r => r.tripId as string).filter(Boolean);
+  const recentTripsData = await prisma.trip.findMany({
+    where: { id: { in: recentTripIds } }
   });
+
+  const recentActivities = recentActivitiesRaw.map(activity => ({
+    ...activity,
+    trip: recentTripsData.find(t => t.id === activity.tripId)
+  }));
 
   return (
     <PageShell>
@@ -34,10 +52,10 @@ export default async function DashboardPage() {
               Discover
             </Link>
             <Link
-              href="/group-alignment"
+              href="/dashboard/favorites"
               className={buttonStyles({ variant: "secondary" })}
             >
-              Group Alignment
+              Favorites
             </Link>
             <Link href="/trips/new" className={buttonStyles()}>
               New Trip
@@ -46,6 +64,24 @@ export default async function DashboardPage() {
           </>
         }
       />
+
+      {recentActivities.some(a => a.trip) && (
+        <div className="mb-12">
+          <h2 className="text-[0.875rem] font-semibold text-ink-500 uppercase tracking-wider mb-4">Recently Viewed</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {recentActivities.map((activity) => activity.trip && (
+              <Link key={activity.id} href={`/trips/${activity.trip.id}`} className="block">
+                <Card className="p-4 hover:shadow-md transition-shadow h-full border-lagoon-100 bg-lagoon-50/30">
+                  <h3 className="font-semibold text-ink-900 line-clamp-1">{activity.trip.title}</h3>
+                  <p className="text-xs text-ink-500 mt-1">
+                    {formatTripDates(activity.trip)}
+                  </p>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {trips.length === 0 ? (
         <EmptyState
@@ -77,10 +113,8 @@ export default async function DashboardPage() {
                 <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-4 text-[0.8125rem] text-ink-500">
                   <span>
                     <Figure>
-                      {new Date(trip.startDate).toLocaleDateString()}
-                    </Figure>{" "}
-                    &ndash;{" "}
-                    <Figure>{new Date(trip.endDate).toLocaleDateString()}</Figure>
+                      {formatTripDates(trip)}
+                    </Figure>
                   </span>
                   <span>
                     Budget{" "}

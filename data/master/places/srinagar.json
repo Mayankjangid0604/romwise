@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dal_Lake",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Shalimar Bagh",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Shalimar_Bagh,_Srinagar",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 24
     },
     {
       "name": "Nishat Bagh",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nishat_Bagh",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 24
     },
     {
       "name": "Chashme Shahi",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Chashme_Shahi",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 24
     },
     {
       "name": "Shankaracharya Temple",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Shankaracharya_Hill",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Jama Masjid Srinagar",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jamia_Masjid,_Srinagar",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Hazratbal Shrine",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hazratbal_Shrine",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Hari Parbat Fort",
@@ -208,7 +215,7 @@
       "area": "Hari Parbat Hill",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "17:00",
       "openingDays": "Daily 09:00–17:00 (permit required)",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hari_Parbat",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Pari Mahal",
@@ -236,7 +244,7 @@
       "area": "Zabarwan Hills",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "18:00",
       "openingDays": "Daily 09:00–18:00",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Pari_Mahal",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Khanqah Shah-i-Hamadan",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Khanqah-e-Moula",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Lal Chowk",
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Lal_Chowk",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Nagin Lake",
@@ -336,7 +347,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Nagin_Lake",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Srinagar Wazwan Feast",
+      "slug": "srinagar-wazwan-feast",
+      "lat": 34.0837,
+      "lng": 74.7973,
+      "description": "Wazwan is the grand Kashmiri multi-course feast of 36 dishes, prepared by wazas (specialist cooks). Essential dishes: rogan josh (lamb in Kashmiri chilli), gushtaba (meatballs in yoghurt gravy), yakhni (aromatic lamb in yoghurt), and tabak maaz (rib rack). Preeti Restaurant and Ahdoos are the safest bets for tourists.",
+      "area": "Downtown Srinagar",
+      "typicalCostInr": 600,
+      "costMinInr": 350,
+      "costMaxInr": 1200,
+      "costStatus": "estimated",
+      "openingTime": "12:00",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Apr–Oct",
+      "seasonStatus": "known",
+      "durationMinutes": 90,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 90,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.9,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Srinagar Noon Chai and Sheermal",
+      "slug": "srinagar-noon-chai-sheermal",
+      "lat": 34.0837,
+      "lng": 74.7973,
+      "description": "Noon chai (pink Kashmiri salt tea brewed with gunpowder tea leaves, milk, and baking soda) is a cultural staple. Served with sheermal (saffron-flavoured flatbread) or kulcha. A ritual morning or evening drink in Kashmiri homes — available at traditional bakeries in the old city.",
+      "area": "Old City / Nowhatta",
+      "typicalCostInr": 60,
+      "costMinInr": 30,
+      "costMaxInr": 100,
+      "costStatus": "estimated",
+      "openingTime": "07:00",
+      "closingTime": "20:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

@@ -29,7 +29,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Kashi_Vishwanath_Temple",
       "sourceRecordId": "2074087",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Dashashwamedh Ghat",
@@ -58,7 +59,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Dashashwamedh_Ghat",
       "sourceRecordId": "23213219",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Manikarnika Ghat",
@@ -86,7 +88,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Manikarnika_Ghat",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Assi Ghat",
@@ -114,7 +117,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Assi_Ghat",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Sarnath",
@@ -142,7 +146,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Sarnath",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 165
     },
     {
       "name": "Gyanvapi Mosque",
@@ -171,7 +176,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Gyanvapi_Mosque",
       "sourceRecordId": "31366965",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Ramnagar Fort",
@@ -183,7 +189,7 @@
       "area": "Ramnagar",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "09:00",
       "closingTime": "17:00",
       "openingDays": "Daily 09:00–17:00",
@@ -199,7 +205,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Ramnagar_Fort",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Munshi Ghat",
@@ -228,7 +235,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Munshi_Ghat",
       "sourceRecordId": "40894887",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Jantar Mantar Varanasi",
@@ -257,7 +265,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Jantar_Mantar,_Varanasi",
       "sourceRecordId": "47539146",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 108
     },
     {
       "name": "Bharat Mata Mandir",
@@ -286,7 +295,8 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Bharat_Mata_Mandir",
       "sourceRecordId": "45566770",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Vishalakshi Temple",
@@ -315,7 +325,92 @@
       "sourceUrl": "https://en.wikipedia.org/wiki/Vishalakshi_Temple",
       "sourceRecordId": "6610212",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Varanasi Street Food — Kachori Sabzi",
+      "slug": "varanasi-kachori-sabzi-food",
+      "lat": 25.3178,
+      "lng": 83.0084,
+      "description": "Banarasi breakfast staple: deep-fried lentil kachori served with tangy aloo sabzi and a tamarind chutney. Famous spots near Dashashwamedh Ghat and Godowlia Crossing. Paired with a cup of thick malai chai.",
+      "area": "Old City / Godowlia",
+      "typicalCostInr": 60,
+      "costMinInr": 30,
+      "costMaxInr": 100,
+      "costStatus": "estimated",
+      "openingTime": "07:00",
+      "closingTime": "11:00",
+      "openingDays": "Daily mornings",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 85,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Thandai and Bhang Lassi Experience",
+      "slug": "varanasi-thandai-bhang-experience",
+      "lat": 25.3183,
+      "lng": 83.006,
+      "description": "Varanasi's iconic thandai (chilled milk drink with almonds and spices) from Blue Lassi shop or Government Bhang Shop near Maidagin. Bhang lassi is a traditional cannabis-infused drink legal in certain licensed shops. Integral to Holi and Shivratri culture.",
+      "area": "Near Ghats / Maidagin",
+      "typicalCostInr": 80,
+      "costMinInr": 40,
+      "costMaxInr": 150,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "20:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "year-round",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 4,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Ganga Funsion Rooftop Dining",
+      "slug": "varanasi-ganga-view-rooftop-dining",
+      "lat": 25.3088,
+      "lng": 83.0104,
+      "description": "Several rooftop restaurants overlooking the Ganga ghats offer a contemplative dining experience — watching cremations at Manikarnika and the river from above while eating Banarasi thali. Prices vary; independent travellers favour Aum Restaurant and Brown Bread Bakery.",
+      "area": "Assi Ghat / Dashashwamedh",
+      "typicalCostInr": 400,
+      "costMinInr": 200,
+      "costMaxInr": 700,
+      "costStatus": "estimated",
+      "openingTime": "07:00",
+      "closingTime": "22:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

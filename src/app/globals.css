@@ -82,3 +82,13 @@ body {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+@media print {
+  nav, button, .replan-panel {
+    display: none !important;
+  }
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+}

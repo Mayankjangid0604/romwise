@@ -31,7 +31,12 @@ export async function getReplanProposal(
 
   const day = await prisma.itineraryDay.findFirst({
     where: { tripId, dayNumber },
-    include: { items: { orderBy: { order: "asc" } } },
+    include: { 
+      items: { 
+        orderBy: { order: "asc" },
+        include: { place: true }
+      } 
+    },
   });
   if (!day) throw new Error("Day not found");
 
@@ -43,7 +48,11 @@ export async function getReplanProposal(
     endTime: item.endTime,
     order: item.order,
     isTimeSensitive: isTimeSensitiveCategory(item.category, item.startTime),
+    // B-004: Pass actual DB hours so replanner can validate shifts
+    openingTime: item.place?.openingTime ?? null,
+    closingTime: item.place?.closingTime ?? null,
   }));
+
 
   return proposeReplan(items, disruption);
 }

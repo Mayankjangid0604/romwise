@@ -4,7 +4,7 @@ import {
   validateGroupAlignmentResponse,
 } from "../group-alignment";
 import { ValidationError } from "../discovery";
-import { GeminiSchemaError } from "../gemini";
+
 
 const VALID_TRAVELER = {
   name: "Alice",
@@ -104,7 +104,7 @@ describe("validateGroupAlignmentResponse", () => {
 
   it("rejects null", () => {
     expect(() => validateGroupAlignmentResponse(null)).toThrow(
-      GeminiSchemaError,
+      ValidationError,
     );
   });
 
@@ -115,7 +115,7 @@ describe("validateGroupAlignmentResponse", () => {
         compromiseSuggestion: "Compromise",
         harmonyScore: 50,
       }),
-    ).toThrow(GeminiSchemaError);
+    ).toThrow(ValidationError);
   });
 
   it("rejects missing compromiseSuggestion", () => {
@@ -124,7 +124,7 @@ describe("validateGroupAlignmentResponse", () => {
         coreTension: "Tension",
         harmonyScore: 50,
       }),
-    ).toThrow(GeminiSchemaError);
+    ).toThrow(ValidationError);
   });
 
   it("rejects harmonyScore out of range", () => {
@@ -134,7 +134,7 @@ describe("validateGroupAlignmentResponse", () => {
         compromiseSuggestion: "Compromise",
         harmonyScore: 150,
       }),
-    ).toThrow(GeminiSchemaError);
+    ).toThrow(ValidationError);
   });
 
   it("rejects negative harmonyScore", () => {
@@ -144,7 +144,7 @@ describe("validateGroupAlignmentResponse", () => {
         compromiseSuggestion: "Compromise",
         harmonyScore: -10,
       }),
-    ).toThrow(GeminiSchemaError);
+    ).toThrow(ValidationError);
   });
 
   it("rejects non-number harmonyScore", () => {
@@ -154,7 +154,7 @@ describe("validateGroupAlignmentResponse", () => {
         compromiseSuggestion: "Compromise",
         harmonyScore: "high",
       }),
-    ).toThrow(GeminiSchemaError);
+    ).toThrow(ValidationError);
   });
 
   it("rounds harmonyScore to integer", () => {

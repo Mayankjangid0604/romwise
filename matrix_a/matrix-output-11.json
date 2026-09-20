@@ -1,0 +1,128 @@
+{
+  "days": [
+    {
+      "dayNumber": 1,
+      "date": "2026-11-07T06:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu1lnlvb00e69tus25pgtopx",
+          "title": "Galta Ji (Monkey Temple)",
+          "description": "Complex of Hindu temples and kunds (natural water tanks) built into a mountain gorge 10km east of Jaipur. Home to hundreds of rhesus macaques. Features Galta temple, Surya Mandir and an old haveli. Free entry; steep path with 200+ stairs. Best visited in the morning when monkeys are most active.",
+          "category": "spiritual",
+          "startTime": "12:00",
+          "endTime": "13:30",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9216,
+          "lng": 75.8661,
+          "reasoning": "Start the morning early at Galta Ji to see the temple complex and active monkeys while the weather is cool.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1lnl7e00dq9tust6pntr7w",
+          "title": "Amer Fort",
+          "description": "11km north of Jaipur, this 16th-century hilltop fort complex is Jaipur's most visited landmark. Features the ornate Sheesh Mahal (Hall of Mirrors), Diwan-i-Aam, Sukh Niwas and panoramic Aravalli views. Accessible by foot, jeep or elephant ride from the main gate. ASI-protected UNESCO site. Budget 2–3 hours.",
+          "category": "history",
+          "startTime": "13:47",
+          "endTime": "16:17",
+          "estimatedCostInr": 325,
+          "costSource": "db",
+          "lat": 26.9855,
+          "lng": 75.8513,
+          "reasoning": "Head north to Amer to explore the magnificent 16th-century Amer Fort during late morning.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu1lnljc00dy9tus72ak6d3h",
+          "title": "Jal Mahal",
+          "description": "18th-century palace appearing to float in the centre of Man Sagar Lake, 6km north of Jaipur on the Amer road. Palace interior is not open to visitors; the attraction is the view from the lakeside gardens and road. Best photographed at sunrise or sunset. Free viewpoint from the lake embankment.",
+          "category": "sightseeing",
+          "startTime": "16:29",
+          "endTime": "16:59",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 26.9488,
+          "lng": 75.8476,
+          "reasoning": "Stop by Jal Mahal on the way back to the city to capture evening photographs of the floating palace.",
+          "order": 3
+        },
+        {
+          "placeId": "cmu53cgh300iaurhuuy4mapo8",
+          "title": "Chokhi Dhani Village Restaurant",
+          "description": "Rajasthani thali at Chokhi Dhani, a village-themed ethnic resort. Unlimited traditional meal with dal baati churma, ker sangri, gatte ki sabzi, bajre ki roti, and local desserts. Cultural performances (folk dance, puppet shows) accompany dinner.",
+          "category": "dining",
+          "startTime": "17:39",
+          "endTime": "19:39",
+          "estimatedCostInr": 1200,
+          "costSource": "db",
+          "lat": 26.7982,
+          "lng": 75.8562,
+          "reasoning": "Conclude the first day with a traditional Rajasthani thali dinner and cultural performances at Chokhi Dhani.",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "date": "2026-11-08T06:30:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu53cgjn00icurhui7kjcont",
+          "title": "Lassiwala — Old City Lassi",
+          "description": "Iconic roadside stall at MI Road serving thick, creamy rabri lassi in clay kulhads since 1944. A Jaipur institution. Expect queues after 10am. Only open until stock finishes — typically by noon. Cash only.",
+          "category": "dining",
+          "startTime": "08:00",
+          "endTime": "08:30",
+          "estimatedCostInr": 80,
+          "costSource": "db",
+          "lat": 26.9171,
+          "lng": 75.8197,
+          "reasoning": "Start the day with an iconic, creamy rabri lassi at Lassiwala on MI Road.",
+          "order": 1
+        },
+        {
+          "placeId": "cmu1godnk00839t5wbus3hqbm",
+          "title": "City Palace",
+          "description": "Royal palace complex at the heart of old Jaipur, partly a museum and partly the residence of the Jaipur royal family. Features Mubarak Mahal, Chandra Mahal, Diwan-i-Khas and a courtyard with two large silver urns (the world's largest silver objects). Well-integrated with Jantar Mantar; visit both in sequence.",
+          "category": "history",
+          "startTime": "09:30",
+          "endTime": "11:00",
+          "estimatedCostInr": 450,
+          "costSource": "db",
+          "lat": 26.9257,
+          "lng": 75.8236,
+          "reasoning": "Explore the royal City Palace in the heart of the Old City during the morning hours.",
+          "order": 2
+        },
+        {
+          "placeId": "cmu1lnlae00ds9tusfwgc3twc",
+          "title": "Hawa Mahal",
+          "description": "Five-storey red-sandstone facade with 953 small latticed windows (jharokhas), built in 1799 to allow royal ladies to observe street life unseen. The interior is modest but the rooftop offers good views over the old city. The exterior view from Johari Bazaar across the street is the classic photograph. Budget 30–45 minutes inside.",
+          "category": "history",
+          "startTime": "11:10",
+          "endTime": "11:55",
+          "estimatedCostInr": 125,
+          "costSource": "db",
+          "lat": 26.9239,
+          "lng": 75.8267,
+          "reasoning": "Visit the striking honeycomb facade of Hawa Mahal and take in the old city views from across the street.",
+          "order": 3
+        }
+      ]
+    }
+  ],
+  "resolvedDestination": {
+    "id": "cmu1gnx7700029t5wqp7flh5m",
+    "name": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "lat": 26.915,
+    "lng": 75.82,
+    "matchType": "exact"
+  },
+  "candidateCount": 24,
+  "usedGemini": true,
+  "usedFallback": false,
+  "season": "winter",
+  "conflicts": []
+}

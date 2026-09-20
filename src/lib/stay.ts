@@ -20,6 +20,7 @@ export type RankedHotel = SampleHotel & {
 export type StayRankingInput = {
   nights: number;
   remainingBudgetInr: number;
+  centerCoordinate?: { lat: number; lng: number };
   stopCoordinates: { lat: number; lng: number }[];
 };
 
@@ -66,10 +67,21 @@ function computeDistanceScore(avgDistKm: number): number {
 }
 
 export function rankHotels(input: StayRankingInput): RankedHotel[] {
+  // Shift sample hotel coordinates to be around the actual destination center
+  // instead of hardcoded to Goa (lat ~15.49, lng ~73.83)
+  const offsetLat = input.centerCoordinate ? input.centerCoordinate.lat - 15.49 : 0;
+  const offsetLng = input.centerCoordinate ? input.centerCoordinate.lng - 73.83 : 0;
+
   return SAMPLE_HOTELS.map((hotel) => {
-    const totalCostInr = hotel.costPerNightInr * input.nights;
+    const adjustedHotel = {
+      ...hotel,
+      lat: hotel.lat + offsetLat,
+      lng: hotel.lng + offsetLng,
+    };
+
+    const totalCostInr = adjustedHotel.costPerNightInr * input.nights;
     const avgDistanceToStopsKm = computeAvgDistance(
-      hotel,
+      adjustedHotel,
       input.stopCoordinates,
     );
     const budgetFitScore = computeBudgetFitScore(
@@ -80,7 +92,7 @@ export function rankHotels(input: StayRankingInput): RankedHotel[] {
     const overallScore = Math.round(budgetFitScore * 0.5 + distanceScore * 0.5);
 
     return {
-      ...hotel,
+      ...adjustedHotel,
       totalCostInr,
       avgDistanceToStopsKm,
       budgetFitScore,

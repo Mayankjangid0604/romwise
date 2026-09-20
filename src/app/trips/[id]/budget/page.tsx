@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { computeBudgetSummary, type BudgetItem } from "@/lib/budget";
 import { OptimizeButton } from "./optimize-button";
+import { ExpenseList } from "@/components/expenses/expense-list";
 import {
   PageShell,
   PageHeader,
@@ -27,6 +28,7 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
     include: {
       groupMembers: true,
       staySelection: true,
+      expenses: { include: { payer: true }, orderBy: { date: "desc" } },
       itineraryDays: {
         orderBy: { dayNumber: "asc" },
         include: { items: { orderBy: { order: "asc" } } },
@@ -212,6 +214,8 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
               </div>
             </Card>
           </section>
+
+          <ExpenseList tripId={trip.id} initialExpenses={trip.expenses} />
         </div>
       )}
     </PageShell>

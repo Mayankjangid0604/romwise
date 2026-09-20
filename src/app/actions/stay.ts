@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { SAMPLE_HOTELS } from "@/lib/stay";
+import { getTripDuration } from "@/lib/date-utils";
 import { revalidatePath } from "next/cache";
 
 export async function selectHotel(
@@ -26,10 +27,7 @@ export async function selectHotel(
   const hotel = SAMPLE_HOTELS.find((h) => h.name === hotelName);
   if (!hotel) throw new Error("Hotel not found");
 
-  const dayCount =
-    Math.ceil(
-      (trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24),
-    ) + 1;
+  const dayCount = getTripDuration(trip, 3);
   const nights = Math.max(1, dayCount - 1);
   const totalCostInr = hotel.costPerNightInr * nights;
 

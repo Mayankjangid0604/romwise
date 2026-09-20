@@ -52,6 +52,7 @@ interface PlaceRecord {
   costMinInr?: number | null;
   costMaxInr?: number | null;
   costStatus?: string | null;
+  typicalCostInr?: number | null;
   openingTime?: string | null;
   closingTime?: string | null;
   openingDays?: string | null;
@@ -94,6 +95,7 @@ export function buildPlaceUpdatePayload(p: PlaceRecord) {
     costMinInr: p.costMinInr ?? undefined,
     costMaxInr: p.costMaxInr ?? undefined,
     costStatus: p.costStatus ?? undefined,
+    typicalCostInr: p.typicalCostInr ?? undefined,
     openingTime: p.openingTime ?? undefined,
     closingTime: p.closingTime ?? undefined,
     openingDays: p.openingDays ?? undefined,
@@ -267,6 +269,7 @@ async function main() {
             costMinInr: p.costMinInr ?? null,
             costMaxInr: p.costMaxInr ?? null,
             costStatus: p.costStatus ?? "unknown",
+            typicalCostInr: p.typicalCostInr ?? null,
             openingTime: p.openingTime ?? null,
             closingTime: p.closingTime ?? null,
             openingDays: p.openingDays ?? null,

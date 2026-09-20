@@ -12,7 +12,7 @@
       "area": "Dawki riverside ghat",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "07:00",
       "closingTime": "17:00",
       "openingDays": "Daily 07:00–17:00 (best Oct–Apr; river may close during border tension or floods)",
@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Umngot",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Dawki Suspension Bridge",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dawki",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Tamabil Border Crossing Viewpoint",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dawki",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Shnongpdeng",
@@ -96,7 +99,7 @@
       "area": "Shnongpdeng, 5km upstream from Dawki",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Year-round; Oct–Apr recommended",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dawki",
       "confidence": 0.82,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Phe Phe Falls",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dawki",
       "confidence": 0.65,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Dawki Fish Market",
@@ -168,7 +173,36 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Dawki",
       "confidence": 0.72,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Dawki Riverside Picnic Food",
+      "slug": "dawki-riverside-food",
+      "lat": 25.1913,
+      "lng": 92.0191,
+      "description": "Dawki has basic roadside stalls near the Umngot River serving Khasi snacks, boiled eggs, chai, and simple rice meals. The best strategy is to buy from Shillong or Cherrapunji before arrival and picnic by the crystal-clear green river while watching boats cross to Bangladesh.",
+      "area": "Umngot River Bridge",
+      "typicalCostInr": 100,
+      "costMinInr": 50,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "08:00",
+      "closingTime": "17:00",
+      "openingDays": "Daily (stalls may close early in season)",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Apr",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 60,
+      "hiddenGem": true,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.65,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

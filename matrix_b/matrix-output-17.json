@@ -1,0 +1,94 @@
+{
+  "days": [
+    {
+      "dayNumber": 1,
+      "date": "2026-11-07T00:00:00.000Z",
+      "items": [
+        {
+          "placeId": "cmu274k4r00b29t48ykornrml",
+          "title": "Umngot River Boating",
+          "description": "Boating on the Umngot River, celebrated as one of the clearest rivers in India. In the Oct–Apr dry season the water is so transparent that boats appear to float in mid-air above the riverbed — a widely photographed optical illusion. Coracle-style wooden boats are hired from local boatmen at the riverside ghat; no fixed rate, negotiate on the spot. The river forms the India-Bangladesh border; boats do not cross into Bangladesh. Most dramatic on sunny mornings when reflections are sharp. Avoid Jul–Sep monsoon when river is high and muddy.",
+          "category": "nature",
+          "startTime": "08:00",
+          "endTime": "09:00",
+          "estimatedCostInr": 50,
+          "costSource": "db",
+          "lat": 25.193,
+          "lng": 92.018,
+          "reasoning": "Deterministic selection from known places for this destination",
+          "order": 1
+        },
+        {
+          "placeId": "cmu274k8600b49t48oyurv4pb",
+          "title": "Dawki Suspension Bridge",
+          "description": "Long suspension bridge crossing the Umngot River at Dawki, used by cross-border trade trucks. Built in the colonial era; the current structure is maintained by the Indian government. Walking across provides a good vantage point for photographing the turquoise river below. The bridge also forms the visual backdrop for most Umngot boat photographs. Free to walk across. Located directly adjacent to the main boat-hire ghat.",
+          "category": "sightseeing",
+          "startTime": "09:10",
+          "endTime": "09:30",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 25.1908,
+          "lng": 92.0163,
+          "reasoning": "Deterministic selection from known places for this destination",
+          "order": 2
+        },
+        {
+          "placeId": "cmu274key00b89t48zljkc2zo",
+          "title": "Shnongpdeng",
+          "description": "Small Khasi village on the Umngot River, 5km upstream from Dawki, that has become the centre for adventure activities along the river. Activities include kayaking, cliff jumping (off a 15m rock), snorkelling in the clear water, swimming, camping on the riverbank, and rope swings. Tents and hammocks can be rented from local community operators. The water clarity here is equal to or better than the main Dawki ghat. An overnight stay under the stars beside the Umngot is one of the most memorable experiences in Meghalaya. Best Oct–Apr; avoid monsoon.",
+          "category": "adventure",
+          "startTime": "09:40",
+          "endTime": "12:40",
+          "estimatedCostInr": 500,
+          "costSource": "db",
+          "lat": 25.1851,
+          "lng": 92.0169,
+          "reasoning": "Deterministic selection from known places for this destination",
+          "order": 3
+        },
+        {
+          "placeId": "cmu53c7sj00c2urhun29eqfg1",
+          "title": "Dawki Riverside Picnic Food",
+          "description": "Dawki has basic roadside stalls near the Umngot River serving Khasi snacks, boiled eggs, chai, and simple rice meals. The best strategy is to buy from Shillong or Cherrapunji before arrival and picnic by the crystal-clear green river while watching boats cross to Bangladesh.",
+          "category": "dining",
+          "startTime": "12:50",
+          "endTime": "13:20",
+          "estimatedCostInr": 100,
+          "costSource": "db",
+          "lat": 25.1913,
+          "lng": 92.0191,
+          "reasoning": "Deterministic selection from known places for this destination",
+          "order": 4
+        },
+        {
+          "placeId": "cmu274kic00ba9t48970zqrq7",
+          "title": "Phe Phe Falls",
+          "description": "Remote waterfall in the hills above the Umngot River valley, accessible by a 45-minute trek from the nearest road point. The falls drop into a narrow gorge with a pool suitable for swimming. One of the lesser-visited natural attractions of the Dawki area, generally known only to local guides and more adventurous travellers. The hike passes through bamboo-forested slopes with occasional views of the river valley. Requires a local guide; no formal facilities.",
+          "category": "nature",
+          "startTime": "13:30",
+          "endTime": "16:00",
+          "estimatedCostInr": 0,
+          "costSource": "free",
+          "lat": 25.2203,
+          "lng": 92.0406,
+          "reasoning": "Deterministic selection from known places for this destination",
+          "order": 5
+        }
+      ]
+    }
+  ],
+  "resolvedDestination": {
+    "id": "cmu1gnzb9000r9t5w7ej86xef",
+    "name": "Dawki",
+    "state": "Meghalaya",
+    "country": "India",
+    "lat": 25.1916,
+    "lng": 92.0206,
+    "matchType": "exact"
+  },
+  "candidateCount": 7,
+  "usedGemini": false,
+  "usedFallback": true,
+  "season": "winter",
+  "conflicts": []
+}

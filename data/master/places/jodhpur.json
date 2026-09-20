@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mehrangarh",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 350
     },
     {
       "name": "Jaswant Thada",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jaswant_Thada",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 65
     },
     {
       "name": "Umaid Bhawan Palace",
@@ -68,7 +70,7 @@
       "area": "Circuit House Road",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "10:00",
       "closingTime": "17:00",
       "openingDays": "Museum: Daily 10:00–17:00",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Umaid_Bhawan_Palace",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Clocktower and Sardar Market",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jodhpur",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Blue City Walk",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jodhpur",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Mandore Gardens",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Mandore",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Balsamand Lake",
@@ -180,7 +186,7 @@
       "area": "North Jodhpur",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": null,
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Balsamand_Lake",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Toorji Ka Jhalra (Stepwell)",
@@ -224,7 +231,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Toorji_Ka_Jhalra",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Rao Jodha Desert Rock Park",
@@ -236,7 +244,7 @@
       "area": "Old City",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "08:00",
       "closingTime": "18:00",
       "openingDays": "Daily 08:00–18:00",
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Rao_Jodha_Desert_Rock_Park",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Kaylana Lake",
@@ -264,7 +273,7 @@
       "area": "West Jodhpur",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open all day",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Kaylana_Lake",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 50
     },
     {
       "name": "Osian",
@@ -292,7 +302,7 @@
       "area": "Nagaur District",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": null,
@@ -308,7 +318,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Osian",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Ghanta Ghar (Clocktower)",
@@ -336,7 +347,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Ghanta_Ghar,_Jodhpur",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Jodhpur Makhaniya Lassi",
+      "slug": "jodhpur-makhaniya-lassi",
+      "lat": 26.2947,
+      "lng": 73.0213,
+      "description": "Jodhpur's signature thick saffron lassi topped with malai cream, famous at Shri Mishrilal Hotel near Clock Tower. Also try the ghee-laden pyaz kachori (onion pastry), mawa kachori, and mirchi bada at the stalls surrounding Sardar Market.",
+      "area": "Clock Tower / Sardar Market",
+      "typicalCostInr": 100,
+      "costMinInr": 50,
+      "costMaxInr": 200,
+      "costStatus": "estimated",
+      "openingTime": "07:30",
+      "closingTime": "13:00",
+      "openingDays": "Daily mornings",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 30,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 85,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Jodhpur Rooftop Mehrangarh View Dining",
+      "slug": "jodhpur-mehrangarh-rooftop-dining",
+      "lat": 26.2993,
+      "lng": 73.0169,
+      "description": "Rooftop restaurants in the blue city below Mehrangarh Fort offer panoramic views of the indigo-painted houses and the fort at sunset. On the Rocks and Indique are popular for local Rajasthani cuisine with a stunning backdrop. Best visited at dusk.",
+      "area": "Old City below Mehrangarh",
+      "typicalCostInr": 500,
+      "costMinInr": 250,
+      "costMaxInr": 900,
+      "costStatus": "estimated",
+      "openingTime": "12:00",
+      "closingTime": "23:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Oct–Mar",
+      "seasonStatus": "known",
+      "durationMinutes": 75,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 80,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

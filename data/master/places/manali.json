@@ -28,7 +28,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hidimba_Devi_Temple",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Solang Valley",
@@ -40,7 +41,7 @@
       "area": "Solang Nala, 14km north of Manali",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Year-round; activity operators typically 09:00–17:00",
@@ -56,7 +57,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Solang_Valley",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Rohtang Pass",
@@ -68,7 +70,7 @@
       "area": "Rohtang, 51km from Manali on NH3",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open May–Oct; permit required, daily quota applies",
@@ -84,7 +86,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Rohtang_Pass",
       "confidence": 0.9,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Vashisht Hot Springs",
@@ -112,7 +115,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Vashisht",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Old Manali",
@@ -140,7 +144,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Old_Manali",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Jogini Falls",
@@ -168,7 +173,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Jogini_Falls",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Manu Temple",
@@ -196,7 +202,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Manu_Temple,_Manali",
       "confidence": 0.8,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Naggar Castle",
@@ -208,7 +215,7 @@
       "area": "Naggar, 22km south of Manali",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": "10:00",
       "closingTime": "17:00",
       "openingDays": "Daily 10:00–17:00 (museum/gallery hours; hotel accessible)",
@@ -224,14 +231,15 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Naggar_Castle",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 200
     },
     {
       "name": "Beas Kund Trek",
       "slug": "beas-kund-trek-manali",
       "category": "adventure",
-      "lat": 32.3900,
-      "lng": 77.1500,
+      "lat": 32.39,
+      "lng": 77.15,
       "description": "Trek to the source of the Beas River at an alpine glacial lake (3540m), starting from Dhundi village 4km beyond Solang Valley. The well-marked trail passes through alpine meadows (bugyals) with views of Shitidhar, Hanuman Tibba, and Seven Sisters peaks. Possible as a strenuous day hike (16km round trip, 900m gain) or 2-day overnight. Route is generally open May–Oct. No permit required; guides available in Manali but trail is manageable with trekking experience.",
       "area": "Dhundi/Solang area, 20km from Manali",
       "costMinInr": 0,
@@ -252,7 +260,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Beas_River",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Rahala Falls",
@@ -280,7 +289,8 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Rohtang_Pass",
       "confidence": 0.75,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
     },
     {
       "name": "Hampta Pass Trek",
@@ -292,7 +302,7 @@
       "area": "Jobra/Prini, 14km east of Manali",
       "costMinInr": null,
       "costMaxInr": null,
-      "costStatus": "unknown",
+      "costStatus": "estimated",
       "openingTime": null,
       "closingTime": null,
       "openingDays": "Open Jun–Sep (Jun snow possible)",
@@ -308,14 +318,15 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Hampta_Pass",
       "confidence": 0.85,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 500
     },
     {
       "name": "Jana Waterfall",
       "slug": "jana-waterfall-manali",
       "category": "nature",
       "lat": 32.0985,
-      "lng": 77.1930,
+      "lng": 77.193,
       "description": "Cascade waterfall near Jana village, 11km from Manali on the right bank of the Beas (Naggar side). A 4km forest trail from the road winds through deodar and oak forest before reaching the falls. Much quieter than Rohtang-road waterfalls; a good alternative for those visiting Naggar. Best visited Apr–Oct; trail slippery after rain. Free to visit. Combined well with Naggar Castle as a day trip from Manali.",
       "area": "Jana village, 11km from Manali",
       "costMinInr": 0,
@@ -336,7 +347,64 @@
       "sourceName": "Wikipedia",
       "sourceUrl": "https://en.wikipedia.org/wiki/Naggar",
       "confidence": 0.7,
-      "dataStatus": "needs_review"
+      "dataStatus": "needs_review",
+      "typicalCostInr": 0
+    },
+    {
+      "name": "Manali Siddu and Dham Food Experience",
+      "slug": "manali-siddu-dham-food",
+      "lat": 32.2396,
+      "lng": 77.1887,
+      "description": "Siddu is a steamed wheat bread stuffed with poppy seeds and walnuts — the traditional Himachali comfort food of Kullu valley. Best paired with ghee and dal. Dham (traditional feast) is served on occasions but local dhabas near Old Manali serve it daily.",
+      "area": "Old Manali",
+      "typicalCostInr": 150,
+      "costMinInr": 80,
+      "costMaxInr": 250,
+      "costStatus": "estimated",
+      "openingTime": "09:00",
+      "closingTime": "21:00",
+      "openingDays": "Daily",
+      "openingHoursStatus": "known",
+      "bestSeason": "Mar–Nov",
+      "seasonStatus": "known",
+      "durationMinutes": 45,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 78,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.8,
+      "dataStatus": "needs_review",
+      "category": "dining"
+    },
+    {
+      "name": "Old Manali Café Scene",
+      "slug": "old-manali-cafe-scene",
+      "lat": 32.253,
+      "lng": 77.1729,
+      "description": "Old Manali village is packed with eclectic cafés serving Israeli breakfast, banana porridge, momos, and thukpa. Dragon and Drifters Inn are backpacker favourites. Great for people-watching, trip planning, and acclimatising before higher-altitude excursions.",
+      "area": "Old Manali Village",
+      "typicalCostInr": 250,
+      "costMinInr": 120,
+      "costMaxInr": 450,
+      "costStatus": "estimated",
+      "openingTime": "08:00",
+      "closingTime": "22:00",
+      "openingDays": "Daily (May–Oct); limited Nov–Apr",
+      "openingHoursStatus": "known",
+      "bestSeason": "May–Oct",
+      "seasonStatus": "known",
+      "durationMinutes": 60,
+      "fatigueCost": 1,
+      "accessibilityScore": 3,
+      "popularityScore": 82,
+      "hiddenGem": false,
+      "sourceType": "curated",
+      "sourceName": "Roamwise Editorial",
+      "confidence": 0.85,
+      "dataStatus": "needs_review",
+      "category": "dining"
     }
   ]
 }

@@ -37,17 +37,22 @@ describe("itinerary action integration", () => {
     "utf-8",
   );
 
+  const jobSource = fs.readFileSync(
+    path.resolve(__dirname, "../../app/api/jobs/generate-itinerary/route.ts"),
+    "utf-8",
+  );
+
   it("checks entitlement before generating", () => {
     expect(actionSource).toContain("checkGenerationEntitlement");
     expect(actionSource).toContain("canGenerate");
   });
 
-  it("increments tripGenerations after successful generation", () => {
-    expect(actionSource).toContain("tripGenerations");
-    expect(actionSource).toContain("increment");
+  it("increments tripGenerations after successful generation in background job", () => {
+    expect(jobSource).toContain("tripGenerations");
+    expect(jobSource).toContain("increment");
   });
 
-  it("updates trip status to planning after generation", () => {
-    expect(actionSource).toContain('status: "planning"');
+  it("updates trip status to planning after generation in background job", () => {
+    expect(jobSource).toContain('status: "planning"');
   });
 });
