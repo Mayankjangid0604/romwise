@@ -50,11 +50,20 @@ export function ExpenseList({
     let participants: ExpenseParticipant[] = [];
 
     if (splitMethod === "equal") {
-      const splitAmount = amountVal / groupMembers.length;
-      participants = groupMembers.map((m) => ({
-        userId: m.userId,
-        owedInr: splitAmount,
-      }));
+      const baseSplit = Math.floor(amountVal / groupMembers.length);
+      let remainder = amountVal - (baseSplit * groupMembers.length);
+      
+      participants = groupMembers.map((m) => {
+        let owed = baseSplit;
+        if (remainder > 0) {
+          owed += 1;
+          remainder -= 1;
+        }
+        return {
+          userId: m.userId,
+          owedInr: owed,
+        };
+      });
     } else {
       let customTotal = 0;
       participants = groupMembers.map((m) => {

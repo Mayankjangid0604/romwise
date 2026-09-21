@@ -21,8 +21,41 @@ export async function POST(
     include: { groupMembers: true },
   });
 
-  if (!trip || !trip.groupMembers.some((m) => m.userId === session.user!.id)) {
+  if (!trip) {
+    return NextResponse.json({ error: "Trip not found" }, { status: 404 });
+  }
+
+  const currentUserMember = trip.groupMembers.find((m) => m.userId === session.user!.id);
+  const isCreator = trip.creatorId === session.user!.id;
+
+  if (!currentUserMember && !isCreator) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Role Security: Only creator or members can create expenses
+  if (!isCreator && currentUserMember?.role === "viewer") {
+    return NextResponse.json({ error: "Viewers cannot create expenses" }, { status: 403 });
+  }
+
+  const groupUserIds = new Set(trip.groupMembers.map((m) => m.userId));
+  if (isCreator) groupUserIds.add(trip.creatorId);
+
+  const finalPayerId = payerId || session.user!.id;
+  if (!groupUserIds.has(finalPayerId)) {
+    return NextResponse.json({ error: "Payer is not a trip participant" }, { status: 400 });
+  }
+
+  let totalOwed = 0;
+  for (const p of participants) {
+    if (!groupUserIds.has(p.userId)) {
+      return NextResponse.json({ error: `User ${p.userId} is not a participant` }, { status: 400 });
+    }
+    totalOwed += Math.round(p.owedInr);
+  }
+
+  const parsedAmount = parseInt(amountInr, 10);
+  if (totalOwed !== parsedAmount) {
+    return NextResponse.json({ error: `Sum of split amounts (${totalOwed}) does not match total amount (${parsedAmount})` }, { status: 400 });
   }
 
   try {
@@ -81,7 +114,14 @@ export async function DELETE(
     include: { groupMembers: true },
   });
 
-  if (!trip || !trip.groupMembers.some((m) => m.userId === session.user!.id)) {
+  if (!trip) {
+    return NextResponse.json({ error: "Trip not found" }, { status: 404 });
+  }
+
+  const currentUserMember = trip.groupMembers.find((m) => m.userId === session.user!.id);
+  const isCreator = trip.creatorId === session.user!.id;
+
+  if (!currentUserMember && !isCreator) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -91,6 +131,18 @@ export async function DELETE(
 
   if (!expense || expense.tripId !== id) {
     return NextResponse.json({ error: "Expense not found" }, { status: 404 });
+  }
+
+  const isPayer = expense.payerId === session.user!.id;
+
+  // Viewers cannot delete
+  if (!isCreator && currentUserMember?.role === "viewer") {
+    return NextResponse.json({ error: "Viewers cannot delete expenses" }, { status: 403 });
+  }
+
+  // Only the creator or the payer can delete
+  if (!isCreator && !isPayer) {
+    return NextResponse.json({ error: "Only the creator or payer can delete this expense" }, { status: 403 });
   }
 
   try {

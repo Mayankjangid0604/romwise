@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { RecentTracker } from "@/components/ui/recent-tracker";
-import { Plane, Train, Car, Calendar, ArrowRight, Bed, MapPin, ArrowLeft, ArrowUpRight } from "lucide-react";
+import { Plane, Train, Car, Calendar, ArrowRight, Bed, MapPin, ArrowLeft, ArrowUpRight, FileText } from "lucide-react";
 import { AddTransitButton, AddStayButton } from "@/components/ui/logistics-buttons";
+import { OfflineSaveButton } from "@/components/ui/offline-save-button";
 import {
   Card,
   Badge,
@@ -12,6 +13,7 @@ import {
   formatInr,
   buttonStyles,
 } from "@/components/ui";
+import { imageProvider } from "@/lib/providers/images";
 
 export default async function TripOverviewPage(props: { params: Promise<{ id: string }> }) {
   const session = await auth();
@@ -48,10 +50,67 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
   
   const hasItinerary = trip.itineraryDays.length > 0 && trip.itineraryDays.some(d => d.items.length > 0);
 
+  const destinationImage = await imageProvider.searchDestinationImage(trip.destination);
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
       <RecentTracker type="VIEW_TRIP" tripId={trip.id} />
       
+      {/* Destination Hero */}
+      <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden shadow-xl shadow-ink-900/10">
+        {destinationImage ? (
+          <img 
+            src={destinationImage.url} 
+            alt={trip.destination}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-lagoon-900 bg-[url('/globe-pattern.svg')] opacity-20 bg-repeat bg-center" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
+        
+        <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between">
+          <div className="flex justify-between items-start">
+            <Badge tone="lagoon" className="bg-lagoon-500/20 text-white border-lagoon-500/30 backdrop-blur-md">
+              {trip.tripType.replace("_", " ")}
+            </Badge>
+            <div className="flex flex-wrap gap-2">
+              <OfflineSaveButton trip={trip} userId={session?.user?.id || ""} />
+              <Link 
+                href={`/trips/${trip.id}/live`} 
+                className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
+              >
+                Live Mode
+              </Link>
+              <Link 
+                href={`/api/trips/${trip.id}/pdf`} 
+                target="_blank"
+                className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
+              >
+                <FileText className="w-4 h-4" /> Download PDF
+              </Link>
+            </div>
+          </div>
+          
+          <div>
+            <h1 className="text-4xl sm:text-5xl font-display font-bold text-white mb-2 drop-shadow-md">
+              {trip.title}
+            </h1>
+            <div className="flex items-center text-lagoon-50 gap-2 font-medium drop-shadow-sm">
+              <MapPin className="w-5 h-5 text-lagoon-300" />
+              <span>{trip.destination}</span>
+            </div>
+          </div>
+        </div>
+
+        {destinationImage && destinationImage.authorName && (
+          <div className="absolute bottom-2 right-4 text-[0.65rem] text-white/60 bg-black/40 px-2 py-0.5 rounded backdrop-blur-sm flex flex-col items-end">
+            <span>Photo by <a href={destinationImage.authorUrl} target="_blank" rel="noreferrer" className="underline hover:text-white">{destinationImage.authorName}</a> on <a href={destinationImage.sourceUrl || "#"} target="_blank" rel="noreferrer" className="underline hover:text-white">{destinationImage.source}</a></span>
+            <span className="text-[0.60rem] opacity-75">{destinationImage.license || "License not recorded"}</span>
+          </div>
+        )}
+      </div>
+
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         

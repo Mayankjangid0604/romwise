@@ -72,7 +72,7 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
     data: { status: "generating" },
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   
   // Fire and forget background job
   after(() => {

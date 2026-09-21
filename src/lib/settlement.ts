@@ -45,7 +45,7 @@ export function calculateSettlements(expenses: ExpenseRecord[]): SettlementSumma
     }
   }
 
-  // Sort by amount descending to minimize transactions (greedy approach)
+  // Sort by amount descending to simplify balances into a reduced set of suggested transfers (greedy approach, does not mathematically guarantee minimum possible transfers)
   debtors.sort((a, b) => b.amount - a.amount);
   creditors.sort((a, b) => b.amount - a.amount);
 

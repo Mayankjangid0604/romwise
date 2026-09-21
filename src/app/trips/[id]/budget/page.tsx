@@ -133,7 +133,7 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
                   : undefined
               }
             >
-              Spending by Category
+              Planned Spend by Category
             </SectionHeading>
 
             <Card padding="dense">
@@ -157,6 +157,43 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
                       </Figure>
                       <span className="w-16 text-right text-ink-400 text-[0.75rem]">
                         {cat.itemCount} items
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          </section>
+
+          <section>
+            <SectionHeading hint="Based on actual logged expenses">
+              Actual Spend by Category
+            </SectionHeading>
+
+            <Card padding="dense">
+              <div className="space-y-3">
+                {["food", "transport", "stay", "activity", "other"].map((catName) => {
+                  const catExpenses = trip.expenses.filter((e) => e.category === catName);
+                  const catTotal = catExpenses.reduce((sum, e) => sum + e.amountInr, 0);
+                  if (catTotal === 0) return null; // Do not show zero categories unnecessarily
+
+                  const totalActual = trip.expenses.reduce((sum, e) => sum + e.amountInr, 0);
+                  const pct = totalActual > 0 ? Math.round((catTotal / totalActual) * 100) : 0;
+                  
+                  return (
+                    <div
+                      key={catName}
+                      className="flex items-center gap-3 text-[0.8125rem]"
+                    >
+                      <span className="w-24 shrink-0 capitalize font-medium text-ink-700">
+                        {catName}
+                      </span>
+                      <Progress value={pct} size="sm" />
+                      <Figure className="w-28 text-right text-ink-700">
+                        {formatInr(catTotal)} ({pct}%)
+                      </Figure>
+                      <span className="w-16 text-right text-ink-400 text-[0.75rem]">
+                        {catExpenses.length} items
                       </span>
                     </div>
                   );
@@ -209,6 +246,18 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
             </Card>
           </section>
 
+          <ExpenseList 
+            tripId={trip.id} 
+            initialExpenses={trip.expenses} 
+            groupMembers={trip.groupMembers.map(m => ({ userId: m.userId, name: m.user.name }))}
+            currentUserId={session.user.id}
+          />
+        </div>
+      )}
+      
+      {/* Always render ExpenseList even if itinerary is empty, as users may book flights/hotels before planning daily activities */}
+      {budgetItems.length === 0 && (
+        <div className="mt-8">
           <ExpenseList 
             tripId={trip.id} 
             initialExpenses={trip.expenses} 

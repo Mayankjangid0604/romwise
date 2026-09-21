@@ -12,6 +12,8 @@ import {
   formatInr,
   buttonStyles,
 } from "@/components/ui";
+import { TRIP_TEMPLATES } from "@/lib/trip-templates";
+import { TemplateCard } from "@/components/ui/template-card";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -138,6 +140,19 @@ export default async function DashboardPage() {
             </Link>
           </section>
         )}
+
+        <section className="mt-12 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-sm font-semibold text-ink-500 uppercase tracking-wider">
+              Quick Start Templates
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {TRIP_TEMPLATES.map(template => (
+              <TemplateCard key={template.id} template={template} />
+            ))}
+          </div>
+        </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           

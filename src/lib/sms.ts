@@ -4,6 +4,10 @@ export interface SmsProvider {
 
 class ConsoleSmsProvider implements SmsProvider {
   async send(phone: string, message: string) {
+    if (process.env.NODE_ENV === "production") {
+      console.warn(`[SMS FAIL] Attempted to send SMS in production without a real provider configured.`);
+      return { success: false, error: "SMS sending is currently unavailable." };
+    }
     console.log(`[SMS → ${phone}] ${message}`);
     return { success: true };
   }

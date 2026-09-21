@@ -1,0 +1,17 @@
+{
+  "name": "RoamWise",
+  "short_name": "RoamWise",
+  "description": "Intelligent trip planning and itinerary management",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#06b6d4",
+  "icons": [
+    {
+      "src": "/globe.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
