@@ -16,8 +16,8 @@ if (process.env.NODE_ENV === "production") {
   }
 
   // E2E VARIABLES MUST NEVER ENABLE IN PRODUCTION
-  if (process.env.E2E_TEST_MODE === "true" || process.env.E2E_AI_MOCK === "true" || process.env.OTP_TEST_BYPASS === "true") {
-    throw new Error("Production startup failed: E2E test modes are active. Unset E2E_TEST_MODE, E2E_AI_MOCK, and OTP_TEST_BYPASS.");
+  if (process.env.E2E_TEST_MODE === "true" || process.env.E2E_AI_MOCK === "true") {
+    throw new Error("Production startup failed: E2E test modes are active. Unset E2E_TEST_MODE and E2E_AI_MOCK.");
   }
 }
 

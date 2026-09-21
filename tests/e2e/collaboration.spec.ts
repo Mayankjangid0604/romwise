@@ -127,9 +127,10 @@ test.describe('Collaborative Trip Planning', () => {
 
     // Should redirect to trip page
     await expect(pageUser2).toHaveURL(new RegExp(`/trips/${tripId}`));
+    await pageUser2.waitForLoadState('domcontentloaded');
     
     // 3. User 2 votes and comments
-    await pageUser2.goto(`/trips/${tripId}/itinerary`);
+    await pageUser2.goto(`/trips/${tripId}/itinerary`, { waitUntil: 'domcontentloaded' });
     await expect(pageUser2.locator('text="Beach Visit"').first()).toBeVisible();
 
     // Expand the collaboration widget if needed or just interact
