@@ -112,7 +112,12 @@ export async function resolveDestination(
  * Search travel destinations for autocomplete / trip creation UI.
  */
 export async function searchTravelDestinations(query: string, limit = 10) {
-  if (!query.trim()) return [];
+  if (!query.trim()) {
+    return prisma.travelDestination.findMany({
+      take: limit,
+      orderBy: { id: "asc" }, // Or some notion of popularity if it existed, just taking the first N
+    });
+  }
   return prisma.travelDestination.findMany({
     where: { name: { contains: query.trim(), mode: "insensitive" } },
     orderBy: { name: "asc" },

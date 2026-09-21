@@ -162,10 +162,11 @@ describe("resolveDestination", () => {
 });
 
 describe("searchTravelDestinations", () => {
-  it("returns empty array for empty query", async () => {
+  it("returns popular destinations for empty query", async () => {
+    mockDestination.findMany.mockResolvedValueOnce([JAIPUR]);
     const result = await searchTravelDestinations("");
-    expect(result).toEqual([]);
-    expect(mockDestination.findMany).not.toHaveBeenCalled();
+    expect(result).toEqual([JAIPUR]);
+    expect(mockDestination.findMany).toHaveBeenCalled();
   });
 
   it("calls DB with the query string", async () => {

@@ -26,9 +26,9 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
   const trip = await prisma.trip.findUnique({
     where: { id },
     include: {
-      groupMembers: true,
+      groupMembers: { include: { user: true } },
       tripAccommodations: true,
-      expenses: { include: { payer: true }, orderBy: { date: "desc" } },
+      expenses: { include: { payer: true, ExpenseParticipant: true }, orderBy: { date: "desc" } },
       itineraryDays: {
         orderBy: { dayNumber: "asc" },
         include: { items: { orderBy: { order: "asc" } } },
@@ -209,7 +209,12 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
             </Card>
           </section>
 
-          <ExpenseList tripId={trip.id} initialExpenses={trip.expenses} />
+          <ExpenseList 
+            tripId={trip.id} 
+            initialExpenses={trip.expenses} 
+            groupMembers={trip.groupMembers.map(m => ({ userId: m.userId, name: m.user.name }))}
+            currentUserId={session.user.id}
+          />
         </div>
       )}
     </div>
