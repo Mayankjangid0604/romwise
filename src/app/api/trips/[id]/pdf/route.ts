@@ -30,7 +30,10 @@ export async function GET(
     }
 
     // Determine the base URL securely to prevent SSRF via Host header injection
-    const baseUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || `http://localhost:${process.env.PORT || 3000}`;
+    const baseUrl = process.env.APP_URL || (process.env.NODE_ENV !== "production" ? `http://localhost:${process.env.PORT || 3000}` : "");
+    if (!baseUrl) {
+      return new NextResponse("APP_URL must be defined in production.", { status: 500 });
+    }
 
     // Ensure id only contains safe characters to prevent path traversal / SSRF via id injection
     if (!/^[a-z0-9-]+$/i.test(id)) {

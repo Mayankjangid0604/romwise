@@ -15,6 +15,11 @@ export function SignOutButton() {
       localStorage.removeItem('roamwise_user_id');
       // Clear offline trips list
       localStorage.removeItem('roamwise_offline_trips');
+      
+      // Wipe IndexedDB trips database
+      if ('indexedDB' in window) {
+        indexedDB.deleteDatabase('roamwise-db');
+      }
     } catch (e) {
       console.error('Error clearing offline data during sign out', e);
     }
