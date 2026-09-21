@@ -6,6 +6,7 @@ import { Clock, IndianRupee, MapPin, Heart } from "lucide-react";
 import { useState } from "react";
 import { FavoriteButton } from "./favorite-button";
 import { cn } from "./cn";
+import { Activity, Accessibility } from "lucide-react";
 
 export interface PlaceCardProps {
   placeId?: string;
@@ -16,6 +17,8 @@ export interface PlaceCardProps {
   costEstimate?: number | null;
   description?: string | null;
   address?: string | null;
+  accessibilityScore?: number | null;
+  fatigueCost?: number | null;
   isFavorite?: boolean;
   onFavoriteToggle?: () => void;
   onClick?: () => void;
@@ -32,6 +35,8 @@ export function PlaceCard({
   costEstimate,
   description,
   address,
+  accessibilityScore,
+  fatigueCost,
   isFavorite = false,
   onFavoriteToggle,
   onClick,
@@ -120,7 +125,39 @@ export function PlaceCard({
               <span>{costEstimate === 0 ? "Free" : costEstimate.toLocaleString()}</span>
             </div>
           )}
+          
+          {(accessibilityScore != null || fatigueCost != null) && (
+            <div className="flex items-center gap-3 ml-auto text-sm text-ink-500">
+              {accessibilityScore != null && (
+                <div 
+                  className={cn(
+                    "flex items-center gap-1",
+                    accessibilityScore >= 8 ? "text-success-600" : 
+                    accessibilityScore >= 5 ? "text-warning-600" : "text-danger-600"
+                  )}
+                  title={`Accessibility Score: ${accessibilityScore}/10`}
+                >
+                  <Accessibility className="w-4 h-4" />
+                  <span className="font-medium">{accessibilityScore}/10</span>
+                </div>
+              )}
+              {fatigueCost != null && (
+                <div 
+                  className={cn(
+                    "flex items-center gap-1",
+                    fatigueCost <= 3 ? "text-success-600" : 
+                    fatigueCost <= 6 ? "text-warning-600" : "text-danger-600"
+                  )}
+                  title={`Fatigue Cost: ${fatigueCost}/10`}
+                >
+                  <Activity className="w-4 h-4" />
+                  <span className="font-medium">{fatigueCost}/10</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
+        {children}
       </div>
     </Card>
   );

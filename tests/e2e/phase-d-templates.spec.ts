@@ -35,9 +35,12 @@ test.describe('Phase D - Templates & Overrides', () => {
       await expect(chatInput).toHaveValue(/Plan a 5-day family trip to Jaipur for 4 people \(2 adults, 2 kids\)/i);
 
       // User decides to override pace and budget manually in the input
-      await chatInput.fill('Plan a 5-day family trip to Jaipur for 4 people (2 adults, 2 kids), FULL PACE, budget 100000.');
-      
+      await chatInput.fill('Plan a 5-day family trip to Jaipur for 4 people (2 adults, 2 kids), FULL PACE, budget 100000');
+      await chatInput.pressSequentially('.');
+      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
+      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
       await chatInput.press('Enter');
+      await responsePromise;
 
       // Wait for AI to process and state to update
       await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });

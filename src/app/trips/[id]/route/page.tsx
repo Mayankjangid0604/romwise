@@ -16,6 +16,7 @@ import {
   Figure,
   cn,
 } from "@/components/ui";
+import DynamicMap from "@/components/ui/dynamic-map";
 
 export default async function RoutePage(props: {
   params: Promise<{ id: string }>;
@@ -48,13 +49,12 @@ export default async function RoutePage(props: {
 
   if (trip.itineraryDays.length === 0) {
     return (
-      <PageShell>
-        <PageHeader backHref={`/trips/${id}`} backLabel="Trip" title="Route" />
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <EmptyState
           title="No itinerary generated yet"
           hint="Generate one first to see an optimized route."
         />
-      </PageShell>
+      </div>
     );
   }
 
@@ -86,16 +86,13 @@ export default async function RoutePage(props: {
 
   const result = optimizeRoute(stops);
 
-  return (
-    <PageShell>
-      <PageHeader
-        backHref={`/trips/${id}`}
-        backLabel="Trip"
-        eyebrow={trip.title}
-        title="Route"
-      />
+  const mapCenter = stops.length > 0 ? { lat: stops[0].lat, lng: stops[0].lng } : undefined;
+  const mapMarkers = stops.map(s => ({ lat: s.lat, lng: s.lng, label: s.title, subtitle: s.category }));
+  const mapRoute = result.optimizedOrder.map(s => ({ lat: s.lat, lng: s.lng }));
 
-      <div className="flex flex-wrap gap-2 mb-8">
+  return (
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out space-y-6">
+      <div className="flex flex-wrap gap-2">
         {trip.itineraryDays.map((d) => (
           <Link
             key={d.dayNumber}
@@ -153,6 +150,17 @@ export default async function RoutePage(props: {
             )}
           </div>
 
+          {mapCenter && (
+            <div className="h-[400px] sm:h-[500px]">
+              <DynamicMap 
+                center={mapCenter} 
+                markers={mapMarkers} 
+                route={mapRoute} 
+                height="100%" 
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <RouteColumn
               heading="Original Order"
@@ -162,7 +170,7 @@ export default async function RoutePage(props: {
               tone="neutral"
             />
             <RouteColumn
-              heading="Optimized Order"
+              heading="Estimated Optimal Order"
               stops={result.optimizedOrder}
               totalKm={result.optimizedTotalKm}
               totalMinutes={result.optimizedTotalMinutes}
@@ -171,7 +179,7 @@ export default async function RoutePage(props: {
           </div>
         </div>
       )}
-    </PageShell>
+    </div>
   );
 }
 

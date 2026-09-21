@@ -61,6 +61,10 @@ export async function createTrip(
   const accommodationsStr = formData.get("accommodations") as string;
   const accessibilityNotes = ((formData.get("accessibilityNotes") as string) ?? "").trim();
   const preferencesStr = formData.get("preferences") as string;
+  const waypointsStr = formData.get("waypoints") as string;
+  const isRoundTrip = formData.get("isRoundTrip") === "true";
+  const returnDestination = (formData.get("returnDestination") as string) || null;
+  const travelerCompositionStr = formData.get("travelerComposition") as string;
 
   let parsedPreferences: { category: string; priority: string }[] = [];
   try {
@@ -68,6 +72,29 @@ export async function createTrip(
   } catch (err) {
     console.error("Failed to parse preferences", err);
   }
+
+  // Validate waypoints JSON
+  let waypointsJson: string | null = null;
+  try {
+    if (waypointsStr) {
+      const parsed = JSON.parse(waypointsStr);
+      if (Array.isArray(parsed)) waypointsJson = JSON.stringify(parsed);
+    }
+  } catch {
+    // ignore invalid waypoints
+  }
+
+  // Validate travelerComposition JSON
+  let travelerCompositionJson: string | null = null;
+  try {
+    if (travelerCompositionStr) {
+      const parsed = JSON.parse(travelerCompositionStr);
+      travelerCompositionJson = JSON.stringify(parsed);
+    }
+  } catch {
+    // ignore
+  }
+
 
   const fieldErrors: Record<string, string> = {};
 
@@ -158,9 +185,38 @@ export async function createTrip(
       timeStatus,
       startTime,
       endTime,
+      waypoints: waypointsJson,
+      isRoundTrip,
+      returnDestination,
+      travelerComposition: travelerCompositionJson,
       status: "draft",
       creatorId: session.user.id,
       destinationId: matchedDestination?.id ?? null,
+      travelSegments: travelSegmentsStr ? {
+        create: (() => {
+          try {
+            const parsed = JSON.parse(travelSegmentsStr);
+            if (Array.isArray(parsed)) {
+              type Segment = { type: string; mode: string; originName: string | null; destinationName: string | null };
+              return parsed.reduce((acc: Segment[], seg: unknown) => {
+                if (typeof seg === 'object' && seg !== null) {
+                  const s = seg as Record<string, unknown>;
+                  acc.push({
+                    type: "transit",
+                    mode: typeof s.mode === 'string' ? s.mode : "unknown",
+                    originName: typeof s.origin === 'string' ? s.origin : null,
+                    destinationName: typeof s.destination === 'string' ? s.destination : null,
+                  });
+                }
+                return acc;
+              }, [] as Segment[]);
+            }
+          } catch (err) {
+            // ignore
+          }
+          return [];
+        })()
+      } : undefined,
       groupMembers: {
         create: {
           userId: session.user.id,
@@ -181,4 +237,21 @@ export async function createTrip(
   });
 
   redirect(`/trips/${trip.id}`);
+}
+
+export async function updateAccessibilityNotes(tripId: string, notes: string): Promise<TripState> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: "You must be logged in" };
+  }
+
+  try {
+    await prisma.groupMember.updateMany({
+      where: { tripId, userId: session.user.id },
+      data: { accessibilityNotes: notes }
+    });
+    return {};
+  } catch (err) {
+    return { error: "Failed to update accessibility notes" };
+  }
 }

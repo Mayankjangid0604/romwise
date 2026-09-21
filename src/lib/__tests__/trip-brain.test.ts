@@ -27,6 +27,7 @@ import { getCandidatePlaces, bulkVerifyPlaces } from "@/lib/travel-knowledge";
 import { AIGateway } from "@/lib/ai/gateway";
 import {
   generateGroundedItinerary,
+  computeDayWindow,
   DestinationNotFoundError,
   DestinationDataError,
   ValidationError,
@@ -656,4 +657,67 @@ describe("Phase 2 — WEEKEND trip type", () => {
   });
 });
 
+describe("Phase 0D — computeDayWindow Verification", () => {
+  it("PICNIC uses 10:00 to 16:00", () => {
+    const res = computeDayWindow("PICNIC", 0, 1, null, null, "balanced", null, null);
+    expect(res).toEqual({ dayStartMins: 600, dayEndMins: 960 });
+  });
+
+  it("DAY_TRIP uses default pace bounds or input times", () => {
+    // With explicit input times
+    const res1 = computeDayWindow("DAY_TRIP", 0, 1, null, null, "balanced", "09:00", "21:00");
+    expect(res1).toEqual({ dayStartMins: 540, dayEndMins: 1260 });
+  });
+
+  it("OVERNIGHT uses 14:00-14:00 bounds (start time on day 0, end time on day 1) if provided", () => {
+    const startDate = new Date();
+    startDate.setHours(14, 0, 0, 0);
+    const endDate = new Date();
+    endDate.setHours(14, 0, 0, 0);
+
+    // Day 0
+    const resDay0 = computeDayWindow("OVERNIGHT", 0, 2, startDate, endDate, "balanced", null, null);
+    expect(resDay0.dayStartMins).toBe(14 * 60); // 14:00
+    expect(resDay0.dayEndMins).toBe(22 * 60); // 22:00 default
+
+    // Day 1
+    const resDay1 = computeDayWindow("OVERNIGHT", 1, 2, startDate, endDate, "balanced", null, null);
+    expect(resDay1.dayStartMins).toBe(8 * 60); // 08:00 default
+    expect(resDay1.dayEndMins).toBe(14 * 60); // 14:00
+  });
+
+  it("WEEKEND respects default bounds (Friday 18:00 - Sunday 18:00) when times are passed", () => {
+    const startDate = new Date();
+    startDate.setHours(18, 0, 0, 0);
+    const endDate = new Date();
+    endDate.setHours(18, 0, 0, 0);
+
+    // Day 0 (Friday)
+    const resDay0 = computeDayWindow("WEEKEND", 0, 3, startDate, endDate, "balanced", null, null);
+    expect(resDay0.dayStartMins).toBe(18 * 60);
+    expect(resDay0.dayEndMins).toBe(22 * 60);
+
+    // Day 1 (Saturday)
+    const resDay1 = computeDayWindow("WEEKEND", 1, 3, startDate, endDate, "balanced", null, null);
+    expect(resDay1.dayStartMins).toBe(8 * 60);
+    expect(resDay1.dayEndMins).toBe(22 * 60);
+
+    // Day 2 (Sunday)
+    const resDay2 = computeDayWindow("WEEKEND", 2, 3, startDate, endDate, "balanced", null, null);
+    expect(resDay2.dayStartMins).toBe(8 * 60);
+    expect(resDay2.dayEndMins).toBe(18 * 60);
+  });
+
+  it("MULTI_DAY ignores start/end times and uses full days", () => {
+    const startDate = new Date();
+    startDate.setHours(14, 0, 0, 0);
+    const endDate = new Date();
+    endDate.setHours(14, 0, 0, 0);
+
+    const res = computeDayWindow("MULTI_DAY", 0, 3, startDate, endDate, "balanced", null, null);
+    // Balanced pace default start is 08:00 (480)
+    expect(res.dayStartMins).toBe(480);
+    expect(res.dayEndMins).toBe(18 * 60); // 18:00 default end
+  });
+});
 

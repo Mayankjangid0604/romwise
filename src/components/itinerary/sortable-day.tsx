@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
 import {
   DndContext,
@@ -22,6 +22,12 @@ import { Timeline, TimelineItem } from "@/components/ui/timeline";
 
 export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
   const [items, setItems] = useState(day.items);
+  const [prevDayItems, setPrevDayItems] = useState(day.items);
+
+  if (day.items !== prevDayItems) {
+    setPrevDayItems(day.items);
+    setItems(day.items);
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -51,7 +57,20 @@ export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; d
             dayId: day.id,
             items: newItems.map((item, idx: number) => ({ id: item.id, order: idx }))
           }),
-        }).catch(err => console.error("Failed to reorder", err));
+        }).then(async res => {
+          if (!res.ok) {
+            const data = await res.json().catch(() => null);
+            alert(data?.error || "Failed to reorder. The schedule might be impossible.");
+            setItems(items); // revert
+          } else {
+            // Force a hard refresh to get the recomputed times
+            window.location.reload();
+          }
+        }).catch(err => {
+          console.error("Failed to reorder", err);
+          alert("Network error while reordering.");
+          setItems(items); // revert
+        });
 
         return newItems;
       });

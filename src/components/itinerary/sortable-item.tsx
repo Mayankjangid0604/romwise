@@ -7,6 +7,7 @@ import { PlaceCard } from "@/components/ui";
 import { PlaceDetailModal } from "@/components/ui/place-detail";
 import { ReplanPanel } from "@/app/trips/[id]/replan-panel";
 import { InlineEditPanel } from "@/app/trips/[id]/inline-edit-panel";
+import { CollaborationWidget } from "./collaboration-widget";
 
 export type SortableItemType = {
   id: string;
@@ -18,12 +19,12 @@ export type SortableItemType = {
   costSource: string;
   category: string;
   reasoning: string;
-  votes: { value: number }[];
-  comments: unknown[];
-  place?: { lat: number; lng: number; area: string | null } | null;
+  votes: { id: string; value: number; userId: string }[];
+  comments: { id: string; content: string; userId: string; user: { name: string | null } }[];
+  place?: { lat: number; lng: number; area: string | null; accessibilityScore?: number | null; fatigueCost?: number | null } | null;
 };
 
-export function SortableItem({ id, item, tripId, dayNumber }: { id: string; item: SortableItemType; tripId: string; dayNumber: number }) {
+export function SortableItem({ id, item, tripId, dayNumber, currentUserId, canEdit = true }: { id: string; item: SortableItemType; tripId: string; dayNumber: number; currentUserId?: string; canEdit?: boolean }) {
   const [showDetail, setShowDetail] = useState(false);
   const {
     attributes,
@@ -50,6 +51,8 @@ export function SortableItem({ id, item, tripId, dayNumber }: { id: string; item
         address={item.place?.area}
         costEstimate={item.estimatedCostInr}
         duration={`${item.startTime} - ${item.endTime}`}
+        accessibilityScore={item.place?.accessibilityScore}
+        fatigueCost={item.place?.fatigueCost}
         className="w-full bg-white hover:bg-ink-50/50"
         onClick={() => setShowDetail(true)}
       >
@@ -79,25 +82,16 @@ export function SortableItem({ id, item, tripId, dayNumber }: { id: string; item
             </p>
           </details>
         )}
-        <div className="mt-4 pt-3 border-t border-ink-100 flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
-          <div className="flex gap-2">
-            <button 
-              className="text-xs font-medium text-ink-500 hover:text-green-600 bg-ink-50 px-2 py-1 rounded"
-              onClick={() => fetch(`/api/trips/${tripId}/items/${item.id}/vote`, { method: "POST", body: JSON.stringify({ value: 1 })})}
-            >
-              👍 {item.votes?.filter((v: { value: number }) => v.value === 1).length || 0}
-            </button>
-            <button 
-              className="text-xs font-medium text-ink-500 hover:text-red-600 bg-ink-50 px-2 py-1 rounded"
-              onClick={() => fetch(`/api/trips/${tripId}/items/${item.id}/vote`, { method: "POST", body: JSON.stringify({ value: -1 })})}
-            >
-              👎 {item.votes?.filter((v: { value: number }) => v.value === -1).length || 0}
-            </button>
-          </div>
-          <div className="text-xs text-ink-400">
-            {item.comments?.length || 0} comments
-          </div>
-        </div>
+        
+        <CollaborationWidget 
+          tripId={tripId} 
+          itemId={item.id} 
+          votes={item.votes} 
+          comments={item.comments} 
+          currentUserId={currentUserId}
+          canEdit={canEdit}
+        />
+
         <div onClick={(e) => e.stopPropagation()}>
           <ReplanPanel
             tripId={tripId}
@@ -125,6 +119,8 @@ export function SortableItem({ id, item, tripId, dayNumber }: { id: string; item
           address={item.place?.area}
           costEstimate={item.estimatedCostInr}
           duration={`${item.startTime} - ${item.endTime}`}
+          accessibilityScore={item.place?.accessibilityScore}
+          fatigueCost={item.place?.fatigueCost}
           onClose={() => setShowDetail(false)}
         />
       )}

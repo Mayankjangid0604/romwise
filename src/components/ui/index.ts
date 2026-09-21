@@ -18,3 +18,6 @@ export * from "./weather-widget";
 export * from "./place-card";
 export * from "./timeline";
 export * from "./recent-tracker";
+export { AppShell, AppNavigation } from "./app-nav";
+export { TripWorkspaceNav } from "./trip-workspace-nav";
+

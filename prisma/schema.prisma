@@ -138,7 +138,7 @@ model Place {
   sourceRecordId     String?
   sourceUrl          String?
   FavoritePlace      FavoritePlace[]
-  images              Image[]
+  images             Image[]
   itineraryItems     ItineraryItem[]
   destination        TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 
@@ -160,34 +160,38 @@ model DataSource {
 }
 
 model Trip {
-  id                 String              @id @default(cuid())
-  title              String
-  destination        String
-  startDate          DateTime?
-  endDate            DateTime?
-  budgetInr          Int
-  maxTravelers       Int                 @default(20)
-  paceLevel          String              @default("balanced")
-  status             String              @default("draft")
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  creatorId          String
-  destinationId      String?
-  dateStatus         String              @default("unknown")
-  endTime            String?
-  startTime          String?
-  timeStatus         String              @default("UNKNOWN")
-  tripType           String              @default("MULTI_DAY")
-  expenses           Expense[]
-  groupMembers       GroupMember[]
-  itineraryDays      ItineraryDay[]
-  packingItems       PackingItem[]
-  staySelection      StaySelection?
-  travelSegments     TravelSegment[]
-  creator            User                @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  destinationRef     TravelDestination?  @relation(fields: [destinationId], references: [id])
-  tripAccommodations TripAccommodation[]
-  tripShares         TripShare[]
+  id                  String              @id @default(cuid())
+  title               String
+  destination         String
+  startDate           DateTime?
+  endDate             DateTime?
+  budgetInr           Int
+  maxTravelers        Int                 @default(20)
+  paceLevel           String              @default("balanced")
+  status              String              @default("draft")
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  creatorId           String
+  destinationId       String?
+  dateStatus          String              @default("unknown")
+  endTime             String?
+  startTime           String?
+  timeStatus          String              @default("UNKNOWN")
+  tripType            String              @default("MULTI_DAY")
+  // Multi-destination & round-trip support
+  waypoints           String?
+  isRoundTrip         Boolean             @default(false)
+  returnDestination   String?
+  travelerComposition String?
+  expenses            Expense[]
+  groupMembers        GroupMember[]
+  itineraryDays       ItineraryDay[]
+  packingItems        PackingItem[]
+  travelSegments      TravelSegment[]
+  creator             User                @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  destinationRef      TravelDestination?  @relation(fields: [destinationId], references: [id])
+  tripAccommodations  TripAccommodation[]
+  tripShares          TripShare[]
 }
 
 model GroupMember {
@@ -224,18 +228,6 @@ model PackingItem {
   essential Boolean @default(false)
   tripId    String
   trip      Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
-}
-
-model StaySelection {
-  id              String @id @default(cuid())
-  hotelName       String
-  costPerNightInr Int
-  totalCostInr    Int
-  nights          Int
-  lat             Float
-  lng             Float
-  tripId          String @unique
-  trip            Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
 }
 
 model ItineraryDay {
@@ -357,6 +349,8 @@ model FavoritePlace {
   @@unique([userId, placeId])
 }
 
+
+
 model Image {
   id            String             @id @default(cuid())
   url           String
@@ -436,6 +430,9 @@ model TripAccommodation {
   checkOutTime     String?
   bookingReference String?
   notes            String?
+  costPerNightInr  Int?
+  totalCostInr     Int?
+  nights           Int?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   trip             Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)

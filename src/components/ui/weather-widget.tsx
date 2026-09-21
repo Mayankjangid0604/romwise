@@ -38,7 +38,10 @@ export function WeatherWidget({ lat, lng, startDate, endDate }: WeatherWidgetPro
 
   return (
     <Card className="mb-8 p-4">
-      <h3 className="text-sm font-medium text-ink-500 uppercase tracking-wider mb-3">Weather Forecast</h3>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-sm font-medium text-ink-500 uppercase tracking-wider">Weather Forecast</h3>
+        <span className="text-[10px] font-medium bg-amber-100 text-amber-800 px-2 py-0.5 rounded uppercase tracking-widest">Mock Data</span>
+      </div>
       <div className="flex overflow-x-auto gap-4 pb-2 snap-x">
         {forecast.map((day, i) => (
           <div key={i} className="flex-none w-24 flex flex-col items-center justify-center p-2 rounded-lg bg-muted/30 snap-start">

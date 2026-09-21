@@ -25,7 +25,11 @@ export async function GET(
     include: {
       groupMembers: true,
       itineraryDays: {
-        include: { items: true },
+        include: { 
+          items: {
+            include: { place: true }
+          }
+        },
         orderBy: { dayNumber: "asc" }
       }
     },
@@ -55,10 +59,15 @@ export async function GET(
         `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"}`,
         `DTSTART:${dtStart}`,
         `DTEND:${dtEnd}`,
-        `SUMMARY:${item.title}`,
-        `DESCRIPTION:${item.description}`,
-        "END:VEVENT"
+        `SUMMARY:${item.title || item.place?.name}`,
+        `DESCRIPTION:${item.description || item.place?.description || ""}`
       );
+      if (item.place?.address) {
+        icsContent.push(`LOCATION:${item.place.address}`);
+      } else if (item.place?.area) {
+        icsContent.push(`LOCATION:${item.place.area}`);
+      }
+      icsContent.push("END:VEVENT");
     }
   }
 

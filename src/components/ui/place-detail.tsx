@@ -15,6 +15,8 @@ export interface PlaceDetailProps {
   season?: string | null;
   timeOfDay?: string | null;
   accessibility?: string | null;
+  accessibilityScore?: number | null;
+  fatigueCost?: number | null;
   onClose: () => void;
 }
 
@@ -29,6 +31,8 @@ export function PlaceDetailModal({
   season,
   timeOfDay,
   accessibility,
+  accessibilityScore,
+  fatigueCost,
   onClose,
 }: PlaceDetailProps) {
   const [imgError, setImgError] = useState(false);
@@ -106,6 +110,23 @@ export function PlaceDetailModal({
               <div className="flex items-center gap-2">
                 {timeOfDay.toLowerCase().includes('night') ? <Moon className="w-5 h-5 text-purple-500" /> : <Sun className="w-5 h-5 text-amber-500" />}
                 <span className="text-sm font-medium text-ink-700 capitalize">{timeOfDay.toLowerCase()}</span>
+              </div>
+            )}
+            
+            {(accessibilityScore != null || fatigueCost != null) && (
+              <div className="flex items-center gap-4 border-l border-ink-200 pl-4 ml-2">
+                {accessibilityScore != null && (
+                  <div className="flex items-center gap-2" title="Accessibility Score">
+                    <Accessibility className={accessibilityScore >= 8 ? "w-5 h-5 text-success-500" : accessibilityScore >= 5 ? "w-5 h-5 text-warning-500" : "w-5 h-5 text-danger-500"} />
+                    <span className="text-sm font-medium text-ink-700">{accessibilityScore}/10</span>
+                  </div>
+                )}
+                {fatigueCost != null && (
+                  <div className="flex items-center gap-2" title="Fatigue Cost">
+                    <span className="text-lg">🏃</span>
+                    <span className="text-sm font-medium text-ink-700">{fatigueCost}/10</span>
+                  </div>
+                )}
               </div>
             )}
           </div>

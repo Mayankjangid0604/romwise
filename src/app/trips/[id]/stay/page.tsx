@@ -27,7 +27,7 @@ export default async function StayPage(props: {
     where: { id },
     include: {
       groupMembers: true,
-      staySelection: true,
+      tripAccommodations: true,
       destinationRef: true,
       itineraryDays: {
         include: { items: true },
@@ -83,7 +83,7 @@ export default async function StayPage(props: {
         do not reflect real-time availability or user reviews.
       </Alert>
 
-      {trip.staySelection && (
+      {trip.tripAccommodations[0] && (
         <Card tone="selected" className="mb-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -91,14 +91,14 @@ export default async function StayPage(props: {
                 Selected Stay
               </p>
               <p className="font-display text-xl font-semibold text-ink-900 mt-1">
-                {trip.staySelection.hotelName}
+                {trip.tripAccommodations[0].name}
               </p>
               <p className="text-[0.8125rem] text-ink-600 mt-1">
-                <Figure>{formatInr(trip.staySelection.costPerNightInr)}</Figure>
-                /night &times; <Figure>{trip.staySelection.nights}</Figure>{" "}
+                <Figure>{formatInr(trip.tripAccommodations[0].costPerNightInr ?? 0)}</Figure>
+                /night &times; <Figure>{trip.tripAccommodations[0].nights ?? 0}</Figure>{" "}
                 nights ={" "}
                 <Figure className="font-medium text-ink-800">
-                  {formatInr(trip.staySelection.totalCostInr)}
+                  {formatInr(trip.tripAccommodations[0].totalCostInr ?? 0)}
                 </Figure>
               </p>
             </div>
@@ -118,7 +118,7 @@ export default async function StayPage(props: {
 
       <div className="space-y-3">
         {ranked.map((hotel) => {
-          const isSelected = trip.staySelection?.hotelName === hotel.name;
+          const isSelected = trip.tripAccommodations[0]?.name === hotel.name;
           return (
             <Card key={hotel.name} tone={isSelected ? "success" : "default"}>
               <div className="flex items-start justify-between gap-4">

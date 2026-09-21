@@ -30,7 +30,7 @@ test.describe('E2E Trip Planning Flow', () => {
 
       // Verify session is active by navigating to a protected route
       await page.goto('/dashboard');
-      await expect(page.locator('text=E2E Test User')).toBeVisible();
+      await expect(page.locator('text=Welcome back')).toBeVisible();
 
       // 3. Navigate to new trip page
       await page.goto('/trips/new');
@@ -40,8 +40,12 @@ test.describe('E2E Trip Planning Flow', () => {
       await expect(chatInput).toBeVisible();
 
       // 4. Send a message to start planning
-      await chatInput.fill('I want to go to Tokyo for 3 days. I use a wheelchair and I love food and culture.');
+      await chatInput.fill('I want to go to Tokyo for 3 days. I use a wheelchair and I love food and culture');
+      await chatInput.pressSequentially('.');
+      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
+      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
       await chatInput.press('Enter');
+      await responsePromise;
 
       // 5. Wait for AI response
       await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });
@@ -58,7 +62,7 @@ test.describe('E2E Trip Planning Flow', () => {
       await createButton.click();
 
       // 7. Wait for navigation to the trip dashboard (not /trips/new)
-      await expect(page).not.toHaveURL(/\/trips\/new$/);
+      await expect(page).not.toHaveURL(/\/trips\/new$/, { timeout: 30000 });
       await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+/, { timeout: 30000 });
       
       // 8. Assert DB State

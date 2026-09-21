@@ -12,9 +12,30 @@ export default async function AdminPlacePage(props: { params: Promise<{ id: stri
 
   if (!place) notFound();
 
+  const warnings = [];
+  if (place.lat === 0 && place.lng === 0) warnings.push("Missing valid coordinates.");
+  if (!place.typicalCostInr) warnings.push("Missing typical cost.");
+  if (!place.durationMinutes) warnings.push("Missing recommended duration.");
+  if (!place.openingTime || !place.closingTime) warnings.push("Missing opening or closing times.");
+  if (!place.address) warnings.push("Missing address.");
+  if (!place.description) warnings.push("Missing description.");
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       <div>
+        {warnings.length > 0 && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800">
+            <h3 className="font-semibold mb-2 flex items-center gap-2">
+              ⚠️ Data Quality Warnings
+            </h3>
+            <ul className="list-disc pl-5 text-sm space-y-1">
+              {warnings.map((warn, i) => (
+                <li key={i}>{warn}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <h1 className="text-2xl font-bold text-ink-900 mb-2">{place.name}</h1>
         <p className="text-ink-600 mb-6">{place.destination.name} • {place.category}</p>
 

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { POST } from "../route";
 import * as authModule from "@/lib/auth";
 import { AIGateway } from "@/lib/ai/gateway";
+import { checkRateLimitDb } from "@/lib/db-rate-limit";
 
 // Mock auth
 vi.mock("@/lib/auth", () => ({
@@ -15,8 +16,21 @@ vi.mock("@/lib/ai/gateway", () => ({
   },
 }));
 
-vi.mock("@/lib/rate-limit", () => ({
-  checkRateLimit: vi.fn().mockResolvedValue(true),
+vi.mock("@/lib/db-rate-limit", () => ({
+  checkRateLimitDb: vi.fn().mockResolvedValue({ allowed: true, retryAfterSeconds: 0 }),
+}));
+
+vi.mock("@/lib/destination-resolver", () => ({
+  resolveDestination: vi.fn().mockResolvedValue({
+    id: "test",
+    name: "Paris",
+    state: "",
+    country: "",
+    lat: 48,
+    lng: 2,
+    matchType: "exact"
+  }),
+  searchTravelDestinations: vi.fn().mockResolvedValue([])
 }));
 
 // Mock NextRequest
@@ -132,5 +146,17 @@ describe("POST /api/chat/planner", () => {
     expect(data.type).toBe("question");
     expect(data.extractedData.destination).toBe("Paris");
     expect(data.extractedData.budgetInr).toBeUndefined();
+  });
+
+  it("should return 429 if rate limited", async () => {
+    vi.mocked(checkRateLimitDb).mockResolvedValueOnce({ allowed: false, retryAfterSeconds: 15, count: 6 });
+    
+    const req = new MockNextRequest("http://localhost/api/chat/planner", { messages: [] });
+    const res = await POST(req as unknown as Request);
+    
+    expect(res.status).toBe(429);
+    const data = await res.json();
+    expect(data.error).toContain("15 seconds");
+    expect(res.headers.get("Retry-After")).toBe("15");
   });
 });

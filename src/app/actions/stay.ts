@@ -31,24 +31,17 @@ export async function selectHotel(
   const nights = Math.max(1, dayCount - 1);
   const totalCostInr = hotel.costPerNightInr * nights;
 
-  await prisma.staySelection.upsert({
-    where: { tripId },
-    create: {
-      hotelName: hotel.name,
-      costPerNightInr: hotel.costPerNightInr,
-      totalCostInr,
-      nights,
-      lat: hotel.lat,
-      lng: hotel.lng,
+  await prisma.tripAccommodation.deleteMany({ where: { tripId } });
+  
+  await prisma.tripAccommodation.create({
+    data: {
       tripId,
-    },
-    update: {
-      hotelName: hotel.name,
+      name: hotel.name,
       costPerNightInr: hotel.costPerNightInr,
       totalCostInr,
       nights,
-      lat: hotel.lat,
-      lng: hotel.lng,
+      latitude: hotel.lat,
+      longitude: hotel.lng,
     },
   });
 
@@ -71,7 +64,7 @@ export async function removeHotelSelection(tripId: string) {
   );
   if (!isMember) throw new Error("Not a member of this trip");
 
-  await prisma.staySelection.deleteMany({ where: { tripId } });
+  await prisma.tripAccommodation.deleteMany({ where: { tripId } });
 
   revalidatePath(`/trips/${tripId}/stay`);
   revalidatePath(`/trips/${tripId}/budget`);

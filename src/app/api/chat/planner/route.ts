@@ -3,6 +3,7 @@ import { AIGateway } from "@/lib/ai/gateway";
 import { auth } from "@/lib/auth";
 import { checkRateLimitDb } from "@/lib/db-rate-limit";
 import { z } from "zod";
+import { resolveDestination, searchTravelDestinations } from "@/lib/destination-resolver";
 
 export const maxDuration = 60;
 
@@ -11,12 +12,24 @@ const preferenceItemSchema = z.object({
   priority: z.enum(["must-have", "very-important", "preferred", "nice-to-have", "avoid", "never"]),
 });
 
+const travelerCompositionSchema = z.object({
+  adults: z.number().optional(),
+  seniors: z.number().optional(),
+  children: z.number().optional(),
+  tripPurpose: z.enum(["leisure", "pilgrimage", "adventure", "business", "honeymoon", "family_vacation", "other"]).optional(),
+  foodPreference: z.enum(["veg", "nonveg", "both"]).optional(),
+});
+
 const extractedDataSchema = z.object({
   destination: z.string().optional(),
   tripType: z.enum(["ONE_DAY", "MULTI_DAY", "FLEXIBLE", "PICNIC", "DAY_TRIP", "OVERNIGHT", "WEEKEND"]).optional(),
   timeStatus: z.enum(["EXACT", "FLEXIBLE", "UNKNOWN"]).optional(),
   startTime: z.string().optional(),
   endTime: z.string().optional(),
+  // Multi-destination / round trip
+  waypoints: z.array(z.string()).optional(),         // e.g. ["Vaishno Devi", "Srinagar", "Sonmarg"]
+  isRoundTrip: z.boolean().optional(),
+  returnDestination: z.string().optional(),           // "Srinagar" if flying back from there
   travelSegments: z.array(z.object({
     mode: z.string(),
     arrivalDate: z.string().optional(),
@@ -34,12 +47,12 @@ const extractedDataSchema = z.object({
     checkOutTime: z.string().optional(),
     location: z.string().optional()
   })).optional(),
-
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   budgetInr: z.number().optional(),
   paceLevel: z.enum(["easy", "balanced", "full"]).optional(),
   maxTravelers: z.number().optional(),
+  travelerComposition: travelerCompositionSchema.optional(),
   preferences: z.array(preferenceItemSchema).optional(),
   accessibilityNotes: z.string().optional(),
   constraints: z.object({
@@ -51,14 +64,19 @@ const plannerResponseSchema = z.object({
   type: z.enum(["question", "complete"]),
   message: z.string().min(1),
   extractedData: extractedDataSchema.optional(),
+  fallbackDestinations: z.array(z.object({
+    id: z.string(),
+    name: z.string()
+  })).optional(),
 });
 
 export type PlannerExtractedData = z.infer<typeof extractedDataSchema>;
 export type PlannerPreferenceItem = z.infer<typeof preferenceItemSchema>;
+export type TravelerComposition = z.infer<typeof travelerCompositionSchema>;
 
 export async function POST(req: Request) {
   try {
-const session = await auth();
+    const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -87,55 +105,40 @@ const session = await auth();
     }
 
     // E2E AI mock — deterministic response for browser testing
-    // Only active when BOTH E2E_TEST_MODE and E2E_AI_MOCK are set
     if (process.env.E2E_TEST_MODE === "true" && process.env.E2E_AI_MOCK === "true") {
-      // messages is already available from req.json() earlier
       const lastUserMessage = messages.findLast((m: { role: string }) => m.role === "user");
       const content = (lastUserMessage?.content ?? "").toLowerCase();
 
-      // Detect if this looks like a complete trip request and return complete state
       const isComplete = content.includes("goa") || content.includes("jaipur") || content.includes("manali") ||
         content.includes("kerala") || content.includes("tokyo") || content.includes("days") ||
         (content.includes("budget") && content.includes("people"));
 
       if (isComplete) {
-        // Parse destination from message
         let destination = "Goa";
         if (content.includes("jaipur")) destination = "Jaipur";
         else if (content.includes("manali")) destination = "Manali";
         else if (content.includes("kerala")) destination = "Kerala";
         else if (content.includes("tokyo")) destination = "Tokyo";
 
-        // Parse travelers
         const travelersMatch = content.match(/(\d+)\s+(?:people|person|traveler)/);
         const maxTravelers = travelersMatch ? parseInt(travelersMatch[1]) : 2;
 
-        // Parse budget
         const budgetMatch = content.match(/(?:budget|₹)\s*:?\s*(\d[\d,]*)/i);
         const budgetInr = budgetMatch ? parseInt(budgetMatch[1].replace(/,/g, "")) : 50000;
 
-        // Parse preferences from message
         const preferences: PlannerPreferenceItem[] = [];
         if (content.includes("food") || content.includes("dining")) {
           preferences.push({ category: "dining", priority: "preferred" });
         }
-        if (content.includes("culture") || content.includes("cultural")) {
+        if (content.includes("culture")) {
           preferences.push({ category: "culture", priority: "preferred" });
         }
-        if (content.includes("outdoor") || content.includes("nature") || content.includes("adventure")) {
-          preferences.push({ category: "nature", priority: "preferred" });
-        }
-        if (content.includes("avoid museum") || content.includes("no museum")) {
-          preferences.push({ category: "culture", priority: "never" });
+        
+        let accessibilityNotes: string | undefined = undefined;
+        if (content.includes("wheelchair")) {
+          accessibilityNotes = "wheelchair";
         }
 
-        // Parse accessibility
-        let accessibilityNotes = "";
-        if (content.includes("wheelchair")) accessibilityNotes = "wheelchair accessible required";
-        else if (content.includes("low walk") || content.includes("minimal walk")) accessibilityNotes = "low walking";
-        else if (content.includes("senior") || content.includes("elderly")) accessibilityNotes = "senior travelers";
-
-        // Parse dates
         const today = new Date();
         const startDate = new Date(today);
         startDate.setDate(startDate.getDate() + 30);
@@ -144,15 +147,12 @@ const session = await auth();
         const days = daysMatch ? parseInt(daysMatch[1]) : 3;
         endDate.setDate(endDate.getDate() + days - 1);
 
-        // Parse tripType
         let tripType = "MULTI_DAY";
         if (content.includes("picnic")) tripType = "PICNIC";
         else if (content.includes("overnight")) tripType = "OVERNIGHT";
         else if (content.includes("weekend")) tripType = "WEEKEND";
         else if (content.includes("day trip") || content.includes("one day")) tripType = "DAY_TRIP";
-        else if (content.includes("flexible")) tripType = "FLEXIBLE";
 
-        // Parse pace
         let paceLevel: "easy" | "balanced" | "full" = "balanced";
         if (content.includes("full") || content.includes("packed")) paceLevel = "full";
         else if (content.includes("easy") || content.includes("relaxed")) paceLevel = "easy";
@@ -169,7 +169,7 @@ const session = await auth();
             maxTravelers,
             tripType,
             preferences: preferences.length > 0 ? preferences : undefined,
-            accessibilityNotes: accessibilityNotes || undefined,
+            accessibilityNotes,
           },
         });
       }
@@ -181,71 +181,110 @@ const session = await auth();
       });
     }
 
-        // Format chat history for prompt
+    // Format chat history for prompt
     const chatHistory = messages
       .map((m: { role: string; content: string }) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
       .join("\n");
 
     const systemInstruction = `
-You are Roamwise, an AI travel planning assistant.
-Your goal is to gather the necessary details to create a trip.
-You MUST gather the following details, asking one or two questions at a time in a natural, conversational way:
-1. Destination (Where are they going?)
-2. Dates or approximate duration (When? or How many days?)
-3. Budget (e.g., $1000, "cheap", "luxury")
-4. Pace level (Easy/relaxed, Balanced, or Full/packed)
-5. Number of travelers (Who is going? Solo, couple, family of 4?)
-6. Any accessibility or special needs (Optional: wheelchair, low walking, senior travelers, traveling with kids)
-7. Preferences (Optional: what they enjoy — food, culture, adventure, nature, shopping, relaxation — and what to avoid)
+You are Roamwise, a smart AI travel planning assistant. Your goal is to gather the necessary details to create a personalised trip plan.
 
-8. Logistics (Optional): If the user mentions their flight, train, bus, or driving arrival/departure times, extract them into travelSegments. If they mention hotel check-in/out times, extract them into accommodations. If they mention specific start or end times for the trip (e.g. "We only have from 10 AM to 4 PM"), extract them to startTime and endTime.
-9. Trip Type & Time Status: Classify tripType as:
-   - "PICNIC"    — a few hours outing (e.g. "picnic", "afternoon trip", "half-day outing"). No overnight stay.
-   - "DAY_TRIP"  — exactly one day, returns same evening (e.g. "day trip", "one day", "day visit").
-   - "ONE_DAY"   — same as DAY_TRIP (use when user explicitly says "one day trip" without "picnic" framing).
-   - "OVERNIGHT" — one night away (e.g. "overnight trip", "quick overnight", "one night").
-   - "WEEKEND"   — weekend getaway, Saturday–Sunday (e.g. "weekend trip", "weekend getaway", "2 days").
-   - "MULTI_DAY" — explicit multi-day trip with specific start+end dates mentioned.
-   - "FLEXIBLE"  — user doesn't know dates yet or says "flexible dates".
-   Classify timeStatus as "EXACT" (known times), "FLEXIBLE", or "UNKNOWN".
+INFORMATION TO GATHER (ask naturally, 1-2 questions at a time — do NOT repeat questions already answered):
 
-Rules:
-- Be friendly, enthusiastic, and brief.
-- If the user provides multiple pieces of information at once, acknowledge them and ask about the missing parts.
-- Do NOT output your internal state or JSON directly in your message.
-- Once you have gathered enough information to confidently determine Destination, Start/End Dates (or duration), Budget (in INR), Pace Level, and Travelers, set type="complete".
-- If the user gives a duration (e.g. "5 days") and no start date, pick a default start date (e.g. next month) and calculate the end date.
-- Convert budget to a reasonable INR number if given as text like "cheap" or in another currency. (e.g., cheap = 30000, medium = 70000, luxury = 150000).
-- CRITICAL: If the user explicitly states a number for the budget (e.g., "100000" or "budget 50000"), you MUST extract that EXACT number into budgetInr. Do not modify explicit numbers.
-- If the user says "just decide for me", make reasonable assumptions.
-- Extract preferences carefully: "I love food and culture" → preferences with dining/culture preferred. "Avoid museums" → culture with priority "never". "I enjoy outdoor activities" → nature/adventure preferred.
-- Extract accessibility needs: "low walking", "wheelchair", "senior", "traveling with kids" → put in accessibilityNotes.
+REQUIRED:
+1. Primary destination (and any additional stops / waypoints if it's a multi-destination trip)
+2. Is it a round trip? (Do they return from the same city, or a different one?)
+3. Travel dates or approximate duration
+4. Budget in INR (or convert from other currencies / vague terms: cheap≈30000, medium≈70000, luxury≈200000)
+5. Number of travelers + who they are (solo, couple, family — any children, seniors?)
+6. Pace level: Easy/relaxed, Balanced, or Full/packed
 
-Output JSON format:
+OPTIONAL (ask if relevant, don't force):
+7. Traveler composition: How many adults, any children (ages), any seniors? What's the occasion (pilgrimage, honeymoon, adventure, family vacation)?
+8. Food preference: vegetarian-only, non-veg OK, or no preference?
+9. Interests / preferences (what they enjoy: culture, food, adventure, nature, shopping, relaxation, nightlife)
+10. Things to avoid (crowded places, museums, etc.)
+11. Accessibility needs (wheelchair, low walking, traveling with infants)
+12. Specific arrival/departure times, flight details, hotel check-in/check-out
+
+MULTI-DESTINATION TRIPS:
+- If the user mentions multiple places (e.g. "Vaishno Devi then Srinagar and Sonmarg"), recognize this as a multi-destination trip.
+- Extract the PRIMARY destination (first stop) into "destination"
+- Extract intermediate stops into "waypoints" array
+- Ask if they're returning from the last stop or a different city → extract to "returnDestination"
+- Ask "Is this a round trip?" → extract "isRoundTrip"
+
+RULES:
+- Be friendly, concise, and enthusiastic.
+- NEVER repeat a question if the user already answered it in a previous message.
+- Build on what you already know — don't start fresh each turn.
+- If the user provides many details at once, acknowledge them and only ask about the truly missing parts.
+- Do NOT show raw JSON in your message text.
+- Once you have Destination, Dates/Duration, Budget, Pace, and Travelers — set type="complete".
+- If duration given without dates, pick a default start date next month and calculate end date.
+- CRITICAL: If user gives an explicit number for budget (e.g. "budget 80000"), extract EXACTLY that number into budgetInr.
+- For multi-destination: primary destination = first stop. All stops listed in waypoints.
+
+DESTINATION EXTRACTION RULES (CRITICAL — follow exactly):
+- "destination" MUST be a SINGLE city or place name. Never combine cities.
+  ✅ CORRECT: destination="Srinagar", waypoints=["Gulmarg", "Pahalgam"]
+  ❌ WRONG:   destination="Srinagar and Gulmarg"  ← this breaks the system
+  ❌ WRONG:   destination="Kashmir and Sonmarg"   ← this breaks the system
+- For a trip like "Vaishno Devi, Srinagar, Sonmarg" → destination="Vaishno Devi", waypoints=["Srinagar", "Sonmarg"]
+- For a trip like "Kashmir" → destination="Srinagar" (use the main city of the region)
+- Known Kashmir destinations: Srinagar, Gulmarg, Pahalgam, Kashmir Valley
+- For single-destination trips, waypoints should be omitted or []
+
+TRIP TYPE CLASSIFICATION:
+- PICNIC: few hours outing, no overnight stay
+- DAY_TRIP / ONE_DAY: full day, returns same evening
+- OVERNIGHT: one night away
+- WEEKEND: Sat-Sun getaway (~2 days)
+- MULTI_DAY: explicit multi-day with start+end dates
+- FLEXIBLE: user doesn't know dates yet
+
+TRANSPORT INTELLIGENCE (travelSegments):
+- If the user explicitly provides flight/train/bus details, you may extract them.
+- Do NOT fabricate or generate speculative travel segments. If the user does not provide them, leave travelSegments empty. We will determine routing deterministically.
+- Hotel check-in/out → extract into accommodations
+
+Output ONLY valid JSON (no markdown, no code fences):
 {
   "type": "question" | "complete",
   "message": "Your conversational reply to the user",
   "extractedData": {
-    "destination": "string (only if known)",
-    "startDate": "YYYY-MM-DD (only if known)",
-    "endDate": "YYYY-MM-DD (only if known)",
+    "destination": "SINGLE city or place name ONLY — e.g. 'Srinagar' or 'Vaishno Devi'. NEVER a combined string like 'Kashmir and Sonmarg' or 'Srinagar and Gulmarg'.",
+    "waypoints": ["Each additional stop as a separate single city name"],
+    "isRoundTrip": true | false,
+    "returnDestination": "City to fly/drive back from (if different from origin)",
+    "startDate": "YYYY-MM-DD",
+    "endDate": "YYYY-MM-DD",
     "tripType": "PICNIC" | "DAY_TRIP" | "ONE_DAY" | "OVERNIGHT" | "WEEKEND" | "MULTI_DAY" | "FLEXIBLE",
     "timeStatus": "EXACT" | "FLEXIBLE" | "UNKNOWN",
-    "startTime": "HH:MM (24-hour, if given)",
-    "endTime": "HH:MM (24-hour, if given)",
-    "travelSegments": [ { "mode": "flight", "arrivalDate": "YYYY-MM-DD", "arrivalTime": "HH:MM", "departureDate": "YYYY-MM-DD", "departureTime": "HH:MM", "origin": "string", "destination": "string" } ],
-    "accommodations": [ { "name": "Hotel Name", "checkInDate": "YYYY-MM-DD", "checkInTime": "HH:MM", "checkOutDate": "YYYY-MM-DD", "checkOutTime": "HH:MM", "location": "string" } ],
-    "budgetInr": 50000 (number, only if known),
-    "paceLevel": "easy" | "balanced" | "full" (only if known),
-    "maxTravelers": 2 (number, only if known),
+    "startTime": "HH:MM",
+    "endTime": "HH:MM",
+    "travelSegments": [
+      { "mode": "flight", "arrivalDate": "YYYY-MM-DD", "arrivalTime": "HH:MM", "departureDate": "YYYY-MM-DD", "departureTime": "HH:MM", "origin": "string", "destination": "string" }
+    ],
+    "accommodations": [
+      { "name": "Hotel Name", "checkInDate": "YYYY-MM-DD", "checkInTime": "HH:MM", "checkOutDate": "YYYY-MM-DD", "checkOutTime": "HH:MM", "location": "string" }
+    ],
+    "budgetInr": 50000,
+    "paceLevel": "easy" | "balanced" | "full",
+    "maxTravelers": 2,
+    "travelerComposition": {
+      "adults": 2,
+      "seniors": 1,
+      "children": 1,
+      "tripPurpose": "leisure" | "pilgrimage" | "adventure" | "business" | "honeymoon" | "family_vacation" | "other",
+      "foodPreference": "veg" | "nonveg" | "both"
+    },
     "preferences": [
       { "category": "dining", "priority": "preferred" },
       { "category": "culture", "priority": "never" }
-    ] (only if mentioned — use categories: dining, culture, nature, adventure, sightseeing, shopping, relaxation, nightlife),
-    "accessibilityNotes": "string describing any mobility/accessibility needs (only if mentioned)",
-    "constraints": {
-      "avoid": ["museums", "crowded places"] (only if user explicitly asked to avoid something)
-    }
+    ],
+    "accessibilityNotes": "string",
+    "constraints": { "avoid": ["museums"] }
   }
 }
 `;
@@ -265,6 +304,24 @@ Output JSON format:
     if (!parsed.success) {
       console.error("AI returned invalid structure:", result.data, parsed.error);
       return NextResponse.json({ error: "Invalid response from AI" }, { status: 502 });
+    }
+
+    if (parsed.data.type === "complete" && parsed.data.extractedData?.destination) {
+      const destination = parsed.data.extractedData.destination;
+      const resolved = await resolveDestination(destination, true);
+      
+      if (!resolved) {
+        // Fallback intelligence
+        const nearby = await searchTravelDestinations("", 5);
+        const nearbyNames = nearby.map(d => d.name).join(", ");
+        
+        parsed.data.type = "question";
+        parsed.data.extractedData = undefined;
+        parsed.data.message = `We don't currently have enough verified travel data for ${destination}. Did you mean something else? Nearby supported destinations include: ${nearbyNames}. Where would you like to go instead?`;
+        
+        // Populate structured fallbackDestinations for the UI to render as pills/buttons
+        parsed.data.fallbackDestinations = nearby.map(d => ({ id: d.id, name: d.name }));
+      }
     }
 
     return NextResponse.json(parsed.data);

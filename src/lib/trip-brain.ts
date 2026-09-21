@@ -66,6 +66,7 @@ export type PaceLevel = "easy" | "balanced" | "full";
 
 export type TripBrainInput = {
   destination: string;
+  waypoints?: string[];      // additional stops for multi-destination trips
   startDate: Date | null;
   endDate: Date | null;
   dateStatus?: string | null;
@@ -510,7 +511,7 @@ function validateGroundedResponse(
 }
 
 
-function computeDayWindow(
+export function computeDayWindow(
   tripType: string,
   dayIdx: number,
   dayCount: number,
@@ -757,8 +758,22 @@ export async function generateGroundedItinerary(
   const season = deriveSeason(input.startDate);
   console.log(`[TripBrain] trip season: ${season}`);
 
-  // Step 1: Resolve destination — reject unknown destinations before any AI call
-  const resolved = await resolveDestination(input.destination);
+  // Step 1: Resolve destination(s) — try primary first, then waypoints if primary fails.
+  // For multi-destination trips, pool candidates from ALL resolvable stops.
+  let resolved = await resolveDestination(input.destination);
+
+  // If primary destination can't be resolved, try waypoints in order
+  const allStops = [input.destination, ...(input.waypoints ?? [])];
+  if (!resolved && allStops.length > 1) {
+    for (const stop of allStops.slice(1)) {
+      resolved = await resolveDestination(stop);
+      if (resolved) {
+        console.log(`[TripBrain] primary destination unresolvable, using waypoint: ${stop}`);
+        break;
+      }
+    }
+  }
+
   if (!resolved) {
     throw new DestinationNotFoundError(input.destination);
   }
@@ -771,16 +786,48 @@ export async function generateGroundedItinerary(
     console.log(`[TripBrain] accessibility requirement: ${accessibilityRequirement}`);
   }
 
-  // Step 3: Retrieve candidate places (preference-scored, season-aware, hard exclusions applied)
+  // Step 3: Retrieve candidate places from ALL resolvable destinations (pooled for multi-stop trips)
   const budgetPerDay = Math.floor(input.budgetInr / dayCount);
-  const candidates = await getCandidatePlaces({
-    destinationId: resolved.id,
+
+  // Resolve additional waypoint destinations and pool their candidates
+  const waypointDestinations: typeof resolved[] = [];
+  if (input.waypoints && input.waypoints.length > 0) {
+    for (const stop of input.waypoints) {
+      const wp = await resolveDestination(stop);
+      if (wp && wp.id !== resolved.id) {
+        waypointDestinations.push(wp);
+        console.log(`[TripBrain] waypoint resolved: ${wp.name}, ${wp.state}`);
+      }
+    }
+  }
+
+  const candidateArgs = {
     allPreferences: input.allPreferences,
     budgetPerDayInr: budgetPerDay,
     season: season === "unknown" ? undefined : season,
     limit: 35,
     accessibilityRequirement: accessibilityRequirement !== "none" ? accessibilityRequirement : undefined,
-  });
+  };
+
+  const primaryCandidates = await getCandidatePlaces({ destinationId: resolved.id, ...candidateArgs });
+
+  // Pool candidates from all waypoint destinations (up to limit each)
+  const waypointCandidates: CandidatePlace[] = [];
+  for (const wp of waypointDestinations) {
+    const wpCandidates = await getCandidatePlaces({
+      destinationId: wp.id,
+      ...candidateArgs,
+      limit: Math.max(10, Math.floor(35 / (waypointDestinations.length + 1))),
+    });
+    waypointCandidates.push(...wpCandidates);
+  }
+
+  // Deduplicate by placeId
+  const seenIds = new Set(primaryCandidates.map(c => c.id));
+  const candidates = [
+    ...primaryCandidates,
+    ...waypointCandidates.filter(c => !seenIds.has(c.id)),
+  ];
 
   console.log(`[TripBrain] candidates retrieved: ${candidates.length} places (season: ${season}, accessibility: ${accessibilityRequirement})`);
 

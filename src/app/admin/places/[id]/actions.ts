@@ -21,9 +21,8 @@ export async function updatePlaceField(placeId: string, field: string, value: st
 
   const updateData: Record<string, string | number | null> = { [field]: value };
 
-  // If modifying a factual field and it was AI derived, update provenance
-  const isFactual = ["typicalCostInr", "durationMinutes", "openingTime", "closingTime"].includes(field);
-  if (isFactual) {
+  // If an admin manually modifies any field, mark it as manually curated
+  if (field !== "dataStatus") {
     updateData.sourceType = "MANUALLY_CURATED";
   }
 

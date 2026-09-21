@@ -56,10 +56,24 @@ export async function POST(req: Request) {
 
     const creatorMember = trip.groupMembers.find((m) => m.role === "creator");
 
+    // Parse waypoints JSON stored in DB (e.g. '["Gulmarg","Pahalgam"]')
+    let parsedWaypoints: string[] | undefined;
+    if (trip.waypoints) {
+      try {
+        const parsed = JSON.parse(trip.waypoints);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          parsedWaypoints = parsed.filter((w): w is string => typeof w === "string");
+        }
+      } catch {
+        // ignore malformed waypoints
+      }
+    }
+
     let result;
     try {
       result = await generateGroundedItinerary({
         destination: trip.destination,
+        waypoints: parsedWaypoints,
         startDate: trip.startDate,
         endDate: trip.endDate,
         dateStatus: trip.dateStatus,
@@ -73,6 +87,7 @@ export async function POST(req: Request) {
         allPreferences,
         accessibilityNotes: creatorMember?.accessibilityNotes || undefined,
       });
+
     } catch (err) {
       console.error("Trip Brain error:", err);
       // Revert status to draft on error

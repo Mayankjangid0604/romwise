@@ -27,7 +27,7 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
     where: { id },
     include: {
       groupMembers: true,
-      staySelection: true,
+      tripAccommodations: true,
       expenses: { include: { payer: true }, orderBy: { date: "desc" } },
       itineraryDays: {
         orderBy: { dayNumber: "asc" },
@@ -53,21 +53,15 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
     })),
   );
 
-  const stayCostInr = trip.staySelection?.totalCostInr ?? 0;
+  const primaryAccommodation = trip.tripAccommodations[0];
+  const stayCostInr = primaryAccommodation?.totalCostInr ?? 0;
   const summary = computeBudgetSummary(budgetItems, trip.budgetInr);
   const totalSpendWithStay = summary.estimatedSpend + stayCostInr;
   const remainingWithStay = trip.budgetInr - totalSpendWithStay;
   const isOverBudgetWithStay = remainingWithStay < 0;
 
   return (
-    <PageShell>
-      <PageHeader
-        backHref={`/trips/${trip.id}`}
-        backLabel="Trip"
-        eyebrow={trip.title}
-        title="Budget"
-      />
-
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
       {budgetItems.length === 0 ? (
         <EmptyState
           title="No itinerary items to budget"
@@ -106,7 +100,7 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
             </Alert>
           )}
 
-          {trip.staySelection && (
+          {primaryAccommodation && (
             <Card>
               <h2 className="font-display text-lg font-semibold text-ink-800 mb-3">
                 Accommodation
@@ -114,18 +108,18 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="font-medium text-ink-800">
-                    {trip.staySelection.hotelName}
+                    {primaryAccommodation.name}
                   </p>
                   <p className="text-[0.8125rem] text-ink-500 mt-0.5">
                     <Figure>
-                      {formatInr(trip.staySelection.costPerNightInr)}
+                      {formatInr(primaryAccommodation.costPerNightInr ?? 0)}
                     </Figure>
                     /night &times;{" "}
-                    <Figure>{trip.staySelection.nights}</Figure> nights
+                    <Figure>{primaryAccommodation.nights ?? 0}</Figure> nights
                   </p>
                 </div>
                 <Figure className="font-semibold text-ink-900">
-                  {formatInr(trip.staySelection.totalCostInr)}
+                  {formatInr(primaryAccommodation.totalCostInr ?? 0)}
                 </Figure>
               </div>
             </Card>
@@ -218,6 +212,6 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
           <ExpenseList tripId={trip.id} initialExpenses={trip.expenses} />
         </div>
       )}
-    </PageShell>
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { PageShell, PageHeader, EmptyState, PlaceCard } from "@/components/ui";
+import { FavoriteButton } from "@/components/ui/favorite-button";
 
 export default async function FavoritesPage() {
   const session = await auth();
@@ -59,9 +60,15 @@ export default async function FavoritesPage() {
               <h2 className="text-xl font-display font-semibold text-ink-900 mb-6">Saved Destinations</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {favDestinations.map((fd) => (
-                  <div key={fd.id} className="p-5 bg-white border border-ink-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <h3 className="text-lg font-semibold text-ink-900 mb-2">{fd.destination.name}</h3>
+                  <div key={fd.id} className="p-5 bg-white border border-ink-100 rounded-xl shadow-sm hover:shadow-md transition-shadow relative group">
+                    <h3 className="text-lg font-semibold text-ink-900 mb-2 pr-8">{fd.destination.name}</h3>
                     <p className="text-sm text-ink-600 line-clamp-3">{fd.destination.description}</p>
+                    <FavoriteButton 
+                      id={fd.destinationId} 
+                      type="destination" 
+                      initialIsFavorite={true}
+                      className="opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    />
                   </div>
                 ))}
               </div>

@@ -6,6 +6,7 @@ export type AITask =
   | "trip_planning"
   | "replanning"
   | "group_alignment"
+  | "item_alignment"
   | "packing";
 
 export type AIProviderName = "gemini" | "local" | "mock";
