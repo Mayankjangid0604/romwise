@@ -54,7 +54,14 @@ export async function POST(
   }
 
   const parsedAmount = parseInt(amountInr, 10);
-  if (totalOwed !== parsedAmount) {
+  if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+    return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+  }
+  if (!Number.isFinite(totalOwed)) {
+    return NextResponse.json({ error: "Invalid split amounts" }, { status: 400 });
+  }
+  // Allow ±1 rounding tolerance to handle non-divisible splits (e.g. ₹100 ÷ 3)
+  if (Math.abs(totalOwed - parsedAmount) > 1) {
     return NextResponse.json({ error: `Sum of split amounts (${totalOwed}) does not match total amount (${parsedAmount})` }, { status: 400 });
   }
 

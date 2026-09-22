@@ -34,7 +34,7 @@ export async function POST(
   });
 
   if (!trip) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Not Found" }, { status: 404 });
   }
 
   const isMember = await hasTripRole(id, "member");

@@ -246,25 +246,23 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
             </Card>
           </section>
 
-          <ExpenseList 
-            tripId={trip.id} 
-            initialExpenses={trip.expenses} 
+          <ExpenseList
+            tripId={trip.id}
+            initialExpenses={trip.expenses}
             groupMembers={trip.groupMembers.map(m => ({ userId: m.userId, name: m.user.name }))}
             currentUserId={session.user.id}
           />
         </div>
       )}
-      
-      {/* Always render ExpenseList even if itinerary is empty, as users may book flights/hotels before planning daily activities */}
+
+      {/* Render ExpenseList when there are no itinerary items, so users can log flights/hotels before planning */}
       {budgetItems.length === 0 && (
-        <div className="mt-8">
-          <ExpenseList 
-            tripId={trip.id} 
-            initialExpenses={trip.expenses} 
-            groupMembers={trip.groupMembers.map(m => ({ userId: m.userId, name: m.user.name }))}
-            currentUserId={session.user.id}
-          />
-        </div>
+        <ExpenseList
+          tripId={trip.id}
+          initialExpenses={trip.expenses}
+          groupMembers={trip.groupMembers.map(m => ({ userId: m.userId, name: m.user.name }))}
+          currentUserId={session.user.id}
+        />
       )}
     </div>
   );

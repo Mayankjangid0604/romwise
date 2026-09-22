@@ -14,6 +14,9 @@ vi.mock("@/lib/auth", () => ({
 
 vi.mock("@/lib/db", () => ({
   prisma: {
+    trip: {
+      findUnique: vi.fn().mockResolvedValue({ id: "trip1", creatorId: "other-user" }),
+    },
     groupMember: {
       delete: vi.fn().mockResolvedValue({ id: "member-id" }),
     },
@@ -64,5 +67,17 @@ describe("Group Actions Security", () => {
     );
 
     await expect(leaveGroup("trip1")).rejects.toThrow("Unauthorized");
+  });
+
+  it("should prevent trip creator from leaving their own trip", async () => {
+    // Make the authenticated user the trip creator
+    vi.mocked(prisma.trip.findUnique).mockResolvedValueOnce(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      { id: "trip1", creatorId: "user1" } as any
+    );
+
+    await expect(leaveGroup("trip1")).rejects.toThrow("Trip creator cannot leave their own trip");
+    expect(securityModule.requireTripRole).not.toHaveBeenCalled();
+    expect(prisma.groupMember.delete).not.toHaveBeenCalled();
   });
 });

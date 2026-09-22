@@ -17,6 +17,10 @@ export async function GET(
     return new NextResponse("Invalid or expired invite link.", { status: 404 });
   }
 
+  if (share.expiresAt && share.expiresAt < new Date()) {
+    return new NextResponse("This invite link has expired.", { status: 410 });
+  }
+
   const session = await auth();
   if (!session?.user?.id) {
     // Redirect to login, then back to the join route

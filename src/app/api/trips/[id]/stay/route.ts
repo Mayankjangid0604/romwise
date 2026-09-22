@@ -19,7 +19,9 @@ export async function POST(
     include: { groupMembers: true }
   });
 
-  if (!trip || !trip.groupMembers.some(m => m.userId === session.user!.id)) {
+  const isCreator = trip?.creatorId === session.user!.id;
+  const isMember = trip?.groupMembers.some(m => m.userId === session.user!.id);
+  if (!trip || (!isCreator && !isMember)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 

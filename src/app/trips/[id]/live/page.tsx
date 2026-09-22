@@ -52,7 +52,9 @@ export default function LiveTripPage() {
               <Plane className="w-5 h-5" /> {trip.destination}
             </h1>
             <p className="text-lagoon-100 text-sm">
-              {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(trip.startDate))} - {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(trip.endDate))}
+              {trip.startDate && trip.endDate
+                ? `${new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(trip.startDate))} - ${new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(trip.endDate))}`
+                : "Flexible dates"}
             </p>
           </div>
           <div className="flex items-center gap-1 text-xs bg-black/20 px-2 py-1 rounded-full">
