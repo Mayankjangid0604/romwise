@@ -148,7 +148,7 @@ export async function POST(req: Request) {
     // Ensure the trip is never left permanently stuck in "generating" state.
     if (tripId) {
       try {
-        await prisma.trip.update({ where: { id: tripId }, data: { status: "draft" } });
+        await prisma.trip.updateMany({ where: { id: tripId, status: "generating" }, data: { status: "draft" } });
       } catch (resetErr) {
         console.error("Failed to reset trip status after background job error:", resetErr);
       }
