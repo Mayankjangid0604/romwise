@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { formatTripDates } from "@/lib/date-utils";
-import { Map, MapPin, Compass, Heart, Plus, Calendar, Clock, ArrowRight } from "lucide-react";
+import { Map, MapPin, Compass, Heart, Plus, Calendar, Clock, ArrowRight, Plane, CalendarDays, Wallet } from "lucide-react";
 import {
   PageShell,
   Card,
@@ -23,6 +23,10 @@ export default async function DashboardPage() {
     prisma.trip.findMany({
       where: { creatorId: session.user.id },
       orderBy: { createdAt: "desc" },
+      include: {
+        itineraryDays: { select: { id: true } },
+        groupMembers: { select: { id: true } },
+      },
     }),
     prisma.recentActivity.findMany({
       where: { userId: session.user.id, type: "VIEW_TRIP", tripId: { not: null } },
@@ -54,9 +58,14 @@ export default async function DashboardPage() {
   const upcomingTrip = futureTrips.length > 0 ? futureTrips[0] : null;
   const otherTrips = trips.filter(t => t.id !== upcomingTrip?.id);
 
+  // Stats
+  const totalItineraryDays = trips.reduce((s, t) => s + t.itineraryDays.length, 0);
+  const totalBudget = trips.reduce((s, t) => s + t.budgetInr, 0);
+  const totalMembers = trips.reduce((s, t) => s + t.groupMembers.length, 0);
+
   return (
-    <PageShell>
-      <div className="py-6 space-y-10">
+    <PageShell width="default" className="max-w-7xl">
+      <div className="py-6 space-y-10 animate-fade-up">
         
         {/* Top Section: Welcome & Quick Actions */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -79,6 +88,30 @@ export default async function DashboardPage() {
             </Link>
           </div>
         </div>
+
+        {/* Stats Row */}
+        {trips.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: "Total Trips", value: trips.length.toString(), icon: Plane, color: "bg-lagoon-50 text-lagoon-600" },
+              { label: "Upcoming", value: futureTrips.length.toString(), icon: Calendar, color: "bg-ember-50 text-ember-600" },
+              { label: "Itinerary Days", value: totalItineraryDays.toString(), icon: CalendarDays, color: "bg-success-50 text-success-600" },
+              { label: "Total Budget", value: `₹${(totalBudget / 1000).toFixed(0)}k`, icon: Wallet, color: "bg-caution-50 text-caution-600" },
+            ].map(({ label, value, icon: Icon, color }) => (
+              <Card key={label} className="p-4 bg-white">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-ink-900 tabular">{value}</p>
+                    <p className="text-xs text-ink-500 font-medium">{label}</p>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {/* Hero Section: Upcoming Trip */}
         {upcomingTrip ? (

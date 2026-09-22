@@ -255,3 +255,30 @@ export async function updateAccessibilityNotes(tripId: string, notes: string): P
     return { error: "Failed to update accessibility notes" };
   }
 }
+
+export async function deleteTrip(tripId: string): Promise<{ error?: string }> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: "You must be logged in" };
+  }
+
+  const trip = await prisma.trip.findUnique({
+    where: { id: tripId },
+    select: { creatorId: true },
+  });
+
+  if (!trip) {
+    return { error: "Trip not found" };
+  }
+
+  if (trip.creatorId !== session.user.id) {
+    return { error: "Only the trip creator can delete this trip" };
+  }
+
+  try {
+    await prisma.trip.delete({ where: { id: tripId } });
+    return {};
+  } catch {
+    return { error: "Failed to delete trip" };
+  }
+}

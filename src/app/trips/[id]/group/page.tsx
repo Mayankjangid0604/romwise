@@ -51,7 +51,7 @@ export default async function GroupPage(props: { params: Promise<{ id: string }>
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold">Group & Collaboration</h1>
-        <p className="text-muted-foreground mt-1">Manage who can view and edit this trip.</p>
+        <p className="text-ink-500 mt-1">Manage who can view and edit this trip.</p>
       </div>
 
       <GroupDashboard
