@@ -212,7 +212,7 @@ function ConversationalPlanner() {
     <PageShell width="form">
       <PageHeader backHref="/dashboard" backLabel="Dashboard" title="Plan Your Next Adventure" />
 
-      <Card className="flex flex-col h-[650px] shadow-lift overflow-hidden border-ink-200">
+      <Card className="flex flex-col h-[calc(100svh-160px)] min-h-[400px] max-h-[650px] shadow-lift overflow-hidden border-ink-200">
         {error && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-4 shrink-0">
             <Alert tone="danger">{error}</Alert>

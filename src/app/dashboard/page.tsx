@@ -70,7 +70,7 @@ export default async function DashboardPage() {
         {/* Top Section: Welcome & Quick Actions */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-display font-bold text-ink-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-ink-900 tracking-tight">
               Welcome back, {session.user.name?.split(' ')[0] || 'Traveler'}
             </h1>
             <p className="text-ink-600 mt-2 text-lg">
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
                     </div>
                   </div>
                   
-                  <div className="flex flex-col gap-4 min-w-[200px] shrink-0 bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/10">
+                  <div className="flex flex-col gap-4 w-full md:min-w-[200px] md:w-auto shrink-0 bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/10">
                     <div className="flex items-center gap-3 text-white">
                       <Calendar className="w-5 h-5 text-lagoon-300" />
                       <div className="text-sm">
