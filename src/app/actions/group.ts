@@ -22,12 +22,14 @@ export async function removeGroupMember(tripId: string, userIdToRemove: string) 
 }
 
 export async function leaveGroup(tripId: string) {
-  // A member can remove themselves, so we check if the authenticated user is the one leaving
-  // And require at least member role
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
-  
-  await requireTripRole(tripId, "viewer"); // At least viewer to leave
+
+  const trip = await prisma.trip.findUnique({ where: { id: tripId } });
+  if (!trip) throw new Error("Trip not found");
+  if (trip.creatorId === session.user.id) throw new Error("Trip creator cannot leave their own trip");
+
+  await requireTripRole(tripId, "viewer");
 
   await prisma.groupMember.delete({
     where: {

@@ -43,6 +43,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const otp = await prisma.otpCode.findUnique({ where: { id: otpId } });
         if (!otp || otp.phone !== phone || !otp.verified) return null;
+        if (otp.expiresAt && otp.expiresAt < new Date()) return null;
 
         const user = await prisma.user.findUnique({ where: { phone } });
         if (!user) return null;

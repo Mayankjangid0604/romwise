@@ -24,8 +24,9 @@ export async function GET(
       return new NextResponse("Not Found", { status: 404 });
     }
 
+    const isCreator = trip.creatorId === session?.user?.id;
     const isMember = trip.groupMembers.some((m) => m.userId === session?.user?.id);
-    if (!isMember) {
+    if (!isCreator && !isMember) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 

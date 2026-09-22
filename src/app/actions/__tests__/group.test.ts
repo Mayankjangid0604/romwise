@@ -14,6 +14,9 @@ vi.mock("@/lib/auth", () => ({
 
 vi.mock("@/lib/db", () => ({
   prisma: {
+    trip: {
+      findUnique: vi.fn().mockResolvedValue({ id: "trip1", creatorId: "other-user" }),
+    },
     groupMember: {
       delete: vi.fn().mockResolvedValue({ id: "member-id" }),
     },

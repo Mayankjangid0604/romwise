@@ -54,7 +54,8 @@ export async function POST(
   }
 
   const parsedAmount = parseInt(amountInr, 10);
-  if (totalOwed !== parsedAmount) {
+  // Allow ±1 rounding tolerance to handle non-divisible splits (e.g. ₹100 ÷ 3)
+  if (Math.abs(totalOwed - parsedAmount) > 1) {
     return NextResponse.json({ error: `Sum of split amounts (${totalOwed}) does not match total amount (${parsedAmount})` }, { status: 400 });
   }
 

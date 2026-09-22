@@ -208,6 +208,7 @@ model GroupMember {
   travelerPreferences TravelerPreference[]
 
   @@unique([userId, tripId])
+  @@index([userId])
 }
 
 model TravelerPreference {

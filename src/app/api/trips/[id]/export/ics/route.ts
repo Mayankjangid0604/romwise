@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 
+function escapeICS(value: string): string {
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\r\n|\r|\n/g, "\\n");
+}
+
 function formatICSDate(date: Date, timeStr: string) {
   // timeStr is like "09:00"
   const [hours, minutes] = timeStr.split(":");
@@ -35,7 +43,9 @@ export async function GET(
     },
   });
 
-  if (!trip || !trip.groupMembers.some((m) => m.userId === session.user!.id)) {
+  const isCreator = trip?.creatorId === session.user!.id;
+  const isMember = trip?.groupMembers.some((m) => m.userId === session.user!.id);
+  if (!trip || (!isCreator && !isMember)) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
@@ -59,13 +69,13 @@ export async function GET(
         `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"}`,
         `DTSTART:${dtStart}`,
         `DTEND:${dtEnd}`,
-        `SUMMARY:${item.title || item.place?.name}`,
-        `DESCRIPTION:${item.description || item.place?.description || ""}`
+        `SUMMARY:${escapeICS(item.title || item.place?.name || "")}`,
+        `DESCRIPTION:${escapeICS(item.description || item.place?.description || "")}`
       );
       if (item.place?.address) {
-        icsContent.push(`LOCATION:${item.place.address}`);
+        icsContent.push(`LOCATION:${escapeICS(item.place.address)}`);
       } else if (item.place?.area) {
-        icsContent.push(`LOCATION:${item.place.area}`);
+        icsContent.push(`LOCATION:${escapeICS(item.place.area)}`);
       }
       icsContent.push("END:VEVENT");
     }

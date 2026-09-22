@@ -71,11 +71,11 @@ export function createOfflineTripSnapshot(trip: any, userId: string): OfflineTri
       id: day.id,
       dayNumber: day.dayNumber,
       date: day.date,
-      activities: (day.activities || []).map((act: any) => ({
+      activities: (day.items || day.activities || []).map((act: any) => ({
         id: act.id,
         title: act.title,
         startTime: act.startTime,
-        location: act.location,
+        location: act.place?.address || act.location || null,
         notes: act.notes,
       })),
     })),
