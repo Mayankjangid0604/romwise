@@ -75,7 +75,7 @@ export function createOfflineTripSnapshot(trip: any, userId: string): OfflineTri
         id: act.id,
         title: act.title,
         startTime: act.startTime,
-        location: act.place?.address || act.place?.area || null,
+        location: act.place?.address || act.place?.area || act.location || null,
         notes: act.notes,
       })),
     })),
@@ -113,4 +113,3 @@ export async function getOfflineTrips(userId: string): Promise<OfflineTripSnapsh
   const trips = await db.getAll('trips');
   return trips.filter(t => t.ownerUserId === userId);
 }
-
