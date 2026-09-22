@@ -10,6 +10,7 @@ import {
 export const maxDuration = 60; // Allow up to 60s for Vercel Pro
 
 export async function POST(req: Request) {
+  let tripId: string | undefined;
   try {
     const authHeader = req.headers.get("authorization");
     const secret = process.env.INTERNAL_JOB_SECRET;
@@ -21,14 +22,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { tripId, userId } = await req.json();
+    const body = await req.json();
+    tripId = body.tripId;
+    const userId: string | undefined = body.userId;
 
     if (!tripId || !userId) {
       return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
     }
 
+    // Narrow types after validation
+    const validTripId: string = tripId;
+    const validUserId: string = userId;
+
     const trip = await prisma.trip.findUnique({
-      where: { id: tripId },
+      where: { id: validTripId },
       include: {
         groupMembers: {
           include: { travelerPreferences: true },
@@ -91,18 +98,18 @@ export async function POST(req: Request) {
     } catch (err) {
       console.error("Trip Brain error:", err);
       // Revert status to draft on error
-      await prisma.trip.update({ where: { id: tripId }, data: { status: "draft" } });
+      await prisma.trip.update({ where: { id: validTripId }, data: { status: "draft" } });
       return NextResponse.json({ error: "Generation failed" }, { status: 500 });
     }
 
-    await prisma.itineraryDay.deleteMany({ where: { tripId } });
+    await prisma.itineraryDay.deleteMany({ where: { tripId: validTripId } });
 
     for (const day of result.days) {
       await prisma.itineraryDay.create({
         data: {
           dayNumber: day.dayNumber,
           date: day.date,
-          tripId,
+          tripId: validTripId,
           items: {
             create: day.items.map((item) => ({
               title: item.title,
@@ -122,7 +129,7 @@ export async function POST(req: Request) {
     }
 
     await prisma.trip.update({
-      where: { id: tripId },
+      where: { id: validTripId },
       data: {
         status: "planning",
         destinationId: result.resolvedDestination.id,
@@ -131,13 +138,21 @@ export async function POST(req: Request) {
 
     // Consume entitlement credit
     await prisma.user.update({
-      where: { id: userId },
+      where: { id: validUserId },
       data: { tripGenerations: { increment: 1 } },
     });
 
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Background job error:", err);
+    // Ensure the trip is never left permanently stuck in "generating" state.
+    if (tripId) {
+      try {
+        await prisma.trip.updateMany({ where: { id: tripId, status: "generating" }, data: { status: "draft" } });
+      } catch (resetErr) {
+        console.error("Failed to reset trip status after background job error:", resetErr);
+      }
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
