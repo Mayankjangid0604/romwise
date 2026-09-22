@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { RecentTracker } from "@/components/ui/recent-tracker";
-import { Plane, Train, Car, Calendar, ArrowRight, Bed, MapPin, ArrowLeft, ArrowUpRight, FileText } from "lucide-react";
+import { TripProgress } from "@/components/ui/trip-progress";
+import { DeleteTripButton } from "./delete-trip-button";
+import { Plane, Train, Car, Calendar, ArrowRight, Bed, MapPin, ArrowUpRight, FileText, Share2, Users } from "lucide-react";
 import { AddTransitButton, AddStayButton } from "@/components/ui/logistics-buttons";
 import { OfflineSaveButton } from "@/components/ui/offline-save-button";
 import {
@@ -27,6 +29,7 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
       groupMembers: { include: { user: true } },
       travelSegments: true,
       tripAccommodations: true,
+      packingItems: { select: { id: true }, take: 1 },
       itineraryDays: {
         include: {
           items: true,
@@ -42,6 +45,8 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
   );
   if (!isMember) redirect("/dashboard");
 
+  const isCreator = trip.creatorId === session.user!.id;
+
   const totalCost = trip.itineraryDays.reduce(
     (sum, day) =>
       sum + day.items.reduce((daySum, item) => daySum + (item.estimatedCostInr ?? 0), 0),
@@ -53,7 +58,7 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
   const destinationImage = await imageProvider.searchDestinationImage(trip.destination);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+    <div className="space-y-8 animate-fade-up">
       <RecentTracker type="VIEW_TRIP" tripId={trip.id} />
       
       {/* Destination Hero */}
@@ -65,7 +70,7 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
-          <div className="absolute inset-0 bg-lagoon-900 bg-[url('/globe-pattern.svg')] opacity-20 bg-repeat bg-center" />
+          <div className="absolute inset-0 bg-gradient-to-br from-lagoon-800 to-lagoon-950" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
         
@@ -87,8 +92,11 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
                 target="_blank"
                 className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
               >
-                <FileText className="w-4 h-4" /> Download PDF
+                <FileText className="w-4 h-4" /> PDF
               </Link>
+              {isCreator && (
+                <DeleteTripButton tripId={trip.id} tripTitle={trip.title} />
+              )}
             </div>
           </div>
           
@@ -112,7 +120,7 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Status / Quick Summary */}
         <Card className="p-6 bg-lagoon-50/50 border-lagoon-100 flex flex-col justify-between">
@@ -171,6 +179,49 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             <Link href={`/trips/${trip.id}/itinerary`} className={buttonStyles({ className: "w-full shadow-sm shadow-ink-200" })}>
               {hasItinerary ? "View Full Itinerary" : "Generate Itinerary"}
             </Link>
+          </div>
+        </Card>
+
+        {/* Trip Progress */}
+        <Card className="p-6 bg-white flex flex-col justify-between">
+          <div>
+            <h2 className="text-sm font-semibold text-ink-500 uppercase tracking-wider mb-4">Trip Readiness</h2>
+            <TripProgress
+              hasItinerary={hasItinerary}
+              hasPacking={trip.packingItems.length > 0}
+              hasBudget={trip.budgetInr > 0}
+              hasGroup={trip.groupMembers.length > 1}
+              hasTransit={trip.travelSegments.length > 0}
+              hasStay={trip.tripAccommodations.length > 0}
+            />
+          </div>
+          {/* Group avatars */}
+          <div className="mt-6 pt-6 border-t border-ink-100">
+            <div className="flex items-center justify-between">
+              <div className="flex -space-x-2">
+                {trip.groupMembers.slice(0, 5).map((m) => (
+                  <div
+                    key={m.id}
+                    className="w-8 h-8 rounded-full bg-lagoon-100 border-2 border-white flex items-center justify-center text-xs font-semibold text-lagoon-700"
+                    title={m.user.name}
+                  >
+                    {m.user.name?.charAt(0)?.toUpperCase() || "?"}
+                  </div>
+                ))}
+                {trip.groupMembers.length > 5 && (
+                  <div className="w-8 h-8 rounded-full bg-ink-200 border-2 border-white flex items-center justify-center text-xs font-semibold text-ink-600">
+                    +{trip.groupMembers.length - 5}
+                  </div>
+                )}
+              </div>
+              <Link
+                href={`/trips/${trip.id}/group`}
+                className="flex items-center gap-1 text-xs font-medium text-lagoon-600 hover:text-lagoon-700"
+              >
+                <Users className="w-3.5 h-3.5" />
+                Manage
+              </Link>
+            </div>
           </div>
         </Card>
       </div>

@@ -7,6 +7,14 @@ import { createTripFromTemplate } from "@/app/actions/template-actions";
 import { Button, Input, Card } from "@/components/ui";
 import { Loader2 } from "lucide-react";
 
+const templateEmoji: Record<string, string> = {
+  "weekend-getaway": "⚡",
+  "honeymoon": "💕",
+  "family-vacation": "👨‍👩‍👧‍👦",
+  "solo-adventure": "🎒",
+  "backpacking": "🏕️",
+};
+
 export function TemplateCard({ template }: { template: TripTemplate }) {
   const [isExpanding, setIsExpanding] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,25 +27,24 @@ export function TemplateCard({ template }: { template: TripTemplate }) {
     const destination = formData.get("destination") as string;
     const startDate = formData.get("startDate") as string;
     
-    console.log("Submitting template:", template.id, destination, startDate);
     try {
       const result = await createTripFromTemplate(template.id, destination, startDate);
-      console.log("Template trip created:", result);
       router.push(`/trips/${result.tripId}`);
-    } catch (err) {
-      console.error("Error creating from template:", err);
+    } catch {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <Card className="flex flex-col h-full hover:shadow-lg transition-shadow bg-white">
+    <Card className="flex flex-col h-full hover:shadow-lift transition-all hover:-translate-y-0.5 bg-white">
       <div className="p-5 flex-1">
+        <div className="text-2xl mb-2">{templateEmoji[template.id] || "✈️"}</div>
         <h3 className="font-display font-semibold text-lg text-ink-900 mb-1">{template.title}</h3>
         <p className="text-sm text-ink-600 mb-4">{template.description}</p>
         <div className="flex flex-wrap gap-2 mb-4">
-          <span className="text-xs bg-ink-100 text-ink-700 px-2 py-1 rounded-md">{template.durationDays} days</span>
-          <span className="text-xs bg-ink-100 text-ink-700 px-2 py-1 rounded-md capitalize">{template.paceLevel} pace</span>
+          <span className="text-xs bg-ink-100 text-ink-700 px-2 py-1 rounded-md font-medium">{template.durationDays} days</span>
+          <span className="text-xs bg-ink-100 text-ink-700 px-2 py-1 rounded-md capitalize font-medium">{template.paceLevel} pace</span>
+          <span className="text-xs bg-lagoon-50 text-lagoon-700 px-2 py-1 rounded-md font-medium">₹{(template.budgetInr / 1000).toFixed(0)}k</span>
         </div>
         
         {!isExpanding ? (
@@ -74,7 +81,7 @@ export function TemplateCard({ template }: { template: TripTemplate }) {
               <Button type="button" variant="ghost" className="flex-1" onClick={() => setIsExpanding(false)}>
                 Cancel
               </Button>
-              <Button type="submit" data-testid={`submit-${template.id}`} className="flex-1 bg-lagoon-600 hover:bg-lagoon-700 text-white" disabled={isSubmitting}>
+              <Button type="submit" data-testid={`submit-${template.id}`} className="flex-1" disabled={isSubmitting}>
                 {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Create"}
               </Button>
             </div>
