@@ -29,8 +29,9 @@ export default async function PrintTripPage(props: { params: Promise<{ id: strin
 
   if (!trip) redirect("/dashboard");
 
+  const isCreator = trip.creatorId === session.user!.id;
   const isMember = trip.groupMembers.some((m) => m.userId === session.user!.id);
-  if (!isMember) redirect("/dashboard");
+  if (!isCreator && !isMember) redirect("/dashboard");
 
   const destinationImage = await imageProvider.searchDestinationImage(trip.destination);
 

@@ -75,7 +75,7 @@ export function createOfflineTripSnapshot(trip: any, userId: string): OfflineTri
         id: act.id,
         title: act.title,
         startTime: act.startTime,
-        location: act.place?.address || act.location || null,
+        location: act.place?.address || act.place?.area || null,
         notes: act.notes,
       })),
     })),

@@ -29,7 +29,7 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
       tripAccommodations: true,
       itineraryDays: {
         include: {
-          items: true,
+          items: { include: { place: true } },
         }
       }
     },
