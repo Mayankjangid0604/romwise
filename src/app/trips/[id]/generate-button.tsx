@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { generateTripItinerary } from "@/app/actions/itinerary";
 import { Button, Alert } from "@/components/ui";
 
-// UX-002: Generation progress stages shown during the ~10–20s Gemini call
 const PROGRESS_STAGES = [
   { label: "Resolving destination…", durationMs: 800 },
   { label: "Finding candidate places for your trip…", durationMs: 2500 },
@@ -19,7 +18,6 @@ function useProgressStages(active: boolean) {
 
   useEffect(() => {
     if (!active) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStageIndex(0);
       return;
     }
@@ -45,36 +43,50 @@ function useProgressStages(active: boolean) {
 }
 
 export function GenerateButton({ tripId }: { tripId: string }) {
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
+  const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fallbackNotice, setFallbackNotice] = useState<boolean>(false);
   const [season, setSeason] = useState<string | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const stageLabel = useProgressStages(pending);
+  // Clean up polling interval on unmount
+  useEffect(() => {
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
+
+  const stageLabel = useProgressStages(isGenerating);
 
   function handleGenerate() {
+    if (isGenerating) return; // prevent double-click
     setError(null);
     setFallbackNotice(false);
     setSeason(null);
+    setIsGenerating(true);
+
     startTransition(async () => {
       const result = await generateTripItinerary(tripId);
       if (!result.success) {
+        setIsGenerating(false);
         setError(result.error);
         return;
       }
 
-      // Start polling
-      const pollInterval = setInterval(async () => {
+      // Poll for status until the background job completes
+      pollRef.current = setInterval(async () => {
         try {
           const res = await fetch(`/api/trips/${tripId}/status`);
           const data = await res.json();
-          
+
           if (data.status === "planning") {
-            clearInterval(pollInterval);
-            window.location.reload(); // Reload to show the itinerary
+            if (pollRef.current) clearInterval(pollRef.current);
+            window.location.reload();
           } else if (data.status === "draft") {
-            clearInterval(pollInterval);
-            setError("Generation failed. Please try again.");
+            if (pollRef.current) clearInterval(pollRef.current);
+            setIsGenerating(false);
+            setError("We couldn't generate this itinerary right now. Your trip details are saved — please try again.");
           }
         } catch (err) {
           console.error("Failed to poll status:", err);
@@ -97,16 +109,15 @@ export function GenerateButton({ tripId }: { tripId: string }) {
         </Alert>
       )}
 
-      {/* Season contextual hint */}
-      {season && !pending && (
+      {season && !isGenerating && (
         <p className="text-xs text-muted-foreground">
           Itinerary optimised for{" "}
           <span className="font-medium capitalize">{season.replace("_", "-")}</span> travel.
         </p>
       )}
 
-      <Button onClick={handleGenerate} disabled={pending}>
-        {pending ? (
+      <Button onClick={handleGenerate} disabled={isGenerating}>
+        {isGenerating ? (
           <span className="flex items-center gap-2">
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
             <span>{stageLabel}</span>
