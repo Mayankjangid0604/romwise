@@ -105,6 +105,19 @@ export async function resolveDestination(
     }
   }
 
+  // 4. Compound destination: split on "&", "and", "/" and try each segment
+  const compoundParts = normalized
+    .split(/\s*[&\/]\s*|\s+and\s+/i)
+    .map(p => p.replace(/,?\s*(india|bharat)$/i, '').trim())
+    .filter(Boolean);
+
+  if (compoundParts.length > 1) {
+    for (const part of compoundParts) {
+      const sub = await resolveDestination(part, allowFuzzy);
+      if (sub) return sub;
+    }
+  }
+
   return null;
 }
 

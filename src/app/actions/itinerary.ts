@@ -40,6 +40,10 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
     return { success: false, error: "Not a member of this trip", errorType: "auth" };
   }
 
+  if (trip.status === "generating") {
+    return { success: false, error: "Generation is already in progress.", errorType: "unknown" };
+  }
+
   // Check entitlement BEFORE attempting generation — but only consume credit on success
   const entitlement = await checkGenerationEntitlement(session.user.id);
   if (!entitlement.canGenerate) {
@@ -66,27 +70,104 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
     }
   });
 
-  // Generation is starting - update status and fire background job
+  // Generation is starting - update status
   await prisma.trip.update({
     where: { id: tripId },
     data: { status: "generating" },
   });
 
-  const baseUrl = process.env.APP_URL || (process.env.NODE_ENV !== "production" ? "http://localhost:3000" : "");
-  if (!baseUrl) {
-    throw new Error("APP_URL must be defined in production.");
-  }
-  
-  // Fire and forget background job
-  after(() => {
-    fetch(`${baseUrl}/api/jobs/generate-itinerary`, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.INTERNAL_JOB_SECRET}`
-      },
-      body: JSON.stringify({ tripId, userId: session.user?.id }),
-    }).catch((err) => console.error("Failed to start background job:", err));
+  const userId = session.user.id;
+
+  // Run generation in background via after() — inline, no fetch needed
+  after(async () => {
+    try {
+      const creatorMember = trip.groupMembers.find((m) => m.role === "creator");
+
+      // Parse waypoints JSON stored in DB
+      let parsedWaypoints: string[] | undefined;
+      if (trip.waypoints) {
+        try {
+          const parsed = JSON.parse(trip.waypoints);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            parsedWaypoints = parsed.filter((w): w is string => typeof w === "string");
+          }
+        } catch {
+          // ignore malformed waypoints
+        }
+      }
+
+      const result = await generateGroundedItinerary({
+        destination: trip.destination,
+        waypoints: parsedWaypoints,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        dateStatus: trip.dateStatus,
+        tripType: trip.tripType || "MULTI_DAY",
+        timeStatus: trip.timeStatus || "UNKNOWN",
+        startTime: trip.startTime || null,
+        endTime: trip.endTime || null,
+        budgetInr: trip.budgetInr,
+        maxTravelers: trip.maxTravelers,
+        paceLevel: (trip.paceLevel as "easy" | "balanced" | "full") || "balanced",
+        allPreferences,
+        accessibilityNotes: creatorMember?.accessibilityNotes || undefined,
+      });
+
+      // Save itinerary to DB
+      await prisma.itineraryDay.deleteMany({ where: { tripId } });
+
+      for (const day of result.days) {
+        await prisma.itineraryDay.create({
+          data: {
+            dayNumber: day.dayNumber,
+            date: day.date,
+            tripId,
+            items: {
+              create: day.items.map((item) => ({
+                title: item.title,
+                description: item.description,
+                category: item.category,
+                startTime: item.startTime,
+                endTime: item.endTime,
+                estimatedCostInr: item.estimatedCostInr,
+                costSource: item.costSource,
+                reasoning: item.reasoning,
+                order: item.order,
+                placeId: item.placeId ?? null,
+              })),
+            },
+          },
+        });
+      }
+
+      // Mark trip as planning and link destination
+      await prisma.trip.update({
+        where: { id: tripId },
+        data: {
+          status: "planning",
+          destinationId: result.resolvedDestination.id,
+        },
+      });
+
+      // Consume entitlement credit
+      await prisma.user.update({
+        where: { id: userId },
+        data: { tripGenerations: { increment: 1 } },
+      });
+
+      console.log(`[Itinerary] Generation completed for trip ${tripId}`);
+    } catch (err) {
+      console.error(`[Itinerary] Generation failed for trip ${tripId}:`, err);
+      // Always reset trip status so it doesn't get stuck on "generating"
+      try {
+        await prisma.trip.update({
+          where: { id: tripId },
+          data: { status: "draft" },
+        });
+      } catch (resetErr) {
+        console.error("[Itinerary] Failed to reset trip status:", resetErr);
+      }
+    }
   });
 
   revalidatePath(`/trips/${tripId}`);

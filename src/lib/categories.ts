@@ -19,7 +19,12 @@ export const PLACE_CATEGORIES = [
   "spiritual",
   "family",
   "local_experience",
+  "stay",
+  "transport",
 ] as const;
+
+/** Categories excluded from itinerary scheduling — they exist in the catalogue only. */
+export const NON_ITINERARY_CATEGORIES: readonly PlaceCategory[] = ["stay", "transport"];
 
 export type PlaceCategory = (typeof PLACE_CATEGORIES)[number];
 

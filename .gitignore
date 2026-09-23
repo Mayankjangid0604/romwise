@@ -62,3 +62,13 @@ node_modules/
 /playwright/.auth/
 test-results/
 playwright-report/
+
+# Data import files
+data-import/raw/
+data-import/processed/
+*.osm.pbf
+*.osm
+cities500.txt
+alternateNames.txt
+IN.txt
+

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect, useRef } from "react";
+import { useState, useTransition, useEffect, useRef, useCallback } from "react";
 import { generateTripItinerary } from "@/app/actions/itinerary";
 import { Button, Alert } from "@/components/ui";
 
@@ -18,8 +18,8 @@ function useProgressStages(active: boolean) {
 
   useEffect(() => {
     if (!active) {
-      setStageIndex(0);
-      return;
+      const t = setTimeout(() => setStageIndex(0), 0);
+      return () => clearTimeout(t);
     }
 
     let idx = 0;
@@ -42,9 +42,9 @@ function useProgressStages(active: boolean) {
   return PROGRESS_STAGES[stageIndex].label;
 }
 
-export function GenerateButton({ tripId }: { tripId: string }) {
+export function GenerateButton({ tripId, initialStatus }: { tripId: string, initialStatus?: string }) {
   const [, startTransition] = useTransition();
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(initialStatus === "generating");
   const [error, setError] = useState<string | null>(null);
   const [fallbackNotice, setFallbackNotice] = useState<boolean>(false);
   const [season, setSeason] = useState<string | null>(null);
@@ -56,6 +56,34 @@ export function GenerateButton({ tripId }: { tripId: string }) {
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, []);
+
+  const startPolling = useCallback(() => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    pollRef.current = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/trips/${tripId}/status`);
+        const data = await res.json();
+
+        if (data.status === "planning") {
+          if (pollRef.current) clearInterval(pollRef.current);
+          window.location.reload();
+        } else if (data.status === "draft") {
+          if (pollRef.current) clearInterval(pollRef.current);
+          setIsGenerating(false);
+          setError("We couldn't generate this itinerary right now. Your trip details are saved — please try again.");
+        }
+      } catch (err) {
+        console.error("Failed to poll status:", err);
+      }
+    }, 2000);
+  }, [tripId]);
+
+  // Auto-start polling if we mounted in generating state
+  useEffect(() => {
+    if (initialStatus === "generating") {
+      startPolling();
+    }
+  }, [initialStatus, startPolling]);
 
   const stageLabel = useProgressStages(isGenerating);
 
@@ -75,23 +103,7 @@ export function GenerateButton({ tripId }: { tripId: string }) {
       }
 
       // Poll for status until the background job completes
-      pollRef.current = setInterval(async () => {
-        try {
-          const res = await fetch(`/api/trips/${tripId}/status`);
-          const data = await res.json();
-
-          if (data.status === "planning") {
-            if (pollRef.current) clearInterval(pollRef.current);
-            window.location.reload();
-          } else if (data.status === "draft") {
-            if (pollRef.current) clearInterval(pollRef.current);
-            setIsGenerating(false);
-            setError("We couldn't generate this itinerary right now. Your trip details are saved — please try again.");
-          }
-        } catch (err) {
-          console.error("Failed to poll status:", err);
-        }
-      }, 2000);
+      startPolling();
     });
   }
 

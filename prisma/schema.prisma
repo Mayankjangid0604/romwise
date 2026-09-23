@@ -137,11 +137,20 @@ model Place {
   sourceName         String?
   sourceRecordId     String?
   sourceUrl          String?
+  // OSM-specific fields
+  osmRawHours        String?           // Preserve complex OSM opening_hours strings
+  cuisine            String?           // For restaurants/cafes
+  phone              String?
+  website            String?
+  stars              Int?              // Hotel star rating
+  placeType          String?           // Sub-type: hotel, hostel, guest_house, restaurant, cafe, etc.
+  wheelchair         String?           // OSM wheelchair tag: yes/no/limited
   FavoritePlace      FavoritePlace[]
   images             Image[]
   itineraryItems     ItineraryItem[]
   destination        TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 
+  @@unique([sourceType, sourceRecordId], name: "source_identity")
   @@index([destinationId])
   @@index([category])
   @@index([dataStatus])
@@ -464,4 +473,20 @@ model Vote {
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([itineraryItemId, userId])
+}
+
+model ImportBatch {
+  id            String   @id @default(cuid())
+  source        String
+  sourceFile    String?
+  sourceDate    String?
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+  status        String   @default("running")
+  scanned       Int      @default(0)
+  inserted      Int      @default(0)
+  updated       Int      @default(0)
+  skipped       Int      @default(0)
+  failed        Int      @default(0)
+  notes         String?
 }

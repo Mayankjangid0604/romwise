@@ -38,8 +38,6 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
 
   const totalActivities = trip.itineraryDays.reduce((sum, d) => sum + d.items.length, 0);
 
-  const totalActivities = trip.itineraryDays.reduce((sum, d) => sum + d.items.length, 0);
-
   return (
     <div className="space-y-8 pb-20 animate-fade-up">
       {trip.itineraryDays.length === 0 ? (
@@ -54,7 +52,7 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
             Let Roamwise AI create a personalized, budget-aware day-by-day plan 
             based on your destination, preferences, and group size.
           </p>
-          <GenerateButton tripId={id} />
+          <GenerateButton tripId={id} initialStatus={trip.status} />
         </div>
       ) : (
         <>
@@ -70,7 +68,7 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <GenerateButton tripId={id} />
+              <GenerateButton tripId={id} initialStatus={trip.status} />
             </div>
           </Card>
 
