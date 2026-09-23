@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { rankHotels } from "@/lib/stay";
+import { getRankedStays } from "@/lib/stay";
 import { getTripDuration } from "@/lib/date-utils";
 import { computeBudgetSummary, type BudgetItem } from "@/lib/budget";
 import { HotelSelectButton, HotelRemoveButton } from "./stay-actions";
@@ -61,13 +61,13 @@ export default async function StayPage(props: {
     : undefined;
 
   const stopCoordinates = center ? [center] : [];
-
-  const ranked = rankHotels({
+  
+  const ranked = trip.destinationId ? await getRankedStays(trip.destinationId, {
     nights,
     remainingBudgetInr: remainingAfterActivities,
     centerCoordinate: center,
     stopCoordinates,
-  });
+  }) : [];
 
   return (
     <PageShell>
@@ -93,14 +93,20 @@ export default async function StayPage(props: {
               <p className="font-display text-xl font-semibold text-ink-900 mt-1">
                 {trip.tripAccommodations[0].name}
               </p>
-              <p className="text-[0.8125rem] text-ink-600 mt-1">
-                <Figure>{formatInr(trip.tripAccommodations[0].costPerNightInr ?? 0)}</Figure>
-                /night &times; <Figure>{trip.tripAccommodations[0].nights ?? 0}</Figure>{" "}
-                nights ={" "}
-                <Figure className="font-medium text-ink-800">
-                  {formatInr(trip.tripAccommodations[0].totalCostInr ?? 0)}
-                </Figure>
-              </p>
+              {trip.tripAccommodations[0].costPerNightInr !== null ? (
+                <p className="text-[0.8125rem] text-ink-600 mt-1">
+                  <Figure>{formatInr(trip.tripAccommodations[0].costPerNightInr)}</Figure>
+                  /night &times; <Figure>{trip.tripAccommodations[0].nights ?? 0}</Figure>{" "}
+                  nights ={" "}
+                  <Figure className="font-medium text-ink-800">
+                    {formatInr(trip.tripAccommodations[0].totalCostInr ?? 0)}
+                  </Figure>
+                </p>
+              ) : (
+                <p className="text-[0.8125rem] text-ink-600 mt-1">
+                  Price unavailable
+                </p>
+              )}
             </div>
             <HotelRemoveButton tripId={id} />
           </div>
@@ -133,14 +139,18 @@ export default async function StayPage(props: {
                   </div>
 
                   <p className="text-[0.875rem] text-ink-600 mt-1.5">
-                    <Figure className="font-medium text-ink-800">
-                      {formatInr(hotel.costPerNightInr)}
-                    </Figure>
-                    /night
-                    <span className="mx-1.5 text-ink-300">&middot;</span>
-                    <Figure>{formatInr(hotel.totalCostInr)}</Figure> total
-                    <span className="mx-1.5 text-ink-300">&middot;</span>
-                    Rating <Figure>{hotel.rating}/5</Figure>
+                    {hotel.costPerNightInr !== null ? (
+                      <>
+                        <Figure className="font-medium text-ink-800">
+                          {formatInr(hotel.costPerNightInr)}
+                        </Figure>
+                        /night
+                        <span className="mx-1.5 text-ink-300">&middot;</span>
+                        <Figure>{formatInr(hotel.totalCostInr ?? 0)}</Figure> total
+                      </>
+                    ) : (
+                      <span className="text-ink-500">Price unavailable</span>
+                    )}
                   </p>
 
                   <p className="text-[0.75rem] text-ink-400 mt-1">
@@ -152,13 +162,6 @@ export default async function StayPage(props: {
                     Distance <Figure>{hotel.distanceScore}</Figure>
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5 mt-3">
-                    {hotel.amenities.map((a) => (
-                      <Badge key={a} tone="neutral">
-                        {a}
-                      </Badge>
-                    ))}
-                  </div>
                 </div>
 
                 <div className="shrink-0">
@@ -169,7 +172,7 @@ export default async function StayPage(props: {
                   ) : (
                     <HotelSelectButton
                       tripId={id}
-                      hotelName={hotel.name}
+                      placeId={hotel.id}
                     />
                   )}
                 </div>

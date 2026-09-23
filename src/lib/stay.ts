@@ -1,16 +1,16 @@
 import { haversineKm } from "./route-optimizer";
+import { prisma } from "./db";
 
-export type SampleHotel = {
+export type StayCandidate = {
+  id: string;
   name: string;
-  costPerNightInr: number;
+  costPerNightInr: number | null;
   lat: number;
   lng: number;
-  rating: number;
-  amenities: string[];
 };
 
-export type RankedHotel = SampleHotel & {
-  totalCostInr: number;
+export type RankedStay = StayCandidate & {
+  totalCostInr: number | null;
   avgDistanceToStopsKm: number;
   budgetFitScore: number;
   distanceScore: number;
@@ -24,35 +24,24 @@ export type StayRankingInput = {
   stopCoordinates: { lat: number; lng: number }[];
 };
 
-export const SAMPLE_HOTELS: SampleHotel[] = [
-  { name: "Budget Inn Express", costPerNightInr: 1200, lat: 15.4950, lng: 73.8300, rating: 3.2, amenities: ["WiFi", "AC"] },
-  { name: "Coastal View Hostel", costPerNightInr: 800, lat: 15.4880, lng: 73.8250, rating: 3.5, amenities: ["WiFi", "Breakfast"] },
-  { name: "Traveler's Rest Lodge", costPerNightInr: 1800, lat: 15.4920, lng: 73.8320, rating: 3.8, amenities: ["WiFi", "AC", "Pool"] },
-  { name: "Heritage Comfort Hotel", costPerNightInr: 3500, lat: 15.4900, lng: 73.8280, rating: 4.2, amenities: ["WiFi", "AC", "Pool", "Spa", "Restaurant"] },
-  { name: "Grand Palace Resort", costPerNightInr: 6000, lat: 15.4870, lng: 73.8350, rating: 4.6, amenities: ["WiFi", "AC", "Pool", "Spa", "Restaurant", "Gym", "Beach access"] },
-  { name: "Backpacker's Bunk", costPerNightInr: 500, lat: 15.4960, lng: 73.8220, rating: 3.0, amenities: ["WiFi"] },
-  { name: "Sunrise Boutique Stay", costPerNightInr: 2800, lat: 15.4940, lng: 73.8310, rating: 4.0, amenities: ["WiFi", "AC", "Breakfast", "Garden"] },
-  { name: "City Central Rooms", costPerNightInr: 1500, lat: 15.4910, lng: 73.8270, rating: 3.6, amenities: ["WiFi", "AC", "Parking"] },
-  { name: "Lakeview Premium Suites", costPerNightInr: 4500, lat: 15.4855, lng: 73.8340, rating: 4.4, amenities: ["WiFi", "AC", "Pool", "Restaurant", "Lake view"] },
-  { name: "Eco Garden Retreat", costPerNightInr: 2200, lat: 15.4975, lng: 73.8260, rating: 3.9, amenities: ["WiFi", "Breakfast", "Garden", "Yoga"] },
-];
-
 function computeAvgDistance(
-  hotel: SampleHotel,
+  lat: number,
+  lng: number,
   stops: { lat: number; lng: number }[],
 ): number {
   if (stops.length === 0) return 0;
   const totalDist = stops.reduce(
-    (sum, stop) => sum + haversineKm(hotel.lat, hotel.lng, stop.lat, stop.lng),
+    (sum, stop) => sum + haversineKm(lat, lng, stop.lat, stop.lng),
     0,
   );
   return Math.round((totalDist / stops.length) * 100) / 100;
 }
 
 function computeBudgetFitScore(
-  totalCostInr: number,
+  totalCostInr: number | null,
   remainingBudgetInr: number,
 ): number {
+  if (totalCostInr === null) return 50; // Neutral score for unknown costs
   if (remainingBudgetInr <= 0) return 0;
   if (totalCostInr <= 0) return 100;
   const ratio = totalCostInr / remainingBudgetInr;
@@ -66,22 +55,15 @@ function computeDistanceScore(avgDistKm: number): number {
   return Math.round(100 - (avgDistKm - 0.5) * (90 / 9.5));
 }
 
-export function rankHotels(input: StayRankingInput): RankedHotel[] {
-  // Shift sample hotel coordinates to be around the actual destination center
-  // instead of hardcoded to Goa (lat ~15.49, lng ~73.83)
-  const offsetLat = input.centerCoordinate ? input.centerCoordinate.lat - 15.49 : 0;
-  const offsetLng = input.centerCoordinate ? input.centerCoordinate.lng - 73.83 : 0;
-
-  return SAMPLE_HOTELS.map((hotel) => {
-    const adjustedHotel = {
-      ...hotel,
-      lat: hotel.lat + offsetLat,
-      lng: hotel.lng + offsetLng,
-    };
-
-    const totalCostInr = adjustedHotel.costPerNightInr * input.nights;
+export function rankStays(
+  places: StayCandidate[],
+  input: StayRankingInput
+): RankedStay[] {
+  return places.map((place) => {
+    const totalCostInr = place.costPerNightInr !== null ? place.costPerNightInr * input.nights : null;
     const avgDistanceToStopsKm = computeAvgDistance(
-      adjustedHotel,
+      place.lat,
+      place.lng,
       input.stopCoordinates,
     );
     const budgetFitScore = computeBudgetFitScore(
@@ -92,7 +74,7 @@ export function rankHotels(input: StayRankingInput): RankedHotel[] {
     const overallScore = Math.round(budgetFitScore * 0.5 + distanceScore * 0.5);
 
     return {
-      ...adjustedHotel,
+      ...place,
       totalCostInr,
       avgDistanceToStopsKm,
       budgetFitScore,
@@ -100,4 +82,21 @@ export function rankHotels(input: StayRankingInput): RankedHotel[] {
       overallScore,
     };
   }).sort((a, b) => b.overallScore - a.overallScore);
+}
+
+export async function getRankedStays(destinationId: string, input: StayRankingInput): Promise<RankedStay[]> {
+  const places = await prisma.place.findMany({
+    where: { destinationId, category: "stay" },
+    select: { id: true, name: true, typicalCostInr: true, lat: true, lng: true }
+  });
+
+  const candidates: StayCandidate[] = places.map((place) => ({
+    id: place.id,
+    name: place.name,
+    costPerNightInr: place.typicalCostInr ?? null,
+    lat: place.lat,
+    lng: place.lng,
+  }));
+
+  return rankStays(candidates, input).slice(0, 30);
 }

@@ -2,13 +2,12 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { SAMPLE_HOTELS } from "@/lib/stay";
 import { getTripDuration } from "@/lib/date-utils";
 import { revalidatePath } from "next/cache";
 
 export async function selectHotel(
   tripId: string,
-  hotelName: string,
+  placeId: string,
 ) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
@@ -24,24 +23,27 @@ export async function selectHotel(
   );
   if (!isMember) throw new Error("Not a member of this trip");
 
-  const hotel = SAMPLE_HOTELS.find((h) => h.name === hotelName);
-  if (!hotel) throw new Error("Hotel not found");
+  const place = await prisma.place.findUnique({
+    where: { id: placeId },
+  });
+  if (!place || place.category !== "stay") throw new Error("Stay not found");
 
   const dayCount = getTripDuration(trip, 3);
   const nights = Math.max(1, dayCount - 1);
-  const totalCostInr = hotel.costPerNightInr * nights;
+  const costPerNightInr = place.typicalCostInr ?? null;
+  const totalCostInr = costPerNightInr !== null ? costPerNightInr * nights : null;
 
   await prisma.tripAccommodation.deleteMany({ where: { tripId } });
   
   await prisma.tripAccommodation.create({
     data: {
       tripId,
-      name: hotel.name,
-      costPerNightInr: hotel.costPerNightInr,
+      name: place.name,
+      costPerNightInr,
       totalCostInr,
       nights,
-      latitude: hotel.lat,
-      longitude: hotel.lng,
+      latitude: place.lat,
+      longitude: place.lng,
     },
   });
 

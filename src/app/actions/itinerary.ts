@@ -8,6 +8,7 @@ import {
   DestinationDataError,
   ValidationError,
 } from "@/lib/trip-brain";
+import { generateGroundedItineraryV2 } from "@/lib/planner-v2/adapter";
 import { checkGenerationEntitlement } from "@/lib/entitlements";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
@@ -96,7 +97,7 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
         }
       }
 
-      const result = await generateGroundedItinerary({
+      const inputPayload = {
         destination: trip.destination,
         waypoints: parsedWaypoints,
         startDate: trip.startDate,
@@ -111,7 +112,11 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
         paceLevel: (trip.paceLevel as "easy" | "balanced" | "full") || "balanced",
         allPreferences,
         accessibilityNotes: creatorMember?.accessibilityNotes || undefined,
-      });
+      };
+
+      const result = process.env.PLANNER_ENGINE === "v2" 
+        ? await generateGroundedItineraryV2(inputPayload)
+        : await generateGroundedItinerary(inputPayload);
 
       // Save itinerary to DB
       await prisma.itineraryDay.deleteMany({ where: { tripId } });
