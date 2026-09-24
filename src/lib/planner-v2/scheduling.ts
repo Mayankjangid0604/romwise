@@ -103,32 +103,47 @@ export function buildDays(
       }
 
       // Find an activity (non-dining unless it's the only thing left)
-      const activityPlace = findBestPlace(placeQueue, usedPlaces, "activity", lastLat, lastLng);
-      if (!activityPlace) {
-        break; // No more places to schedule
-      }
-
-      // Check opening hours
-      let validTime = true;
-      const duration = getActivityDuration(activityPlace);
-      const endTime = currentMins + duration;
+      let activityPlace: CandidatePlaceV2 | null = null;
+      let validTime = false;
+      let duration = 0;
       
-      if (activityPlace.openingTime && activityPlace.closingTime) {
-        const openMins = timeStrToMins(activityPlace.openingTime);
-        const closeMins = timeStrToMins(activityPlace.closingTime);
+      const skippedThisRound = new Set<string>();
+      
+      while (true) {
+        // Find best place excluding ones we already used OR skipped this round
+        const combinedUsed = new Set([...usedPlaces, ...skippedThisRound]);
+        activityPlace = findBestPlace(placeQueue, combinedUsed, "activity", lastLat, lastLng);
         
-        // If it closes before we finish, or opens after we start
-        // Very rudimentary validation - push time forward if it hasn't opened yet
-        if (currentMins < openMins) {
-           currentMins = openMins;
-        }
+        if (!activityPlace) break; // No more places to schedule
         
-        if (currentMins + duration > closeMins) {
-          validTime = false;
+        duration = getActivityDuration(activityPlace);
+        let proposedMins = currentMins;
+        
+        // Check opening hours
+        if (activityPlace.openingTime && activityPlace.closingTime) {
+          const openMins = timeStrToMins(activityPlace.openingTime);
+          const closeMins = timeStrToMins(activityPlace.closingTime);
+          
+          if (proposedMins < openMins) {
+             proposedMins = openMins;
+          }
+          
+          if (proposedMins + duration <= closeMins) {
+            validTime = true;
+            currentMins = proposedMins;
+            break;
+          } else {
+            // Cannot fit it today, skip it for this round
+            skippedThisRound.add(activityPlace.id);
+          }
+        } else {
+          // No hours, assume always open
+          validTime = true;
+          break;
         }
       }
 
-      if (validTime) {
+      if (activityPlace && validTime) {
         items.push(createItem(activityPlace, currentMins, currentMins + duration, items.length));
         usedPlaces.add(activityPlace.id);
         currentMins += duration + paceConfig.bufferMinutes;
@@ -136,12 +151,8 @@ export function buildDays(
         lastLat = activityPlace.lat;
         lastLng = activityPlace.lng;
       } else {
-        // If invalid time, don't use it now. We skip it, but maybe try next place.
-        // For greedy algorithm simplicity, we'll temporarily mark it "used" for this iteration
-        // but actually we shouldn't. Let's just push it to the back.
-        const pIndex = placeQueue.indexOf(activityPlace);
-        placeQueue.splice(pIndex, 1);
-        placeQueue.push(activityPlace);
+        // If no place fits, end the day early
+        break;
       }
     }
 

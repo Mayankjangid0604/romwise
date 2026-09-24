@@ -11,15 +11,19 @@ export async function generateGroundedItineraryV2(input: TripBrainInput) {
   }
 
   // Define how many days
-  const startEnd = getTripStartEndDateTimes(
-    input.tripType as TripType,
-    input.startDate,
-    input.endDate,
-    input.startTime,
-    input.endTime
-  );
+  const startEnd = getTripStartEndDateTimes({
+    tripType: input.tripType,
+    startDate: input.startDate,
+    endDate: input.endDate,
+    startTime: input.startTime,
+    endTime: input.endTime
+  });
   
-  let numDays = getTripDuration(startEnd.start, startEnd.end);
+  let numDays = getTripDuration({ 
+    startDate: startEnd.startDateTime, 
+    endDate: startEnd.endDateTime,
+    tripType: input.tripType
+  });
   if (numDays === 0) numDays = 1;
 
   const result = await generateItineraryV2(
@@ -32,7 +36,7 @@ export async function generateGroundedItineraryV2(input: TripBrainInput) {
     },
     numDays,
     input.paceLevel,
-    startEnd.start ?? new Date()
+    startEnd.startDateTime ?? new Date()
   );
 
   if (result.days.length === 0 || result.days[0].items.length === 0) {

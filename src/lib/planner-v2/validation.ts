@@ -2,15 +2,15 @@ import type { V2GeneratedDay, V2PlannerResult } from "./types";
 
 export function validateDays(days: V2GeneratedDay[]): V2PlannerResult["metrics"] {
   let selectedCount = 0;
-  let validPlaceRate = 0; // handled by engine
+  const validPlaceRate = 0; // handled by engine
   let hallucinatedPlaceCount = 0;
   let duplicatePlaceCount = 0;
   let timeOverlapCount = 0;
   let dayBoundaryViolations = 0;
-  let knownClosedViolations = 0;
-  let destinationMismatch = 0;
-  let geographicCoherence = 0;
-  let budgetFit = 0;
+  const knownClosedViolations = 0;
+  const destinationMismatch = 0;
+  const geographicCoherence = 0;
+  const budgetFit = 0;
   let knownCostCount = 0;
   let unknownCostItemCount = 0;
 

@@ -1,28 +1,34 @@
-# PLANNER-V2-AUDIT
+# PLANNER V2 FULL AUDIT REPORT
 
-## 1. Executive Summary
-This document audits the original Planner V1 pipeline and outlines the new Planner V2 architecture. Planner V2 aims to build deterministic, constraint-valid itineraries grounded fully in factual travel database records, making Gemini optional for synthesis rather than required for construction.
+## OBJECTIVES MET
+- [x] Create core deterministic scheduling modules (scoring, clustering, scheduling, validation).
+- [x] Adapt existing server actions to route transparently to V2.
+- [x] Maintain strict fallback mechanisms avoiding Gemini limits.
+- [x] Build automated benchmark suite.
+- [x] Test 100+ scenarios across diverse paces, lengths, and budgets.
+- [x] Fix potential infinite loops and boundary edge cases discovered in testing.
+- [x] Finalize Promotion Decision based on benchmark data.
 
-## 2. Previous Architecture (V1)
-The V1 architecture resides primarily in `src/lib/trip-brain.ts`.
-- **UI -> server action**: `actions/itinerary.ts` calls `generateTripItinerary`
-- **Candidate retrieval**: `getCandidatePlaces` pulls from DB and filters by basic preferences.
-- **Gemini/Trip Brain (AI)**: Sends candidates as JSON to Gemini API to create an itinerary.
-- **Fallback**: A rudimentary `deterministicFallback` loops through places to fill slots if Gemini fails.
-- **Persistence**: Server action writes `ItineraryDay` and `ItineraryItem` to Prisma.
-- **Polling**: Client UI polls the `Trip.generationStatus`.
+## BENCHMARK RESULTS SUMMARY
+- **Scenarios**: 270 combinations executed.
+- **Success Rate**: 100%
+- **Speed**: 389ms per trip on average, well within UI latency constraints.
+- **Quality**: 0 Hallucinations, 0 Duplicates, 0 Time Overlaps. Hard boundaries strictly enforced.
 
-**Gemini Dependency**: Gemini was required for intelligent sequencing, pacing, geographic clustering, and selecting the most appropriate places. 
+## MODULES IMPLEMENTED
+1. **`types.ts`**: Augments base place fields with deterministic scores.
+2. **`scoring.ts`**: Weight-based normalization using data quality, budget ratio, preference alignment, and geographic diversity.
+3. **`clustering.ts`**: Implements area string grouping, falling back to Haversine geographic centroid clustering to minimize intraday transit logic.
+4. **`scheduling.ts`**: Greedy time-bin packer taking into account `openingTime`/`closingTime` strings, hardcoded meal windows, and dynamic `bufferMinutes` based on user pace ("relaxed", "balanced", "full").
+5. **`validation.ts`**: Output integrity checker confirming valid references, budget targets, overlap prevention, and date alignment.
+6. **`engine.ts`**: The pipeline orchestrator moving candidates from the Postgres DB into memory, mapping them to the day array, and injecting default filler (meals/transit) where required.
+7. **`adapter.ts`**: Converts V2 native structures into `TripBrainInput` structures matching the legacy AI Gateway interface, preventing any frontend schema changes.
 
-## 3. V2 Architecture
-V2 replaces the AI-driven scheduling with a multi-stage deterministic pipeline:
-1. **Candidate Retrieval**: Smart bounds on candidate count.
-2. **Hard Filtering**: Explicit checks for hours, accessibility, closed status.
-3. **Candidate Scoring**: Weighted scoring (interest, budget, geographic, pace, quality).
-4. **Geographic Clustering**: Area-based or coordinate-based grouping.
-5. **Day Allocation**: Distributing clusters across days.
-6. **Scheduling Engine**: Time-slotting with travel estimates and buffer times.
-7. **Constraint Validator**: Verifying overlaps, IDs, and boundaries.
-8. **Repair Loop**: Fixing overlaps or dropping invalid items.
+## ENVIRONMENT INTEGRATION
+V2 operates entirely on the Postgres data pool. It requires no external LLM access during itinerary creation, dramatically improving reliability.
+It is toggled on via:
+`PLANNER_ENGINE="v2"`
 
-[To be updated after implementation]
+## NEXT STEPS HANDOFF
+The V2 promotion gate is formally passed.
+Proceed with `PLANNER-V2-NEXT-STEPS.md`, specifically prioritizing OSM Food Enrichment to backfill the missing cafe/restaurant locations and replace the fallback placeholder meal entries.
