@@ -20,4 +20,5 @@ export * from "./timeline";
 export * from "./recent-tracker";
 export { AppShell, AppNavigation } from "./app-nav";
 export { TripWorkspaceNav } from "./trip-workspace-nav";
+export { DiscoveryImage } from "./discovery-image";
 

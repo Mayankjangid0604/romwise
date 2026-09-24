@@ -7,6 +7,7 @@ import {
   Alert,
   SectionHeading,
   Badge,
+  DiscoveryImage,
 } from "@/components/ui";
 import { COLLECTIONS, getDestinationsForCollection, CollectionTheme, RecommendedDestination } from "@/lib/destination-brain";
 import { DestinationSearch } from "./DestinationSearch";
@@ -46,10 +47,12 @@ export default async function DiscoveryPage(props: {
                   href={`/discovery?collection=${c.id}`}
                   className="group relative h-48 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-ink-200"
                 >
-                  <img 
+                  <DiscoveryImage 
                     src={c.imageUrl} 
                     alt={c.title} 
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                    theme={c.id}
+                    fill
+                    className="group-hover:scale-105 transition-transform duration-700 object-cover" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-900/90 via-ink-900/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 p-4 w-full">
@@ -65,10 +68,12 @@ export default async function DiscoveryPage(props: {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
           {/* Collection Hero */}
           <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8 shadow-sm">
-            <img 
+            <DiscoveryImage 
               src={activeCollection.imageUrl} 
               alt={activeCollection.title} 
-              className="absolute inset-0 w-full h-full object-cover" 
+              theme={activeCollection.id}
+              fill
+              className="object-cover" 
             />
             <div className="absolute inset-0 bg-ink-900/40" />
             <div className="absolute inset-0 p-8 flex flex-col justify-end">
@@ -131,11 +136,14 @@ export default async function DiscoveryPage(props: {
 function renderDestinationCard(dest: RecommendedDestination) {
   return (
     <Card key={dest.id} className="flex flex-col overflow-hidden p-0 border-ink-200">
-      {dest.imageUrl && (
-        <div className="h-48 relative overflow-hidden bg-ink-100">
-          <img src={dest.imageUrl} alt={dest.name} className="absolute inset-0 w-full h-full object-cover" />
-        </div>
-      )}
+      <div className="h-48 relative overflow-hidden bg-ink-100 shrink-0">
+        <DiscoveryImage 
+          src={dest.imageUrl} 
+          alt={dest.name} 
+          fill
+          className="object-cover" 
+        />
+      </div>
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-4">
           <div>

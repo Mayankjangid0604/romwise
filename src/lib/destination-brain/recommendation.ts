@@ -47,10 +47,11 @@ export async function getDestinationsForCollection(
         ${Prisma.raw(collection.scoreSql)} as "rawScore",
         (
           -- Prominence Score Calculation
-          LEAST(COUNT(p.id), 50) * 2 + 
-          LEAST(SUM(CASE WHEN p.category = 'stay' THEN 1 ELSE 0 END), 20) * 3 +
-          (CASE WHEN d.description IS NOT NULL AND length(d.description) > 10 THEN 20 ELSE 0 END) +
-          (CASE WHEN (SELECT 1 FROM "Image" i WHERE i."destinationId" = d.id LIMIT 1) IS NOT NULL THEN 30 ELSE 0 END) +
+          -- Maximize at 100 to prevent mega-cities from dominating purely by volume
+          LEAST(COUNT(p.id), 25) * 2 + 
+          LEAST(SUM(CASE WHEN p.category = 'stay' THEN 1 ELSE 0 END), 10) * 3 +
+          (CASE WHEN d.description IS NOT NULL AND length(d.description) > 10 THEN 10 ELSE 0 END) +
+          (CASE WHEN (SELECT 1 FROM "Image" i WHERE i."destinationId" = d.id LIMIT 1) IS NOT NULL THEN 20 ELSE 0 END) +
           (CASE WHEN d."sourceType" = 'WIKIDATA' THEN 10 ELSE 0 END)
         ) as "prominenceScore"
       FROM "TravelDestination" d
@@ -60,9 +61,11 @@ export async function getDestinationsForCollection(
     SELECT *
     FROM dest_scores
     WHERE "rawScore" > 0
-      AND "totalPlaces" >= 4
+      AND "totalPlaces" >= 5
       ${req.state ? Prisma.sql`AND "state" = ${req.state}` : Prisma.empty}
-    ORDER BY ("rawScore" * "prominenceScore") DESC, "totalPlaces" DESC
+    -- Rank by rawScore, multiplied by density (rawScore/totalPlaces) to penalize generic mega-cities, then scale by prominence.
+    -- Logarithmic scaling on totalPlaces prevents 300-place cities from getting a 10x multiplier over 30-place towns.
+    ORDER BY ("rawScore" * ("rawScore" / CAST("totalPlaces" AS FLOAT)) * "prominenceScore") DESC, "totalPlaces" DESC
     LIMIT ${limit}
   `;
 
@@ -90,12 +93,16 @@ export async function getDestinationsForCollection(
     const relativeScore = (Number(row.rawScore) / maxRawScore) * 100;
     const matchScore = Math.round(Math.min(relativeScore, 98));
 
-    // Determine Tier based on prominence score
+    // Determine Tier based on prominence score and data coverage
+    // Max prominence is now around 120 (50 + 30 + 10 + 20 + 10).
     let tier: 'major' | 'strong' | 'hidden' = 'hidden';
-    if (prominence >= 120) {
+    if (prominence >= 80 && totalPlaces >= 20) {
       tier = 'major';
-    } else if (prominence >= 70) {
+    } else if (prominence >= 50 && totalPlaces >= 10) {
       tier = 'strong';
+    } else if (prominence < 20 || totalPlaces < 5 || stayCount === 0) {
+      // It lacks basic data to be recommended, but we keep it as a weak hidden gem if it survived SQL
+      tier = 'hidden';
     }
 
     return {
