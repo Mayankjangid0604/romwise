@@ -4,7 +4,7 @@ export interface CollectionDefinition {
   id: CollectionTheme;
   title: string;
   description: string;
-  // Raw SQL weighting for sorting
+  imageUrl: string;
   scoreSql: string;
 }
 
@@ -13,6 +13,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "mountains",
     title: "Mountains & Hills",
     description: "Mountain towns, valleys, viewpoints and high-altitude escapes",
+    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'nature' THEN 1 ELSE 0 END) * 1.0 +
       SUM(CASE WHEN p.category = 'adventure' THEN 1.5 ELSE 0 END) +
@@ -23,6 +24,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "beaches",
     title: "Beaches & Coast",
     description: "Coastal destinations, beaches and seaside escapes",
+    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p."placeType" = 'beach' THEN 5.0 ELSE 0 END) +
       SUM(CASE WHEN p.category = 'nature' AND p.name ILIKE '%beach%' THEN 5.0 ELSE 0 END)
@@ -32,6 +34,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "forests",
     title: "Forests & Greenery",
     description: "Forests, waterfalls, parks and green retreats",
+    imageUrl: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p."placeType" IN ('national_park', 'forest', 'garden', 'waterfall') THEN 3.0 ELSE 0 END) +
       SUM(CASE WHEN p.category = 'nature' THEN 1.0 ELSE 0 END)
@@ -41,6 +44,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "nature",
     title: "Nature Escapes",
     description: "Lakes, parks, waterfalls, valleys and natural attractions",
+    imageUrl: "https://images.unsplash.com/photo-1470071131384-001b85755536?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'nature' THEN 2.0 ELSE 0 END) +
       SUM(CASE WHEN p."placeType" IN ('lake', 'waterfall', 'national_park', 'garden', 'cave') THEN 2.0 ELSE 0 END)
@@ -50,6 +54,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "heritage",
     title: "Heritage & History",
     description: "Forts, palaces, monuments and historic cities",
+    imageUrl: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'history' THEN 2.0 ELSE 0 END) +
       SUM(CASE WHEN p.category = 'culture' THEN 1.0 ELSE 0 END) +
@@ -60,6 +65,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "spiritual",
     title: "Spiritual",
     description: "Temples, monasteries, mosques, churches and pilgrimage destinations",
+    imageUrl: "https://images.unsplash.com/photo-1514222049383-f326307137f7?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'spiritual' THEN 2.0 ELSE 0 END) +
       SUM(CASE WHEN p."placeType" IN ('temple', 'church', 'mosque') THEN 2.0 ELSE 0 END)
@@ -69,6 +75,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "wildlife",
     title: "Wildlife",
     description: "National parks, sanctuaries, zoos and wildlife destinations",
+    imageUrl: "https://images.unsplash.com/photo-1564750106192-3eb417a8c3d8?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p."placeType" IN ('national_park', 'zoo', 'wildlife_sanctuary') THEN 5.0 ELSE 0 END) +
       SUM(CASE WHEN p.name ILIKE '%sanctuary%' OR p.name ILIKE '%national park%' THEN 3.0 ELSE 0 END)
@@ -78,6 +85,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "adventure",
     title: "Adventure",
     description: "Trekking, mountain, outdoor and adventure-oriented destinations",
+    imageUrl: "https://images.unsplash.com/photo-1533240332313-0bc499f52610?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'adventure' THEN 5.0 ELSE 0 END) +
       SUM(CASE WHEN p.name ILIKE '%trek%' OR p.name ILIKE '%camp%' THEN 3.0 ELSE 0 END)
@@ -87,6 +95,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "romantic",
     title: "Romantic",
     description: "Scenic, relaxing and couple-friendly destinations",
+    imageUrl: "https://images.unsplash.com/photo-1516681467475-3adcd864b2bb?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category IN ('relaxation', 'nature', 'sightseeing') THEN 1.0 ELSE 0 END) +
       SUM(CASE WHEN p.vibes ILIKE '%romantic%' OR p.vibes ILIKE '%scenic%' THEN 2.0 ELSE 0 END)
@@ -96,6 +105,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "family",
     title: "Family",
     description: "Destinations with strong family-friendly activity coverage",
+    imageUrl: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'family' THEN 5.0 ELSE 0 END) +
       SUM(CASE WHEN p."placeType" IN ('zoo', 'museum', 'garden') THEN 2.0 ELSE 0 END)
@@ -105,6 +115,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "food",
     title: "Food & Culture",
     description: "Destinations with dining and cultural depth",
+    imageUrl: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category IN ('dining', 'restaurant', 'cafe', 'culture') THEN 3.0 ELSE 0 END) +
       SUM(CASE WHEN p.vibes ILIKE '%culinary%' THEN 2.0 ELSE 0 END)
@@ -114,6 +125,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "photography",
     title: "Photography",
     description: "Viewpoints, heritage, landscapes and photogenic places",
+    imageUrl: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'photography' THEN 5.0 ELSE 0 END) +
       SUM(CASE WHEN p.vibes ILIKE '%photogenic%' OR p.vibes ILIKE '%scenic%' THEN 2.0 ELSE 0 END) +
@@ -124,6 +136,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "weekend",
     title: "Weekend Escapes",
     description: "Destinations suitable for short trips",
+    imageUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       -- Balance: not too few, not too many places. But simpler: prioritize places with high popularity and good stay coverage
       SUM(CASE WHEN p.category NOT IN ('stay', 'transport') THEN 1.0 ELSE 0 END)
@@ -133,6 +146,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "relaxing",
     title: "Relaxing",
     description: "Lower-density, nature and relaxation-oriented trips",
+    imageUrl: "https://images.unsplash.com/photo-1473220464492-452fb02e6221?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category = 'relaxation' THEN 5.0 ELSE 0 END) +
       SUM(CASE WHEN p.vibes ILIKE '%peaceful%' OR p.vibes ILIKE '%calm%' OR p.vibes ILIKE '%serene%' THEN 2.0 ELSE 0 END)
@@ -142,6 +156,7 @@ export const COLLECTIONS: Record<CollectionTheme, CollectionDefinition> = {
     id: "backpacking",
     title: "Backpacking",
     description: "Destinations suited to flexible, activity-rich travel",
+    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
     scoreSql: `
       SUM(CASE WHEN p.category IN ('adventure', 'local_experience', 'history') THEN 1.0 ELSE 0 END) +
       SUM(CASE WHEN p."placeType" = 'hostel' THEN 5.0 ELSE 0 END)

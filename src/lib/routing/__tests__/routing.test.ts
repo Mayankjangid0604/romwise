@@ -15,19 +15,24 @@ describe('Routing Architecture', () => {
     process.env.ROUTING_PROVIDER = originalEnv;
   });
 
-  it('approximate provider should calculate straight line routes', async () => {
+  it('approximate provider should calculate approximate routes', async () => {
     const provider = new ApproximateRoutingProvider();
     
-    // Delhi to Agra (approx 180km straight line)
+    // Delhi to Agra (approx 180km straight line, ~234km with road penalty)
     const result = await provider.getRoute({
       origin: { lat: 28.6139, lng: 77.2090 },
       destination: { lat: 27.1767, lng: 78.0081 }
     });
     
-    expect(result.distanceKm).toBeGreaterThan(150);
-    expect(result.distanceKm).toBeLessThan(200);
+    // Straight-line ~180km × 1.3 road penalty = ~234km
+    expect(result.distanceKm).toBeGreaterThan(200);
+    expect(result.distanceKm).toBeLessThan(280);
     expect(result.legs).toHaveLength(1);
     expect(result.legs[0].distanceKm).toBe(result.distanceKm);
+    expect(result.provider).toBe('approximate');
+    // Duration should be reasonable for ~234km at ~55km/h
+    expect(result.durationMinutes).toBeGreaterThan(200);
+    expect(result.durationMinutes).toBeLessThan(400);
   });
 
   it('google stub should not be available without key and config', async () => {

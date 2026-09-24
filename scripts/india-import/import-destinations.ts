@@ -21,19 +21,19 @@ const RAW_DIR = path.join(process.cwd(), "data-import", "raw");
 const CITIES_FILE = path.join(RAW_DIR, "cities500.txt");
 const ALT_NAMES_FILE = path.join(RAW_DIR, "alternateNames.txt");
 
-// Indian state codes → state names
+// Indian state codes → state names (GeoNames uses FIPS codes for admin1)
 const STATE_MAP: Record<string, string> = {
   "01": "Andaman and Nicobar Islands", "02": "Andhra Pradesh", "03": "Assam",
-  "04": "Bihar", "05": "Chandigarh", "06": "Chhattisgarh", "07": "Delhi",
-  "08": "Dadra and Nagar Haveli", "09": "Goa", "10": "Gujarat",
-  "11": "Haryana", "12": "Himachal Pradesh", "13": "Jammu and Kashmir",
-  "14": "Jharkhand", "15": "Karnataka", "16": "Kerala", "17": "Lakshadweep",
-  "19": "Madhya Pradesh", "20": "Maharashtra", "21": "Manipur",
-  "22": "Meghalaya", "23": "Mizoram", "24": "Nagaland", "25": "Odisha",
-  "26": "Puducherry", "28": "Punjab", "29": "Rajasthan", "30": "Sikkim",
-  "31": "Tamil Nadu", "32": "Tripura", "33": "Uttar Pradesh",
-  "34": "Uttarakhand", "35": "West Bengal", "36": "Telangana",
-  "37": "Ladakh", "38": "Arunachal Pradesh",
+  "34": "Bihar", "05": "Chandigarh", "37": "Chhattisgarh", "07": "Delhi",
+  "52": "Dadra and Nagar Haveli and Daman and Diu", "33": "Goa", "09": "Gujarat",
+  "10": "Haryana", "11": "Himachal Pradesh", "12": "Jammu and Kashmir",
+  "38": "Jharkhand", "19": "Karnataka", "13": "Kerala", "14": "Lakshadweep",
+  "35": "Madhya Pradesh", "16": "Maharashtra", "17": "Manipur",
+  "18": "Meghalaya", "31": "Mizoram", "20": "Nagaland", "21": "Odisha",
+  "22": "Puducherry", "23": "Punjab", "24": "Rajasthan", "29": "Sikkim",
+  "25": "Tamil Nadu", "26": "Tripura", "36": "Uttar Pradesh",
+  "39": "Uttarakhand", "28": "West Bengal", "40": "Telangana",
+  "41": "Ladakh", "30": "Arunachal Pradesh",
 };
 
 function slugify(name: string, state: string): string {

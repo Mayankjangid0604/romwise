@@ -52,6 +52,8 @@ export interface RecommendedDestination {
   state: string;
   imageUrl?: string;
   matchScore: number;
+  prominenceScore?: number;
+  tier?: 'major' | 'strong' | 'hidden';
   confidence: number;
   reasons: string[];
   placeCount: number;

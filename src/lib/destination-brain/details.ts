@@ -43,21 +43,33 @@ export async function getDestinationDetails(name: string, context?: string): Pro
     throw new Error("Destination not found");
   }
 
-  // Calculate some average budget from places, or fallback to default
-  const avgCost = dest.places.reduce((acc, place) => acc + (place.typicalCostInr || 0), 0);
-  const averageDailyBudgetInr = avgCost > 0 ? avgCost / dest.places.length : 3000;
+  // Only count places with known, positive costs — unknown costs must NOT be treated as zero
+  const placesWithKnownCost = dest.places.filter(p => p.typicalCostInr && p.typicalCostInr > 0);
+  const costCoverage = placesWithKnownCost.length / Math.max(dest.places.length, 1);
   
-  let budgetLevelLabel = "Mid-range";
-  if (averageDailyBudgetInr < 2000) budgetLevelLabel = "Budget";
-  if (averageDailyBudgetInr > 6000) budgetLevelLabel = "Luxury";
+  let averageDailyBudgetInr: number;
+  let budgetLevelLabel: string;
+  
+  if (placesWithKnownCost.length >= 3) {
+    // Enough data for a reasonable estimate
+    const totalKnownCost = placesWithKnownCost.reduce((acc, p) => acc + (p.typicalCostInr ?? 0), 0);
+    averageDailyBudgetInr = Math.round(totalKnownCost / placesWithKnownCost.length);
+    budgetLevelLabel = averageDailyBudgetInr < 2000 ? "Budget" : averageDailyBudgetInr > 6000 ? "Luxury" : "Mid-range";
+  } else {
+    // Insufficient cost data — use a generic estimate with clear label
+    averageDailyBudgetInr = 3000;
+    budgetLevelLabel = "Estimate unavailable";
+  }
 
-  const mustVisitPlaces = dest.places.map(p => ({
-    name: p.name,
-    description: p.description || p.category,
-    category: p.category,
-    bestFor: p.bestFor || "General Visit",
-    tipForVisiting: p.vibes || "Enjoy the view!"
-  }));
+  const mustVisitPlaces = dest.places
+    .filter(p => p.category !== "stay") // Exclude stays from "must visit"
+    .map(p => ({
+      name: p.name,
+      description: p.description || p.category,
+      category: p.category,
+      bestFor: p.bestFor || "General Visit",
+      tipForVisiting: p.vibes || "Enjoy the experience!"
+    }));
 
   return {
     name: dest.name,

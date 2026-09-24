@@ -5,7 +5,7 @@ import { prisma } from "../../src/lib/db";
 const VIEWPORTS = [
   { name: "mobile-375", width: 375, height: 667 },
   { name: "mobile-390", width: 390, height: 844 },
-  { name: "tablet-768", width: 768, height: 1024 },
+  { name: "tablet-820", width: 820, height: 1180 },
   { name: "desktop-1440", width: 1440, height: 900 },
 ];
 
