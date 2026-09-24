@@ -1,0 +1,45 @@
+{
+  "tables": {
+    "TravelDestination": 6419,
+    "DestinationAlias": 188,
+    "Place": 34407,
+    "Image": 5183
+  },
+  "categories": {
+    "adventure": 15,
+    "cafe": 1,
+    "culture": 402,
+    "dining": 68,
+    "family": 52,
+    "history": 1233,
+    "local_experience": 25,
+    "nature": 1042,
+    "nightlife": 1,
+    "photography": 4,
+    "relaxation": 13,
+    "restaurant": 3,
+    "shopping": 5,
+    "sightseeing": 34,
+    "spiritual": 3405,
+    "stay": 18859,
+    "transport": 9245
+  },
+  "sources": {
+    "UNKNOWN": 1,
+    "WIKIDATA": 33979,
+    "curated": 376,
+    "wikipedia_geosearch": 51
+  },
+  "fields": {
+    "coordinates": 34407,
+    "area": 422,
+    "openingHours": 252,
+    "address": 0,
+    "website": 0,
+    "phone": 0,
+    "accessibility": 0,
+    "typicalCost": 428,
+    "duration": 427,
+    "image": 5183
+  }
+}

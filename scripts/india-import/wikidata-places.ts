@@ -197,6 +197,20 @@ const WIKIDATA_CATEGORIES: WikiCategory[] = [
     qids: ["Q9259"], // World Heritage Site
     maxRadius: 60,
   },
+  {
+    name: "restaurants",
+    roamwiseCategory: "food",
+    placeType: "restaurant",
+    qids: ["Q11707"], // restaurant
+    maxRadius: 30,
+  },
+  {
+    name: "cafes",
+    roamwiseCategory: "cafe",
+    placeType: "cafe",
+    qids: ["Q1497044", "Q30094119"], // cafe, coffeehouse
+    maxRadius: 30,
+  },
 ];
 
 async function sparqlQuery(query: string): Promise<any> {

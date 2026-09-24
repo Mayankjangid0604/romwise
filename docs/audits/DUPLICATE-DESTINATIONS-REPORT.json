@@ -1,0 +1,1486 @@
+[
+  {
+    "canonical": {
+      "id": "cmu1k665o00189tfcvvvg3y7k",
+      "name": "Bengaluru",
+      "state": "Karnataka",
+      "source": "curated",
+      "places": 342
+    },
+    "duplicates": [
+      {
+        "id": "cmudpqy9802shurqw5o49ikan",
+        "name": "Bengaluru",
+        "state": "Karnataka",
+        "source": "GEONAMES",
+        "places": 196,
+        "distanceKm": "0.11"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k6722001i9tfcl2zzcal4",
+      "name": "Bhubaneswar",
+      "state": "Odisha",
+      "source": "curated",
+      "places": 153
+    },
+    "duplicates": [
+      {
+        "id": "cmudpqer402m0urqwgfhmluva",
+        "name": "Bhubaneswar",
+        "state": "Odisha",
+        "source": "GEONAMES",
+        "places": 157,
+        "distanceKm": "2.81"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66vk001g9tfc2i5ec11p",
+      "name": "Kolkata",
+      "state": "West Bengal",
+      "source": "curated",
+      "places": 115
+    },
+    "duplicates": [
+      {
+        "id": "cmudpq4to02ilurqw2jpi0sgq",
+        "name": "Kolkata",
+        "state": "West Bengal",
+        "source": "GEONAMES",
+        "places": 219,
+        "distanceKm": "1.11"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66fd001b9tfcpznvm6uo",
+      "name": "Chennai",
+      "state": "Tamil Nadu",
+      "source": "curated",
+      "places": 87
+    },
+    "duplicates": [
+      {
+        "id": "cmudpmuyq01dyurqwdh0xcbam",
+        "name": "Chennai",
+        "state": "Tamil Nadu",
+        "source": "GEONAMES",
+        "places": 30,
+        "distanceKm": "1.02"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gny9g000e9t5w08m8cn1i",
+      "name": "Shimla",
+      "state": "Himachal Pradesh",
+      "source": "curated",
+      "places": 80
+    },
+    "duplicates": [
+      {
+        "id": "cmudpjxgg00esurqwx3mr9u0z",
+        "name": "Shimla",
+        "state": "Himachal Pradesh",
+        "source": "GEONAMES",
+        "places": 56,
+        "distanceKm": "0.65"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnyqv000k9t5wstfnm6ml",
+      "name": "Jaisalmer",
+      "state": "Rajasthan",
+      "source": "curated",
+      "places": 66
+    },
+    "duplicates": [
+      {
+        "id": "cmudpobce01wyurqw7jnizc80",
+        "name": "Jaisalmer",
+        "state": "Rajasthan",
+        "source": "GEONAMES",
+        "places": 13,
+        "distanceKm": "0.49"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66lv001d9tfcxerzuylz",
+      "name": "Ooty",
+      "state": "Tamil Nadu",
+      "source": "curated",
+      "places": 66
+    },
+    "duplicates": [
+      {
+        "id": "cmudpj7dq005yurqwvfhkr9q5",
+        "name": "Ooty",
+        "state": "Tamil Nadu",
+        "source": "GEONAMES",
+        "places": 31,
+        "distanceKm": "0.36"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k675a001j9tfcvp9iedff",
+      "name": "Gangtok",
+      "state": "Sikkim",
+      "source": "curated",
+      "places": 54
+    },
+    "duplicates": [
+      {
+        "id": "cmudpp16e025ourqw8fdahkoy",
+        "name": "Gangtok",
+        "state": "Sikkim",
+        "source": "GEONAMES",
+        "places": 59,
+        "distanceKm": "1.57"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k662f00179tfcfdji60pw",
+      "name": "Munnar",
+      "state": "Kerala",
+      "source": "curated",
+      "places": 49
+    },
+    "duplicates": [
+      {
+        "id": "cmudpm5vj015uurqw1euit457",
+        "name": "Munnar",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 70,
+        "distanceKm": "0.33"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66yt001h9tfcywdamge8",
+      "name": "Puri",
+      "state": "Odisha",
+      "source": "curated",
+      "places": 46
+    },
+    "duplicates": [
+      {
+        "id": "cmudpkyip00reurqwd7jgwhr3",
+        "name": "Puri",
+        "state": "Odisha",
+        "source": "GEONAMES",
+        "places": 104,
+        "distanceKm": "1.82"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66sc001f9tfc10sad5e8",
+      "name": "Aurangabad",
+      "state": "Maharashtra",
+      "source": "curated",
+      "places": 40
+    },
+    "duplicates": [
+      {
+        "id": "cmudpr7qd02vsurqw84otwrak",
+        "name": "Aurangabad",
+        "state": "Maharashtra",
+        "source": "GEONAMES",
+        "places": 32,
+        "distanceKm": "0.19"
+      },
+      {
+        "id": "cmudpwh0m04vturqwqjzxd1p3",
+        "name": "Aurangabad Cantonment",
+        "state": "Maharashtra",
+        "source": "GEONAMES",
+        "places": 12,
+        "distanceKm": "5.41"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k65j000119tfc600bbyw4",
+      "name": "Mussoorie",
+      "state": "Uttarakhand",
+      "source": "curated",
+      "places": 38
+    },
+    "duplicates": [
+      {
+        "id": "cmudpm4k3015eurqw57w6pq3g",
+        "name": "Mussoorie",
+        "state": "Uttarakhand",
+        "source": "GEONAMES",
+        "places": 78,
+        "distanceKm": "0.67"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k668w00199tfci0jr1v23",
+      "name": "Mysuru",
+      "state": "Karnataka",
+      "source": "curated",
+      "places": 28
+    },
+    "duplicates": [
+      {
+        "id": "cmudpm4060157urqwguz7l9et",
+        "name": "Mysuru",
+        "state": "Karnataka",
+        "source": "GEONAMES",
+        "places": 67,
+        "distanceKm": "0.24"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnzmv000v9t5wl2vziqxt",
+      "name": "Alappuzha",
+      "state": "Kerala",
+      "source": "curated",
+      "places": 24
+    },
+    "duplicates": [
+      {
+        "id": "cmudprjsu02zsurqwczdbnlu4",
+        "name": "Alappuzha",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 17,
+        "distanceKm": "1.63"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k652n000w9tfcfb6ndmc6",
+      "name": "Jodhpur",
+      "state": "Rajasthan",
+      "source": "curated",
+      "places": 24
+    },
+    "duplicates": [
+      {
+        "id": "cmudpo2nc01u3urqwwxm9awmo",
+        "name": "Jodhpur",
+        "state": "Rajasthan",
+        "source": "GEONAMES",
+        "places": 82,
+        "distanceKm": "3.76"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k6561000x9tfch1i0gi7k",
+      "name": "Pushkar",
+      "state": "Rajasthan",
+      "source": "curated",
+      "places": 23
+    },
+    "duplicates": [
+      {
+        "id": "cmudpkxyh00r7urqwlhs5j9rf",
+        "name": "Pushkar",
+        "state": "Rajasthan",
+        "source": "GEONAMES",
+        "places": 36,
+        "distanceKm": "0.11"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnz2j000o9t5wwmd1p7n9",
+      "name": "Shillong",
+      "state": "Meghalaya",
+      "source": "curated",
+      "places": 21
+    },
+    "duplicates": [
+      {
+        "id": "cmudpk1hj00g6urqw7g8e8usr",
+        "name": "Shillong",
+        "state": "Meghalaya",
+        "source": "GEONAMES",
+        "places": 16,
+        "distanceKm": "1.50"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnytr000l9t5wa66bh1n7",
+      "name": "Hampi",
+      "state": "Karnataka",
+      "source": "curated",
+      "places": 17
+    },
+    "duplicates": [
+      {
+        "id": "cmudpoo2k0217urqw2s6w3qgu",
+        "name": "Hampi",
+        "state": "Karnataka",
+        "source": "GEONAMES",
+        "places": 5,
+        "distanceKm": "0.18"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k65sp00149tfc1xfyrx5y",
+      "name": "Srinagar",
+      "state": "Jammu and Kashmir",
+      "source": "curated",
+      "places": 16
+    },
+    "duplicates": [
+      {
+        "id": "cmudpjpi900c9urqwlap9l8ao",
+        "name": "Srinagar",
+        "state": "Jammu and Kashmir",
+        "source": "GEONAMES",
+        "places": 64,
+        "distanceKm": "0.79"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gny6i000d9t5wntd0gh28",
+      "name": "Haridwar",
+      "state": "Uttarakhand",
+      "source": "curated",
+      "places": 15
+    },
+    "duplicates": [
+      {
+        "id": "cmudpomsf020rurqwpdyuzucv",
+        "name": "Haridwar",
+        "state": "Uttarakhand",
+        "source": "GEONAMES",
+        "places": 102,
+        "distanceKm": "0.45"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnze6000s9t5wqtsdlpmb",
+      "name": "Khajuraho",
+      "state": "Madhya Pradesh",
+      "source": "curated",
+      "places": 15
+    },
+    "duplicates": [
+      {
+        "id": "cmudpnliq01neurqwfe7513re",
+        "name": "Khajuraho Group of Monuments",
+        "state": "Madhya Pradesh",
+        "source": "GEONAMES",
+        "places": 23,
+        "distanceKm": "2.27"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnzh2000t9t5wlbc08y2n",
+      "name": "Orchha",
+      "state": "Madhya Pradesh",
+      "source": "curated",
+      "places": 10
+    },
+    "duplicates": [
+      {
+        "id": "cmudpllao00z2urqwehv2ugmf",
+        "name": "Orchha",
+        "state": "Madhya Pradesh",
+        "source": "GEONAMES",
+        "places": 9,
+        "distanceKm": "0.05"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k678j001k9tfcsdalpdf4",
+      "name": "Tawang",
+      "state": "Arunachal Pradesh",
+      "source": "curated",
+      "places": 8
+    },
+    "duplicates": [
+      {
+        "id": "cmudpjh1v009lurqw8xzrlcx7",
+        "name": "Tawang Town",
+        "state": "Arunachal Pradesh",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "7.42"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66p3001e9tfcwz5fnky4",
+      "name": "Mahabalipuram",
+      "state": "Tamil Nadu",
+      "source": "curated",
+      "places": 7
+    },
+    "duplicates": [
+      {
+        "id": "cmudpmo1i01bpurqwsa8pqx9j",
+        "name": "Mahabalipuram",
+        "state": "Tamil Nadu",
+        "source": "GEONAMES",
+        "places": 21,
+        "distanceKm": "0.67"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k65z600169tfc4qyx7722",
+      "name": "Pahalgam",
+      "state": "Jammu and Kashmir",
+      "source": "curated",
+      "places": 5
+    },
+    "duplicates": [
+      {
+        "id": "cmudpljvo00ykurqwcv8lyijm",
+        "name": "Pahalgam",
+        "state": "Jammu and Kashmir",
+        "source": "GEONAMES",
+        "places": 13,
+        "distanceKm": "0.24"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66im001c9tfceytdfdpx",
+      "name": "Madurai",
+      "state": "Tamil Nadu",
+      "source": "curated",
+      "places": 5
+    },
+    "duplicates": [
+      {
+        "id": "cmudpmung01duurqw8zoj6tti",
+        "name": "Madurai",
+        "state": "Tamil Nadu",
+        "source": "GEONAMES",
+        "places": 16,
+        "distanceKm": "0.69"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1k66c4001a9tfct2y3s6db",
+      "name": "Gokarna",
+      "state": "Karnataka",
+      "source": "curated",
+      "places": 4
+    },
+    "duplicates": [
+      {
+        "id": "cmudpovnl023rurqwxm15r3wh",
+        "name": "Gokarna",
+        "state": "Karnataka",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "0.33"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnx7700029t5wqp7flh5m",
+      "name": "Jaipur",
+      "state": "Rajasthan",
+      "source": "wikipedia_geosearch",
+      "places": 248
+    },
+    "duplicates": [
+      {
+        "id": "cmudpobrh01x0urqw7l8uaa1q",
+        "name": "Jaipur",
+        "state": "Rajasthan",
+        "source": "GEONAMES",
+        "places": 361,
+        "distanceKm": "3.23"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnxdi00039t5wx1mzkgpn",
+      "name": "Agra",
+      "state": "Uttar Pradesh",
+      "source": "wikipedia_geosearch",
+      "places": 195
+    },
+    "duplicates": [
+      {
+        "id": "cmudproc7031aurqwq4l1ks17",
+        "name": "Agra",
+        "state": "Uttar Pradesh",
+        "source": "GEONAMES",
+        "places": 69,
+        "distanceKm": "0.50"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnxm800069t5wh4052vqb",
+      "name": "Udaipur",
+      "state": "Rajasthan",
+      "source": "wikipedia_geosearch",
+      "places": 153
+    },
+    "duplicates": [
+      {
+        "id": "cmudpj73x005uurqwj49d6qb3",
+        "name": "Udaipur",
+        "state": "Rajasthan",
+        "source": "GEONAMES",
+        "places": 76,
+        "distanceKm": "3.45"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnxp500079t5wjwh3l6nl",
+      "name": "Mumbai",
+      "state": "Maharashtra",
+      "source": "wikipedia_geosearch",
+      "places": 122
+    },
+    "duplicates": [
+      {
+        "id": "cmudpq7ko02jjurqwbfec1jom",
+        "name": "Mumbai",
+        "state": "Maharashtra",
+        "source": "GEONAMES",
+        "places": 24,
+        "distanceKm": "0.65"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnxs200089t5w0c55trrt",
+      "name": "Amritsar",
+      "state": "Punjab",
+      "source": "wikipedia_geosearch",
+      "places": 72
+    },
+    "duplicates": [
+      {
+        "id": "cmudprfqe02yfurqwc2a4vbwq",
+        "name": "Amritsar",
+        "state": "Punjab",
+        "source": "GEONAMES",
+        "places": 174,
+        "distanceKm": "2.44"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnxgf00049t5w2tw89kks",
+      "name": "Delhi",
+      "state": "Delhi",
+      "source": "wikipedia_geosearch",
+      "places": 62
+    },
+    "duplicates": [
+      {
+        "id": "cmudpplps02c5urqwc4z828v3",
+        "name": "Delhi",
+        "state": "Delhi",
+        "source": "GEONAMES",
+        "places": 40,
+        "distanceKm": "4.67"
+      },
+      {
+        "id": "cmudplqlx010wurqw451hwrkk",
+        "name": "New Delhi",
+        "state": "Delhi",
+        "source": "GEONAMES",
+        "places": 23,
+        "distanceKm": "1.95"
+      },
+      {
+        "id": "cmudpplmz02c4urqw2sqg2tmo",
+        "name": "Delhi Cantonment",
+        "state": "Delhi",
+        "source": "GEONAMES",
+        "places": 11,
+        "distanceKm": "9.50"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnxjb00059t5wc2s58cnf",
+      "name": "Varanasi",
+      "state": "Uttar Pradesh",
+      "source": "wikipedia_geosearch",
+      "places": 37
+    },
+    "duplicates": [
+      {
+        "id": "cmudpizxt0035urqwrnn2pguf",
+        "name": "Varanasi",
+        "state": "Uttar Pradesh",
+        "source": "GEONAMES",
+        "places": 163,
+        "distanceKm": "0.34"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmu1gnxuy00099t5wcpnwhige",
+      "name": "Kochi",
+      "state": "Kerala",
+      "source": "wikipedia_geosearch",
+      "places": 12
+    },
+    "duplicates": [
+      {
+        "id": "cmudpps3h02e8urqwlbjf9zqu",
+        "name": "Kochi",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 4,
+        "distanceKm": "1.24"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpnt2t01qiurqwhbco1t2g",
+      "name": "Kanpur",
+      "state": "Uttar Pradesh",
+      "source": "GEONAMES",
+      "places": 105
+    },
+    "duplicates": [
+      {
+        "id": "cmudpww70051jurqwb8jkwzfg",
+        "name": "Kanpur Cantonment",
+        "state": "Uttar Pradesh",
+        "source": "GEONAMES",
+        "places": 6,
+        "distanceKm": "2.61"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpo1l501tqurqwcmm96cmw",
+      "name": "Jalandhar",
+      "state": "Punjab",
+      "source": "GEONAMES",
+      "places": 56
+    },
+    "duplicates": [
+      {
+        "id": "cmudpsgd803ahurqwb4sjq61o",
+        "name": "Jalandhar Cantonment",
+        "state": "Punjab",
+        "source": "GEONAMES",
+        "places": 14,
+        "distanceKm": "5.20"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpodmo01xmurqwsnl364c5",
+      "name": "Jabalpur",
+      "state": "Madhya Pradesh",
+      "source": "GEONAMES",
+      "places": 43
+    },
+    "duplicates": [
+      {
+        "id": "cmudpwbza04u0urqwq1bw7orw",
+        "name": "Vehicle Factory Area Jabalpur",
+        "state": "Madhya Pradesh",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "7.17"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpjc0b007rurqwel1ak9dd",
+      "name": "Tirupati",
+      "state": "Andhra Pradesh",
+      "source": "GEONAMES",
+      "places": 32
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvd2804fvurqwgpiog2tf",
+        "name": "Tirupati NMA",
+        "state": "Andhra Pradesh",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "7.12"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpo8kl01w1urqwbhzzr2m0",
+      "name": "Jammu",
+      "state": "Jammu and Kashmir",
+      "source": "GEONAMES",
+      "places": 31
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvxv204olurqwbxaiq9aw",
+        "name": "Jammu Cantonment",
+        "state": "Jammu and Kashmir",
+        "source": "GEONAMES",
+        "places": 9,
+        "distanceKm": "3.44"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudplf4o00wxurqwxqjq9ar7",
+      "name": "Panipat",
+      "state": "Haryana",
+      "source": "GEONAMES",
+      "places": 12
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvw2y04nuurqw9zk5dcqr",
+        "name": "Panipat Taraf Rajputan",
+        "state": "Haryana",
+        "source": "GEONAMES",
+        "places": 3,
+        "distanceKm": "3.86"
+      },
+      {
+        "id": "cmudpvw5804nvurqwpk8b9lxf",
+        "name": "Panipat Taraf Ansar",
+        "state": "Haryana",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "3.05"
+      },
+      {
+        "id": "cmudpvw7i04nwurqwlbxqdduc",
+        "name": "Panipat Taraf Makhdum Zadgan",
+        "state": "Haryana",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "3.73"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudplgmo00xgurqwm6z8mzsm",
+      "name": "Palwal",
+      "state": "Haryana",
+      "source": "GEONAMES",
+      "places": 11
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvw0f04nturqwao288080",
+        "name": "Palwal Rural",
+        "state": "Haryana",
+        "source": "GEONAMES",
+        "places": 3,
+        "distanceKm": "2.54"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudplr3f0112urqwkqxiuqrh",
+      "name": "Nellore",
+      "state": "Andhra Pradesh",
+      "source": "GEONAMES",
+      "places": 9
+    },
+    "duplicates": [
+      {
+        "id": "cmudpu24j03xaurqwjtnoc10h",
+        "name": "Bhuja Bhuja Nellore",
+        "state": "Andhra Pradesh",
+        "source": "GEONAMES",
+        "places": 4,
+        "distanceKm": "7.96"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudppooq02d6urqwf8z2bgbk",
+      "name": "Daman",
+      "state": "Dadra and Nagar Haveli and Daman and Diu",
+      "source": "GEONAMES",
+      "places": 8
+    },
+    "duplicates": [
+      {
+        "id": "cmudpww9j051kurqwwgsfnyj1",
+        "name": "Nani Daman",
+        "state": "Dadra and Nagar Haveli and Daman and Diu",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "0.00"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpl4aw00tdurqwx66t7l2h",
+      "name": "Pimpri",
+      "state": "Maharashtra",
+      "source": "GEONAMES",
+      "places": 7
+    },
+    "duplicates": [
+      {
+        "id": "cmudps8h5037turqw6u7nx5oa",
+        "name": "Pimpri-Chinchwad",
+        "state": "Maharashtra",
+        "source": "GEONAMES",
+        "places": 3,
+        "distanceKm": "0.58"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpqmc702odurqw2ohypzlf",
+      "name": "Betūl",
+      "state": "Madhya Pradesh",
+      "source": "GEONAMES",
+      "places": 7
+    },
+    "duplicates": [
+      {
+        "id": "cmudpqm8p02ocurqwkj6enjib",
+        "name": "Betūl Bazār",
+        "state": "Madhya Pradesh",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "5.70"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpqhdk02mrurqwb09ig2hy",
+      "name": "Bhilai",
+      "state": "Chhattisgarh",
+      "source": "GEONAMES",
+      "places": 6
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvm3z04jpurqw25fk6n09",
+        "name": "Bhilai Charoda",
+        "state": "Chhattisgarh",
+        "source": "GEONAMES",
+        "places": 2,
+        "distanceKm": "3.25"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpt6oq03kturqwmur8d33h",
+      "name": "Bāngarda Chhota",
+      "state": "Madhya Pradesh",
+      "source": "GEONAMES",
+      "places": 6
+    },
+    "duplicates": [
+      {
+        "id": "cmudpt6hr03kqurqwfy6oz1qd",
+        "name": "Bāngarda",
+        "state": "Madhya Pradesh",
+        "source": "GEONAMES",
+        "places": 4,
+        "distanceKm": "2.62"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpvkaf04ixurqwild74v4k",
+      "name": "Banmankhi Bazar",
+      "state": "Bihar",
+      "source": "GEONAMES",
+      "places": 6
+    },
+    "duplicates": [
+      {
+        "id": "cmudpqxb602s5urqwgnqxkrum",
+        "name": "Banmankhi",
+        "state": "Bihar",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "0.12"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpwi0q04w7urqwyvz79s97",
+      "name": "Dehu Road",
+      "state": "Maharashtra",
+      "source": "GEONAMES",
+      "places": 6
+    },
+    "duplicates": [
+      {
+        "id": "cmudpplvd02c7urqwm1i17mwd",
+        "name": "Dehu",
+        "state": "Maharashtra",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "5.46"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpp3ev026gurqwckhdyihr",
+      "name": "Gadag",
+      "state": "Karnataka",
+      "source": "GEONAMES",
+      "places": 5
+    },
+    "duplicates": [
+      {
+        "id": "cmudpsh6503arurqwhqsw3mtc",
+        "name": "Gadag-Betageri",
+        "state": "Karnataka",
+        "source": "GEONAMES",
+        "places": 2,
+        "distanceKm": "2.01"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpq7ey02jhurqwltil9gqh",
+      "name": "Bongaigaon",
+      "state": "Assam",
+      "source": "GEONAMES",
+      "places": 5
+    },
+    "duplicates": [
+      {
+        "id": "cmudpviux04iburqwcob9wyz9",
+        "name": "New Bongaigaon Railway Colony",
+        "state": "Assam",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "2.21"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpp9ue028durqwn4cp7l3u",
+      "name": "Dumra",
+      "state": "Bihar",
+      "source": "GEONAMES",
+      "places": 4
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvjrx04ipurqwdf1jqvjv",
+        "name": "Talkhapur Dumra",
+        "state": "Bihar",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "1.44"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudps3yu036burqwn6c1w5hi",
+      "name": "Vapi",
+      "state": "Gujarat",
+      "source": "GEONAMES",
+      "places": 4
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvvad04niurqwhyn1jhlm",
+        "name": "Vapi INA",
+        "state": "Gujarat",
+        "source": "GEONAMES",
+        "places": 3,
+        "distanceKm": "3.02"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpkd9v00k4urqwlg4sb5nh",
+      "name": "Sāmpla",
+      "state": "Haryana",
+      "source": "GEONAMES",
+      "places": 3
+    },
+    "duplicates": [
+      {
+        "id": "cmudprtoo032zurqw8wx1y4kd",
+        "name": "Kheri Sāmpla",
+        "state": "Haryana",
+        "source": "GEONAMES",
+        "places": 3,
+        "distanceKm": "0.40"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpmlz401b0urqwz7cenv37",
+      "name": "Mandi Dabwāli",
+      "state": "Haryana",
+      "source": "GEONAMES",
+      "places": 3
+    },
+    "duplicates": [
+      {
+        "id": "cmudpppsm02diurqwqdv2jbda",
+        "name": "Dabwāli",
+        "state": "Haryana",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "4.14"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpr5ny02v2urqwd0cmv81n",
+      "name": "Badarpur",
+      "state": "Assam",
+      "source": "GEONAMES",
+      "places": 3
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvhcr04hourqwjnmhmomk",
+        "name": "Badarpur Railway Town",
+        "state": "Assam",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "2.60"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpviq704i9urqwgnp3akj8",
+      "name": "Digboi Oil Town",
+      "state": "Assam",
+      "source": "GEONAMES",
+      "places": 3
+    },
+    "duplicates": [
+      {
+        "id": "cmudppdnn029furqwyvoeyuwg",
+        "name": "Digboi",
+        "state": "Assam",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "0.53"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudptuub03uburqwoivy8y4q",
+      "name": "Savarkundla",
+      "state": "Gujarat",
+      "source": "GEONAMES",
+      "places": 3
+    },
+    "duplicates": [
+      {
+        "id": "cmudpn5ri01haurqw3916vhu3",
+        "name": "Kundla",
+        "state": "Gujarat",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "0.62"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpo2q501u4urqwby5in5xy",
+      "name": "Jodhpur",
+      "state": "Gujarat",
+      "source": "GEONAMES",
+      "places": 2
+    },
+    "duplicates": [
+      {
+        "id": "cmudptxan03vcurqwxidjwa1g",
+        "name": "Jamjodhpur",
+        "state": "Gujarat",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "0.31"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudppa62028hurqwif2yuep7",
+      "name": "Duliajan",
+      "state": "Assam",
+      "source": "GEONAMES",
+      "places": 2
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvj4604ifurqwvyp4h9pc",
+        "name": "Duliajan Oil Town",
+        "state": "Assam",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "0.49"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpvjhz04ilurqw92vkzzk9",
+      "name": "Dumari urf Damodarpur Shahjahan",
+      "state": "Bihar",
+      "source": "GEONAMES",
+      "places": 2
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvk1904iturqwptmxr2bb",
+        "name": "Damodarpur",
+        "state": "Bihar",
+        "source": "GEONAMES",
+        "places": 2,
+        "distanceKm": "3.94"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpw20904q8urqwej4w9ud7",
+      "name": "Gokak Falls",
+      "state": "Karnataka",
+      "source": "GEONAMES",
+      "places": 2
+    },
+    "duplicates": [
+      {
+        "id": "cmudpovqf023surqwcsz20zr5",
+        "name": "Gokak",
+        "state": "Karnataka",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "5.38"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpw5eu04rmurqwesa3zgf2",
+      "name": "Ongallur-I",
+      "state": "Kerala",
+      "source": "GEONAMES",
+      "places": 2
+    },
+    "duplicates": [
+      {
+        "id": "cmudpw7vq04skurqwe7fgw0dq",
+        "name": "Ongallur-II",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "1.44"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpjy5400f0urqwn2eyzk9i",
+      "name": "Silchar",
+      "state": "Assam",
+      "source": "GEONAMES",
+      "places": 1
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvf6t04grurqw78vsd03x",
+        "name": "Silchar Part-X",
+        "state": "Assam",
+        "source": "GEONAMES",
+        "places": 1,
+        "distanceKm": "1.94"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpkzyi00rwurqwzhu6rnl3",
+      "name": "Pugalūr",
+      "state": "Tamil Nadu",
+      "source": "GEONAMES",
+      "places": 1
+    },
+    "duplicates": [
+      {
+        "id": "cmudpv1ca04b8urqwyzbra49d",
+        "name": "Pugalūr Agrahāram",
+        "state": "Tamil Nadu",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "2.24"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudplcy700w6urqw4zb2m95y",
+      "name": "Parnera",
+      "state": "Gujarat",
+      "source": "GEONAMES",
+      "places": 1
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvpjd04l5urqwkvay11fw",
+        "name": "Pardi Parnera",
+        "state": "Gujarat",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "1.12"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpubq3040yurqw20jqal2a",
+      "name": "Vengola Kizhakkumbāgam",
+      "state": "Kerala",
+      "source": "GEONAMES",
+      "places": 1
+    },
+    "duplicates": [
+      {
+        "id": "cmudpubgc040uurqwmuja7vsb",
+        "name": "Kizhakkumbāgam",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "8.28"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpkx4j00qxurqwb17ocg73",
+      "name": "Rabkavi",
+      "state": "Karnataka",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudpsh8z03asurqwt6nf1ot8",
+        "name": "Rabkavi-Banhatti",
+        "state": "Karnataka",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "1.18"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpmj7l01a4urqwa6123qpn",
+      "name": "Manjēshvar",
+      "state": "Kerala",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudptgrw03ovurqwi15voxlx",
+        "name": "Bangramanjēshvara",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "0.80"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpnu4g01qyurqwe4pelurz",
+      "name": "Kanigiri",
+      "state": "Andhra Pradesh",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvczx04fuurqwndoz0iac",
+        "name": "Kanigiri U",
+        "state": "Andhra Pradesh",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "0.09"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpr82e02vwurqwqqs1pjl0",
+      "name": "Attingal",
+      "state": "Kerala",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudpuch20419urqwqkxr86dd",
+        "name": "Kīlattingal",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "2.42"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpspxr03e1urqwj3lk9ixs",
+      "name": "Pehlādpur Bāngar",
+      "state": "Delhi",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudpt3cm03jgurqwp5m7vjro",
+        "name": "Lādpur",
+        "state": "Delhi",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "8.47"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpsr4c03efurqw41wlru6q",
+      "name": "Burāri",
+      "state": "Delhi",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudpsthd03fdurqwuepwbkts",
+        "name": "Jharoda Mazra Burāri",
+        "state": "Delhi",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "3.00"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpvgfp04haurqw7o6yx0wr",
+      "name": "Ambicapur Pt VI",
+      "state": "Assam",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudpvih204i5urqw9jig0t6y",
+        "name": "Ambicapur Pt VIII",
+        "state": "Assam",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "4.48"
+      }
+    ]
+  },
+  {
+    "canonical": {
+      "id": "cmudpw3ip04quurqwjvwpmorf",
+      "name": "Ala",
+      "state": "Kerala",
+      "source": "GEONAMES",
+      "places": 0
+    },
+    "duplicates": [
+      {
+        "id": "cmudpw3l604qvurqwlxefyf7k",
+        "name": "Poomangalam",
+        "state": "Kerala",
+        "source": "GEONAMES",
+        "places": 0,
+        "distanceKm": "6.47"
+      }
+    ]
+  }
+]
