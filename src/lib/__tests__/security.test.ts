@@ -122,7 +122,8 @@ describe("security", () => {
         path.resolve(__dirname, "../../app/actions/stay.ts"),
         "utf-8",
       );
-      expect(source).toContain("SAMPLE_HOTELS.find");
+      // Stay system now uses DB lookup — server resolves price from Place record, never from client
+      expect(source).toContain("prisma.place.findUnique");
       expect(source).not.toContain("costPerNightInr: number,");
       expect(source).not.toContain("lat: number,");
     });

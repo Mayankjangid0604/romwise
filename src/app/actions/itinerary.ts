@@ -114,9 +114,10 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
         accessibilityNotes: creatorMember?.accessibilityNotes || undefined,
       };
 
-      const result = process.env.PLANNER_ENGINE === "v2" 
-        ? await generateGroundedItineraryV2(inputPayload)
-        : await generateGroundedItinerary(inputPayload);
+      // V2 is the default deterministic engine. V1 (Gemini) only used if explicitly requested.
+      const result = process.env.PLANNER_ENGINE === "v1" 
+        ? await generateGroundedItinerary(inputPayload)
+        : await generateGroundedItineraryV2(inputPayload);
 
       // Save itinerary to DB
       await prisma.itineraryDay.deleteMany({ where: { tripId } });
@@ -179,7 +180,7 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
 
   return {
     success: true,
-    usedGemini: true,
+    usedGemini: process.env.PLANNER_ENGINE === "v1",
     usedFallback: false,
     candidateCount: 0,
     season: "",

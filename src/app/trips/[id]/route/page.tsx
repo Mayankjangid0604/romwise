@@ -7,6 +7,12 @@ import {
   type RouteStop,
 } from "@/lib/route-optimizer";
 import {
+  buildJourneyLegs,
+  suggestTransportModes,
+  type JourneyStop,
+} from "@/lib/journey";
+import { resolveDestination } from "@/lib/destination-resolver";
+import {
   PageShell,
   PageHeader,
   Card,
@@ -14,6 +20,7 @@ import {
   Stat,
   EmptyState,
   Figure,
+  Badge,
   cn,
 } from "@/components/ui";
 import DynamicMap from "@/components/ui/dynamic-map";
@@ -58,6 +65,41 @@ export default async function RoutePage(props: {
     );
   }
 
+  // ── Intercity Journey Plan ─────────────────────────────────────────────────
+  // Build the journey legs from waypoints for the journey overview
+  const waypointNames: string[] = [];
+  if (trip.waypoints) {
+    try {
+      const parsed = JSON.parse(trip.waypoints);
+      if (Array.isArray(parsed)) waypointNames.push(...parsed.filter((w: unknown): w is string => typeof w === "string"));
+    } catch { /* ignore */ }
+  }
+
+  // Resolve origin — use returnDestination or fall back to first waypoint concept
+  let originStop: JourneyStop | null = null;
+  if (trip.returnDestination) {
+    const resolved = await resolveDestination(trip.returnDestination);
+    if (resolved) originStop = { name: resolved.name, lat: resolved.lat, lng: resolved.lng };
+  }
+
+  // Resolve all destinations in order
+  const destinationStops: JourneyStop[] = [];
+  // Primary destination
+  if (trip.destinationRef) {
+    destinationStops.push({ name: trip.destinationRef.name, lat: trip.destinationRef.lat, lng: trip.destinationRef.lng });
+  }
+  // Waypoints
+  for (const wp of waypointNames) {
+    const resolved = await resolveDestination(wp);
+    if (resolved) destinationStops.push({ name: resolved.name, lat: resolved.lat, lng: resolved.lng });
+  }
+
+  const journeyPlan = destinationStops.length > 0
+    ? buildJourneyLegs(originStop, destinationStops, trip.isRoundTrip)
+    : null;
+
+  // ── Day Route ─────────────────────────────────────────────────────────────
+
   const selectedDay = dayParam ? parseInt(dayParam, 10) : 1;
   const dayData = trip.itineraryDays.find((d) => d.dayNumber === selectedDay);
 
@@ -65,8 +107,6 @@ export default async function RoutePage(props: {
 
   const stops: RouteStop[] = dayData.items
     .map((item) => {
-      // Only include items with real place coordinates — never substitute destination center,
-      // which would make route distances appear precise when they are not.
       const lat = item.place?.lat;
       const lng = item.place?.lng;
       if (lat == null || lng == null) return null;
@@ -92,6 +132,47 @@ export default async function RoutePage(props: {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out space-y-6">
+      {/* Journey Overview (intercity) */}
+      {journeyPlan && journeyPlan.legs.length > 0 && (
+        <Card>
+          <div className="flex items-center gap-2 mb-3">
+            <h2 className="font-display text-lg font-semibold text-ink-800">Journey Overview</h2>
+            <Badge tone="lagoon">{journeyPlan.routeType.replace("_", " ")}</Badge>
+          </div>
+          <div className="space-y-2">
+            {journeyPlan.legs.map((leg) => (
+              <div key={leg.legNumber} className="flex items-center gap-3 text-[0.8125rem]">
+                <span className="w-5 h-5 shrink-0 rounded-full bg-ink-100 flex items-center justify-center text-[0.625rem] font-mono font-medium text-ink-600">
+                  {leg.legNumber}
+                </span>
+                <span className="text-ink-800 font-medium">{leg.originName}</span>
+                <span className="text-ink-400">→</span>
+                <span className="text-ink-800 font-medium">{leg.destinationName}</span>
+                {leg.distanceKm != null && (
+                  <>
+                    <span className="text-ink-300">·</span>
+                    <Figure>{leg.distanceKm.toFixed(0)} km</Figure>
+                  </>
+                )}
+                {leg.suggestedModes.length > 0 && (
+                  <span className="text-ink-400 text-[0.75rem]">
+                    ({leg.suggestedModes.join(" / ")})
+                  </span>
+                )}
+                {leg.isReturn && <Badge tone="neutral">Return</Badge>}
+              </div>
+            ))}
+          </div>
+          {journeyPlan.totalDistanceKm != null && (
+            <p className="text-[0.75rem] text-ink-400 mt-3 pt-2 border-t border-ink-100">
+              Total approximate distance: <Figure>{journeyPlan.totalDistanceKm.toFixed(0)} km</Figure>
+              <span className="ml-2 text-ink-300">(straight-line estimate)</span>
+            </p>
+          )}
+        </Card>
+      )}
+
+      {/* Day Selector */}
       <div className="flex flex-wrap gap-2">
         {trip.itineraryDays.map((d) => (
           <Link
