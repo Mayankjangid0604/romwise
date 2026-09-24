@@ -8,6 +8,7 @@ import {
   SectionHeading,
   Badge,
   DiscoveryImage,
+  buttonStyles,
 } from "@/components/ui";
 import { COLLECTIONS, getDestinationsForCollection, CollectionTheme, RecommendedDestination } from "@/lib/destination-brain";
 import { DestinationSearch } from "./DestinationSearch";
@@ -172,7 +173,7 @@ function renderDestinationCard(dest: RecommendedDestination) {
         <div className="mt-5 pt-4 border-t border-ink-100 flex items-center gap-4 justify-between">
           <Link
             href={`/trips/new?destination=${encodeURIComponent(dest.name)}`}
-            className="inline-flex items-center justify-center rounded-control bg-lagoon-600 text-white font-medium text-[0.875rem] px-5 py-2 hover:bg-lagoon-700 transition-colors shadow-sm"
+            className={buttonStyles({ variant: "primary", size: "md" })}
           >
             Plan this trip
           </Link>

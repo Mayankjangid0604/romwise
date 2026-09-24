@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect, useRef, useCallback } from "react";
 import { generateTripItinerary } from "@/app/actions/itinerary";
 import { Button, Alert } from "@/components/ui";
+import { Loader2 } from "lucide-react";
 
 const PROGRESS_STAGES = [
   { label: "Resolving destination…", durationMs: 800 },
@@ -131,7 +132,7 @@ export function GenerateButton({ tripId, initialStatus }: { tripId: string, init
       <Button onClick={handleGenerate} disabled={isGenerating}>
         {isGenerating ? (
           <span className="flex items-center gap-2">
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            <Loader2 className="h-4 w-4 animate-spin" />
             <span>{stageLabel}</span>
           </span>
         ) : (

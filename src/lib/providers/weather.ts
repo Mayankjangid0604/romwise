@@ -33,17 +33,17 @@ export class MockWeatherProvider implements WeatherProvider {
 
     while (current <= endDate) {
       let condition = "Clear";
-      let icon = "☀️";
+      let icon = "sun";
 
       if (isMonsoon) {
         condition = "Rain";
-        icon = "🌧️";
+        icon = "cloud-rain";
       } else if (isMountain && isWinter) {
         condition = "Snow";
-        icon = "❄️";
+        icon = "snowflake";
       } else if (current.getDate() % 3 === 0) {
         condition = "Partly Cloudy";
-        icon = "⛅";
+        icon = "cloud-sun";
       }
 
       forecast.push({

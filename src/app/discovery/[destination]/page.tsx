@@ -16,6 +16,7 @@ import {
   Input,
   Select,
 } from "@/components/ui";
+import { Utensils, CheckCircle2, Lightbulb } from "lucide-react";
 
 function DestinationDetailContent() {
   const params = useParams();
@@ -218,8 +219,8 @@ function DestinationDetailContent() {
                   <span className="font-medium">Best for:</span> {place.bestFor}
                 </p>
                 <div className="mt-2 p-2 rounded bg-amber-50 border border-amber-200">
-                  <p className="text-[0.75rem] text-amber-800">
-                    💡 {place.tipForVisiting}
+                  <p className="text-[0.75rem] text-amber-800 flex items-start gap-1.5">
+                    <Lightbulb className="w-3.5 h-3.5 mt-0.5 shrink-0" /> {place.tipForVisiting}
                   </p>
                 </div>
               </div>
@@ -234,9 +235,9 @@ function DestinationDetailContent() {
           <h2 className="font-display text-lg font-semibold text-ink-800 mb-3">Local Cuisine</h2>
           <ul className="space-y-2">
             {details.localCuisine.map((dish, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-ink-700">
-                <span className="text-base">🍽️</span>
-                {dish}
+              <li key={i} className="flex items-start gap-2 text-sm text-ink-700">
+                <Utensils className="w-4 h-4 mt-0.5 text-ink-400 shrink-0" />
+                <span>{dish}</span>
               </li>
             ))}
           </ul>
@@ -247,8 +248,8 @@ function DestinationDetailContent() {
           <ul className="space-y-2">
             {details.practicalTips.map((tip, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-ink-700">
-                <span className="text-base mt-0.5">✅</span>
-                {tip}
+                <CheckCircle2 className="w-4 h-4 mt-0.5 text-success-600 shrink-0" />
+                <span>{tip}</span>
               </li>
             ))}
           </ul>

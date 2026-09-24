@@ -7,7 +7,8 @@ export type AITask =
   | "replanning"
   | "group_alignment"
   | "item_alignment"
-  | "packing";
+  | "packing"
+  | "copilot";
 
 export type AIProviderName = "gemini" | "local" | "mock";
 

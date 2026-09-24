@@ -66,6 +66,13 @@ export function getModelForTask(task: AITask): { provider: AIProviderName; model
     };
   }
 
+  if (task === "copilot") {
+    return {
+      provider: "gemini",
+      model: process.env.AI_COPILOT_MODEL || defaultModel,
+    };
+  }
+
   // Fallback
   return {
     provider: "gemini",

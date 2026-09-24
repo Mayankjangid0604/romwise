@@ -26,16 +26,16 @@ export function AICopilot({ tripId }: { tripId: string }) {
     setIsLoading(true);
 
     try {
-      // We will implement the action later, for now just echo
-      const res = await fetch(`/api/chat/copilot`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tripId, message: userMessage.content }),
-      });
-      const data = await res.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.message }]);
-      if (data.intent && data.intent.action !== "NO_ACTION") {
-        router.refresh(); // Refresh the itinerary to reflect the AI's changes
+      const { executeCopilotIntent } = await import("@/app/actions/copilot");
+      const res = await executeCopilotIntent(tripId, userMessage.content);
+      
+      if (res.success) {
+        setMessages((prev) => [...prev, { role: "assistant", content: res.message }]);
+        if (res.action !== "NO_ACTION") {
+          router.refresh();
+        }
+      } else {
+        setMessages((prev) => [...prev, { role: "assistant", content: res.error }]);
       }
     } catch (err) {
       setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I couldn't process that right now." }]);

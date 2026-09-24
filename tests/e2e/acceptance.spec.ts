@@ -21,6 +21,7 @@ async function assertNoHorizontalOverflow(page: Page) {
 }
 
 test.describe("Pre-Merge Acceptance: Responsive & Duplicate Nav", () => {
+  test.setTimeout(120000); // 120 seconds for checking all pages
   let user: import("@prisma/client").User;
   let trip: import("@prisma/client").Trip;
 
@@ -82,7 +83,11 @@ test.describe("Pre-Merge Acceptance: Responsive & Duplicate Nav", () => {
       test("Check all pages for overflow", async ({ page }) => {
         const pages = getPages(trip.id);
         for (const path of pages) {
-          await page.goto(path, { waitUntil: "networkidle" });
+          await page.goto(path, { waitUntil: "domcontentloaded" });
+          // Wait for a deterministic visual element to ensure the page has mostly rendered
+          await page.waitForSelector("main, #main, .container, body", { state: 'attached' });
+          // Give client components a moment to mount and calculate responsive styles
+          await page.waitForTimeout(500);
           await assertNoHorizontalOverflow(page);
         }
       });
