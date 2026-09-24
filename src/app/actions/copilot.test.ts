@@ -152,4 +152,75 @@ describe('Copilot Actions', () => {
     expect(result.success).toBe(false);
     expect((result as any).error).toContain('Failed to process AI request');
   });
+
+  it('allows a member to add an item', async () => {
+    vi.mocked(auth).mockResolvedValue({ user: { id: 'member-id' } } as any);
+    vi.mocked(prisma.groupMember.findFirst).mockResolvedValue({ role: 'member' } as any);
+    vi.mocked(prisma.trip.findUnique).mockResolvedValue({
+      id: 'trip-1',
+      destination: 'Paris',
+      itineraryDays: [{ dayNumber: 1, id: 'day-1', items: [] }]
+    } as any);
+
+    vi.mocked(AIGateway.generateStructured).mockResolvedValue({
+      data: {
+        message: "Added it.",
+        intent: {
+          action: "ADD_PLACE",
+          targetDayNumber: 1,
+          searchKeyword: "Louvre"
+        }
+      }
+    } as any);
+
+    const result = await executeCopilotIntent('trip-1', 'Add Louvre');
+    expect(result.success).toBe(true);
+    expect(prisma.itineraryItem.create).toHaveBeenCalled();
+  });
+
+  it('rejects malformed intent', async () => {
+    vi.mocked(auth).mockResolvedValue({ user: { id: 'creator-id' } } as any);
+    vi.mocked(prisma.groupMember.findFirst).mockResolvedValue({ role: 'admin' } as any);
+    vi.mocked(prisma.trip.findUnique).mockResolvedValue({
+      id: 'trip-1',
+      itineraryDays: []
+    } as any);
+
+    // AI returns something completely wrong
+    vi.mocked(AIGateway.generateStructured).mockResolvedValue({
+      data: {
+        message: "Okay.",
+        intent: "I am not an object"
+      }
+    } as any);
+
+    const result = await executeCopilotIntent('trip-1', 'Do something weird');
+    expect(result.success).toBe(false);
+    expect((result as any).error).toBeDefined();
+    expect(prisma.itineraryItem.create).not.toHaveBeenCalled();
+    expect(prisma.itineraryItem.update).not.toHaveBeenCalled();
+    expect(prisma.itineraryItem.delete).not.toHaveBeenCalled();
+  });
+
+  it('rejects unknown operation', async () => {
+    vi.mocked(auth).mockResolvedValue({ user: { id: 'creator-id' } } as any);
+    vi.mocked(prisma.groupMember.findFirst).mockResolvedValue({ role: 'admin' } as any);
+    vi.mocked(prisma.trip.findUnique).mockResolvedValue({
+      id: 'trip-1',
+      itineraryDays: []
+    } as any);
+
+    vi.mocked(AIGateway.generateStructured).mockResolvedValue({
+      data: {
+        message: "Okay.",
+        intent: { action: "HACK_DATABASE" }
+      }
+    } as any);
+
+    const result = await executeCopilotIntent('trip-1', 'Hack database');
+    expect(result.success).toBe(false); 
+    expect(prisma.itineraryItem.create).not.toHaveBeenCalled();
+    expect(prisma.itineraryItem.update).not.toHaveBeenCalled();
+    expect(prisma.itineraryItem.delete).not.toHaveBeenCalled();
+  });
 });
