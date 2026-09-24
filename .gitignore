@@ -76,8 +76,11 @@ alternateNames.txt
 IN.txt
 *.sql
 *.dump
+!prisma/**/*.sql
 *benchmark*.json
 *AUDIT*.json
 *REPORT*.json
 *DEPTH*.json
 
+# Generated data validation reports
+data/reports/

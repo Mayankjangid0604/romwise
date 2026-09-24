@@ -90,6 +90,11 @@ test.describe('Collaborative Trip Planning', () => {
     // 1. Creator generates share link
     const contextCreator = await browser.newContext();
     const pageCreator = await contextCreator.newPage();
+    await pageCreator.addInitScript(() => {
+      Object.assign(navigator, {
+        clipboard: { writeText: async () => {}, readText: async () => '' }
+      });
+    });
     
     // Login as creator
     await loginAs(pageCreator, contextCreator, u1Email);
