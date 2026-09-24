@@ -1,0 +1,37 @@
+{
+  "preSyncHead": "88f46bf4d2f8a8d2211e1c6f662f52a45a62784f",
+  "postSyncHead": "91d6c79d2ac1837a64f203283c93a2eee5a9e90a",
+  "commits": [
+    {
+      "sha": "91d6c79d2ac1837a64f203283c93a2eee5a9e90a",
+      "author": "Mayankjangid0604",
+      "message": "Merge pull request #3 from Mayankjangid0604/fix/local-data-minimize-api"
+    },
+    {
+      "sha": "f66de3db51dbf3008fc063fd04b2cee9ddc63526",
+      "author": "Mayankjangid0604",
+      "message": "fix: use local data for images and destination details, minimize API usage"
+    }
+  ],
+  "files": [
+    { "path": "src/app/api/destination-details/route.ts", "change": "Modified", "category": "API", "risk": "LOW" },
+    { "path": "src/lib/destination-brain/details.ts", "change": "Modified", "category": "DESTINATION BRAIN", "risk": "LOW" },
+    { "path": "src/lib/providers/images.ts", "change": "Modified", "category": "DISCOVERY", "risk": "LOW" },
+    { "path": "src/lib/providers/maps.ts", "change": "Modified", "category": "ROUTING", "risk": "LOW" },
+    { "path": "src/lib/providers/weather.ts", "change": "Modified", "category": "OTHER", "risk": "LOW" },
+    { "path": "src/lib/services/image-service.ts", "change": "Deleted", "category": "OTHER", "risk": "LOW" },
+    { "path": "src/lib/services/map-service.ts", "change": "Deleted", "category": "OTHER", "risk": "LOW" }
+  ],
+  "databaseChanged": false,
+  "migrationsChanged": false,
+  "dependenciesChanged": false,
+  "ciChanged": false,
+  "envChanged": false,
+  "tests": {
+    "vitest": { "passed": true },
+    "playwright": { "passed": true }
+  },
+  "build": "PASS",
+  "risks": [],
+  "recommendedActions": ["ACCEPT AS-IS"]
+}

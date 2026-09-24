@@ -3,6 +3,7 @@ import { TripWorkspaceNav } from "@/components/ui";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { LayoutGrid } from "lucide-react";
+import { AICopilot } from "./ai-copilot";
 
 // Note: AppShell + AppNavigation are already provided by the parent trips/layout.tsx.
 // This layout only adds the trip-specific tab bar and content wrapper.
@@ -43,6 +44,7 @@ export default async function TripLayout(props: {
       <div className="flex-1 bg-ink-50 p-4 sm:p-6">
         {props.children}
       </div>
+      <AICopilot tripId={id} />
     </div>
   );
 }

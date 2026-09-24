@@ -236,6 +236,12 @@ export async function createTrip(
     },
   });
 
+  if (formData.get("autoGenerate") === "true") {
+    const { generateTripItinerary } = await import("./itinerary");
+    await generateTripItinerary(trip.id);
+    redirect(`/trips/${trip.id}/itinerary`);
+  }
+
   redirect(`/trips/${trip.id}`);
 }
 
