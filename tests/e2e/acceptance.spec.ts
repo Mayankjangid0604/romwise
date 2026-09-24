@@ -25,9 +25,11 @@ test.describe("Pre-Merge Acceptance: Responsive & Duplicate Nav", () => {
   let trip: import("@prisma/client").Trip;
 
   test.beforeAll(async () => {
-    const testEmail = `e2e_accept_${Date.now()}@example.com`;
-    user = await prisma.user.create({
-      data: { email: testEmail, name: "Acceptance User" },
+    const testEmail = `e2e_accept_${Date.now()}_${Math.random().toString(36).substring(2, 7)}@example.com`;
+    user = await prisma.user.upsert({
+      where: { email: testEmail },
+      update: {},
+      create: { email: testEmail, name: "Acceptance User" },
     });
     trip = await prisma.trip.create({
       data: {

@@ -1,12 +1,8 @@
 import { z } from "zod";
 import { AIGateway } from "./ai/gateway";
 import { AIGatewayError } from "./ai/types";
-export class ValidationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ValidationError";
-  }
-}
+import { ValidationError } from "./errors";
+export { ValidationError } from "./errors";
 
 export const travelerProfileSchema = z.object({
   name: z.string().trim().min(1),

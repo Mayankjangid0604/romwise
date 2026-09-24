@@ -77,12 +77,14 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   background: var(--color-ink-50);
   color: var(--color-ink-700);
   font-family: var(--font-sans);
+  overflow-x: hidden;
 }
 
 .tabular {
