@@ -13,12 +13,9 @@ export interface MapProvider {
 }
 
 export class MockMapProvider implements MapProvider {
-  async geocode(address: string): Promise<GeocodeResult | null> {
-    return {
-      lat: 15.2993,
-      lng: 74.1240, // defaults to Goa for testing
-      formattedAddress: address,
-    };
+  async geocode(_address: string): Promise<GeocodeResult | null> {
+    // ponytail: stub — geocode is unused; if needed, query TravelDestination table by name
+    return null;
   }
 
   calculateDistance(from: GeoCoordinates, to: GeoCoordinates): number {

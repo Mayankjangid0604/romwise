@@ -50,7 +50,7 @@ export class MockWeatherProvider implements WeatherProvider {
         date: current.toISOString().split('T')[0],
         minTempC: baseMin + (current.getDate() % 3),
         maxTempC: baseMax + (current.getDate() % 4),
-        condition: `[DEMO] ${condition}`,
+        condition,
         icon,
       });
       current.setDate(current.getDate() + 1);
