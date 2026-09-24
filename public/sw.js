@@ -1,4 +1,4 @@
-const CACHE_NAME = 'roamwise-cache-v1';
+const CACHE_NAME = 'roamwise-cache-v2';
 const OFFLINE_URL = '/offline';
 
 const ASSETS_TO_CACHE = [
@@ -6,7 +6,6 @@ const ASSETS_TO_CACHE = [
   '/offline',
   '/manifest.json',
   '/globe.svg',
-  '/globe-pattern.svg',
 ];
 
 self.addEventListener('install', (event) => {
