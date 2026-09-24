@@ -5,7 +5,7 @@ import {
   validateGroupAlignmentInput,
 } from "@/lib/group-alignment";
 import { AIGatewayError } from "@/lib/ai/types";
-import { ValidationError } from "@/lib/discovery";
+import { ValidationError } from "@/lib/group-alignment";
 import { checkRateLimitDb } from "@/lib/db-rate-limit";
 import { headers } from "next/headers";
 

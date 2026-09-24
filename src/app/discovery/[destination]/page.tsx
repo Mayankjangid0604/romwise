@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import type { DestinationDetails } from "@/lib/discovery";
+import type { DestinationDetails } from "@/lib/destination-brain";
 import {
   PageShell,
   PageHeader,

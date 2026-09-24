@@ -1,52 +1,28 @@
-"use client";
-
-import { useState } from "react";
+import { redirect } from "next/navigation";
 import Link from "next/link";
-import type { DiscoveryResponse } from "@/lib/discovery";
 import {
   PageShell,
   PageHeader,
   Card,
   Alert,
-  Field,
-  Textarea,
-  Button,
-  Badge,
   SectionHeading,
+  Badge,
 } from "@/components/ui";
+import { COLLECTIONS, getDestinationsForCollection, CollectionTheme } from "@/lib/destination-brain";
+import { DestinationSearch } from "./DestinationSearch";
 
-export default function DiscoveryPage() {
-  const [description, setDescription] = useState("");
-  const [result, setResult] = useState<DiscoveryResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+export default async function DiscoveryPage(props: {
+  searchParams: Promise<{ collection?: string }>;
+}) {
+  const { collection: collectionParam } = await props.searchParams;
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setResult(null);
-    setLoading(true);
+  const activeCollection = collectionParam 
+    ? COLLECTIONS[collectionParam as CollectionTheme] 
+    : null;
 
-    try {
-      const res = await fetch("/api/discovery", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Something went wrong");
-        return;
-      }
-
-      setResult(data as DiscoveryResponse);
-    } catch {
-      setError("Failed to connect to the server");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const results = activeCollection 
+    ? await getDestinationsForCollection({ theme: activeCollection.id as CollectionTheme }) 
+    : null;
 
   return (
     <PageShell>
@@ -54,123 +30,81 @@ export default function DiscoveryPage() {
         backHref="/dashboard"
         backLabel="Dashboard"
         title="Discover Destinations"
-        subtitle="Describe the trip you have in mind and get three tailored suggestions."
+        subtitle="Search for a specific destination or explore by travel style."
       />
 
-      <Card className="mb-8">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Field
-            label="Describe your ideal trip"
-            htmlFor="description"
-            hint={`${description.length}/1000 characters`}
-          >
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              maxLength={1000}
-              rows={4}
-              placeholder="e.g. A calm seven-day food and art trip in November for four adults, moderate budget, prefer warm weather"
-            />
-          </Field>
+      <DestinationSearch />
 
-          <Button
-            type="submit"
-            disabled={loading || description.trim().length === 0}
-          >
-            {loading ? "Discovering..." : "Discover Destinations"}
-          </Button>
-        </form>
-      </Card>
+      {/* Collection Grid */}
+      <div className="mb-10">
+        <SectionHeading>Explore by Travel Style</SectionHeading>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+          {Object.values(COLLECTIONS).map((c) => (
+            <Link
+              key={c.id}
+              href={`/discovery?collection=${c.id}`}
+              className={`p-4 rounded-card border transition-all ${
+                activeCollection?.id === c.id
+                  ? "border-lagoon-600 bg-lagoon-50 shadow-sm"
+                  : "border-ink-200 bg-white hover:border-lagoon-300 hover:shadow-sm"
+              }`}
+            >
+              <h3 className="font-display font-semibold text-ink-900">{c.title}</h3>
+              <p className="text-[0.8125rem] text-ink-600 mt-1">{c.description}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
 
-      {error && (
-        <Alert tone="danger" title="Discovery failed" className="mb-8">
-          {error}
-        </Alert>
-      )}
-
-      {result && (
-        <div>
-          <SectionHeading>Suggested Destinations</SectionHeading>
-
-          <div className="space-y-4">
-            {result.destinations.map((dest, i) => (
-              <Card key={i}>
-                <div className="flex items-start justify-between gap-4">
-                  <Link
-                    href={`/discovery/${encodeURIComponent(dest.name)}?context=${encodeURIComponent(dest.rationale)}`}
-                    className="font-display text-xl font-semibold text-ink-900 hover:text-lagoon-700 transition-colors"
-                  >
-                    {dest.name}
-                  </Link>
-                  <Badge tone="lagoon" className="shrink-0 px-3 py-1">
-                    <span className="font-mono tabular">{dest.matchScore}%</span>
-                    <span className="ml-1">match</span>
-                  </Badge>
-                </div>
-
-                <p className="text-ink-700 mt-3 leading-relaxed">
-                  {dest.rationale}
-                </p>
-
-                <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 pt-4 border-t border-ink-100">
-                  <div>
-                    <dt className="text-[0.6875rem] font-medium uppercase tracking-wider text-ink-500">
-                      Climate
-                    </dt>
-                    <dd className="text-[0.875rem] text-ink-700 mt-0.5">
-                      {dest.climate}
-                    </dd>
+      {/* Results */}
+      {activeCollection && (
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+          <SectionHeading>{activeCollection.title} Destinations</SectionHeading>
+          
+          {results && results.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              {results.map((dest) => (
+                <Card key={dest.id} className="flex flex-col">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="font-display text-xl font-semibold text-ink-900">
+                        {dest.name}
+                      </h3>
+                      <p className="text-[0.875rem] text-ink-500">{dest.state}</p>
+                    </div>
+                    <Badge tone="lagoon" className="shrink-0 px-3 py-1">
+                      <span className="font-mono tabular">{dest.matchScore}%</span>
+                      <span className="ml-1">match</span>
+                    </Badge>
                   </div>
-                  <div>
-                    <dt className="text-[0.6875rem] font-medium uppercase tracking-wider text-ink-500">
-                      Best time
-                    </dt>
-                    <dd className="text-[0.875rem] text-ink-700 mt-0.5">
-                      {dest.bestTravelTime}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-[0.6875rem] font-medium uppercase tracking-wider text-ink-500">
-                      Budget level
-                    </dt>
-                    <dd className="text-[0.875rem] text-ink-700 mt-0.5 capitalize">
-                      {dest.suggestedBudgetLevel}
-                    </dd>
-                  </div>
-                </dl>
 
-                <div className="mt-4">
-                  <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-ink-500 mb-2">
-                    Activities
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {dest.activities.map((activity, j) => (
-                      <Badge key={j} tone="neutral">
-                        {activity}
-                      </Badge>
-                    ))}
+                  <div className="mt-4 flex-1">
+                    <ul className="space-y-1">
+                      {dest.reasons.map((reason, i) => (
+                        <li key={i} className="text-[0.875rem] text-ink-700 flex items-start gap-2">
+                          <span className="text-lagoon-600 mt-0.5">•</span>
+                          {reason}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </div>
 
-                <div className="mt-5 pt-4 border-t border-ink-100 flex items-center gap-4">
-                  <Link
-                    href={`/discovery/${encodeURIComponent(dest.name)}?context=${encodeURIComponent(dest.rationale)}`}
-                    className="inline-flex items-center gap-1.5 text-[0.875rem] font-medium text-lagoon-700 hover:text-lagoon-800 transition-colors"
-                  >
-                    Explore destination →
-                  </Link>
-                  <Link
-                    href={`/trips/new?destination=${encodeURIComponent(dest.name)}`}
-                    className="inline-flex items-center gap-1.5 text-[0.875rem] text-ink-500 hover:text-ink-700 transition-colors"
-                  >
-                    Skip to trip form
-                  </Link>
-                </div>
-              </Card>
-            ))}
-          </div>
+                  <div className="mt-5 pt-4 border-t border-ink-100 flex items-center gap-4 justify-between">
+                    <Link
+                      href={`/trips/new?destination=${encodeURIComponent(dest.name)}`}
+                      className="inline-flex items-center justify-center rounded-control bg-lagoon-600 text-white font-medium text-[0.875rem] px-4 py-2 hover:bg-lagoon-700 transition-colors"
+                    >
+                      Plan this trip
+                    </Link>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Alert tone="info" title="No results found" className="mt-4">
+              We couldn't find any destinations matching this style with sufficient data.
+            </Alert>
+          )}
         </div>
       )}
     </PageShell>

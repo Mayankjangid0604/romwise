@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import {
   validateGroupAlignmentInput,
   validateGroupAlignmentResponse,
+  ValidationError,
 } from "../group-alignment";
-import { ValidationError } from "../discovery";
 
 
 const VALID_TRAVELER = {

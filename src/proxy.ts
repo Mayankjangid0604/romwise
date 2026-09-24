@@ -187,7 +187,6 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/trips/:path*",
-    "/api/discovery",
     "/api/group-alignment",
   ],
 };

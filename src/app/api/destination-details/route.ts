@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getDestinationDetails } from "@/lib/discovery";
+import { getDestinationDetails } from "@/lib/destination-brain";
 import { checkRateLimitDb } from "@/lib/db-rate-limit";
 import { headers } from "next/headers";
 import { AIGatewayError } from "@/lib/ai/types";

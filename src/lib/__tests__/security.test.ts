@@ -22,16 +22,6 @@ describe("security", () => {
   });
 
   describe("no secrets in API responses", () => {
-    it("discovery route does not leak env vars in error messages", () => {
-      const routeSource = fs.readFileSync(
-        path.resolve(__dirname, "../../app/api/discovery/route.ts"),
-        "utf-8",
-      );
-      expect(routeSource).not.toMatch(/process\.env\.\w+/g.source.replace("\\w+", "GEMINI_API_KEY"));
-      expect(routeSource).not.toContain("AUTH_SECRET");
-      expect(routeSource).not.toContain("DATABASE_URL");
-    });
-
     it("group-alignment route does not leak env vars in error messages", () => {
       const routeSource = fs.readFileSync(
         path.resolve(__dirname, "../../app/api/group-alignment/route.ts"),
@@ -41,14 +31,6 @@ describe("security", () => {
       expect(routeSource).not.toContain("DATABASE_URL");
     });
 
-    it("error responses use generic messages, not stack traces", () => {
-      const routeSource = fs.readFileSync(
-        path.resolve(__dirname, "../../app/api/discovery/route.ts"),
-        "utf-8",
-      );
-      // Error responses should use known error messages, not error.message or error.stack
-      expect(routeSource).not.toContain("error.stack");
-    });
   });
 
   describe("session-only identity", () => {
@@ -86,15 +68,6 @@ describe("security", () => {
   });
 
   describe("API route authentication", () => {
-    it("discovery route checks auth", () => {
-      const source = fs.readFileSync(
-        path.resolve(__dirname, "../../app/api/discovery/route.ts"),
-        "utf-8",
-      );
-      expect(source).toContain("await auth()");
-      expect(source).toContain("401");
-    });
-
     it("group-alignment route checks auth", () => {
       const source = fs.readFileSync(
         path.resolve(__dirname, "../../app/api/group-alignment/route.ts"),
@@ -146,7 +119,7 @@ describe("security", () => {
       );
       expect(source).toContain("/dashboard");
       expect(source).toContain("/trips");
-      expect(source).toContain("/api/discovery");
+      expect(source).toContain("/api/group-alignment");
       expect(source).toContain("/api/group-alignment");
     });
   });

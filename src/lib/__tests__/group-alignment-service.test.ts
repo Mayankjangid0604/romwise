@@ -16,7 +16,7 @@ import {
 } from "../group-alignment";
 import { AIGateway } from "../ai/gateway";
 import { AIGatewayError } from "../ai/types";
-import { ValidationError } from "../discovery";
+import { ValidationError } from "../group-alignment";
 
 const mockGenerateStructured = vi.mocked(AIGateway.generateStructured);
 
