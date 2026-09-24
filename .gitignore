@@ -25,14 +25,17 @@
 *.pem
 
 # debug
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
+.env.*
 !.env.example
+!.env.*.example
 
 # prisma
 prisma/dev.db
@@ -71,4 +74,10 @@ data-import/processed/
 cities500.txt
 alternateNames.txt
 IN.txt
+*.sql
+*.dump
+*benchmark*.json
+*AUDIT*.json
+*REPORT*.json
+*DEPTH*.json
 
