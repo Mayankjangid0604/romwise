@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { generateShareLink, revokeShareLink } from "@/app/actions/share";
 import { removeGroupMember } from "@/app/actions/group";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,7 @@ export function GroupDashboard({ tripId, role, creator, members, activeShares }:
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const [alignment, setAlignment] = useState<{ harmonyScore: number; coreTension: string; compromiseSuggestion: string; } | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const allParticipants = [
     { ...creator, role: "creator" },
@@ -58,9 +59,11 @@ export function GroupDashboard({ tripId, role, creator, members, activeShares }:
     }
   };
 
-  const handleRevokeLink = async (linkRole: TripRole) => {
+  const handleRevokeLink = (linkRole: TripRole) => {
     if (confirm(`Are you sure you want to revoke the ${linkRole} link? Existing links will stop working immediately.`)) {
-      await revokeShareLink(tripId, linkRole);
+      startTransition(async () => {
+        await revokeShareLink(tripId, linkRole);
+      });
     }
   };
 

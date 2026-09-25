@@ -82,17 +82,22 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
             </div>
           </Card>
 
-          {trip.unscheduledPlaces && Array.isArray(typeof trip.unscheduledPlaces === 'string' ? JSON.parse(trip.unscheduledPlaces) : trip.unscheduledPlaces) && (typeof trip.unscheduledPlaces === 'string' ? JSON.parse(trip.unscheduledPlaces) : trip.unscheduledPlaces).length > 0 && (
-            <Alert tone="caution" title="Some Must-Visit Places Couldn't Be Scheduled">
-              <ul className="list-disc pl-5 mt-2 space-y-1">
-                {(typeof trip.unscheduledPlaces === 'string' ? JSON.parse(trip.unscheduledPlaces) : trip.unscheduledPlaces as any[]).map((place: any, i: number) => (
-                  <li key={i}>
-                    <strong>{place.name}</strong>: {place.reason}
-                  </li>
-                ))}
-              </ul>
-            </Alert>
-          )}
+          {(() => {
+            const raw = trip.unscheduledPlaces;
+            const parsed: { name: string; reason: string }[] = Array.isArray(raw) ? raw as { name: string; reason: string }[] : [];
+            if (parsed.length === 0) return null;
+            return (
+              <Alert tone="caution" title="Some Must-Visit Places Couldn't Be Scheduled">
+                <ul className="list-disc pl-5 mt-2 space-y-1">
+                  {parsed.map((place, i) => (
+                    <li key={i}>
+                      <strong>{place.name}</strong>: {place.reason}
+                    </li>
+                  ))}
+                </ul>
+              </Alert>
+            );
+          })()}
 
           <div className="space-y-12">
             {trip.itineraryDays.map((day) => (

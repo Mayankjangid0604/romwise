@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function AddTransitButton({ tripId }: { tripId: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -20,8 +21,10 @@ export function AddTransitButton({ tripId }: { tripId: string }) {
         headers: { "Content-Type": "application/json" }
       });
       if (res.ok) {
-        setOpen(false);
-        router.refresh();
+        startTransition(() => {
+          setOpen(false);
+          router.refresh();
+        });
       }
     } finally {
       setLoading(false);
@@ -74,6 +77,7 @@ export function AddTransitButton({ tripId }: { tripId: string }) {
 export function AddStayButton({ tripId }: { tripId: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -87,8 +91,10 @@ export function AddStayButton({ tripId }: { tripId: string }) {
         headers: { "Content-Type": "application/json" }
       });
       if (res.ok) {
-        setOpen(false);
-        router.refresh();
+        startTransition(() => {
+          setOpen(false);
+          router.refresh();
+        });
       }
     } finally {
       setLoading(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Clock } from "lucide-react";
 import {
   DndContext,
@@ -23,11 +23,7 @@ import { Timeline, TimelineItem } from "@/components/ui/timeline";
 export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
   const [items, setItems] = useState(day.items);
   const [prevDayItems, setPrevDayItems] = useState(day.items);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useSyncExternalStore(() => () => {}, () => true, () => false);
 
   if (day.items !== prevDayItems) {
     setPrevDayItems(day.items);

@@ -3,12 +3,14 @@ import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { PlaceBrowser, PlaceDTO, PlaceSelectionStatus } from "./place-browser";
 import { MapPin } from "lucide-react";
+import { Prisma } from "@prisma/client";
 
-export default async function PlacesPage(props: { params: Promise<{ id: string }> }) {
+export default async function PlacesPage(props: { params: Promise<{ id: string }>, searchParams: Promise<{ q?: string, category?: string, page?: string, status?: string }> }) {
   const session = await auth();
   if (!session?.user?.id) notFound();
 
   const { id } = await props.params;
+  const searchParams = await props.searchParams;
 
   const trip = await prisma.trip.findUnique({
     where: { id },
@@ -23,11 +25,55 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
 
   if (!trip || (!isCreator && !isMember) || !trip.destinationId) notFound();
 
-  // Fetch all places for this destination
-  const dbPlaces = await prisma.place.findMany({
-    where: { destinationId: trip.destinationId },
-    orderBy: { popularityScore: 'desc' }
-  });
+  const q = searchParams.q || "";
+  const category = searchParams.category || "all";
+  const statusFilter = searchParams.status || "all";
+  const page = Math.max(1, parseInt(searchParams.page || "1", 10) || 1);
+  const pageSize = 24;
+
+  const whereCondition: Prisma.PlaceWhereInput = {
+    destinationId: trip.destinationId,
+    category: category !== "all" ? category : { notIn: ["stay", "transport"] },
+  };
+
+  if (q) {
+    whereCondition.OR = [
+      { name: { contains: q, mode: "insensitive" } },
+      { description: { contains: q, mode: "insensitive" } },
+      { area: { contains: q, mode: "insensitive" } }
+    ];
+  }
+
+  // Handle status filter by joining against tripPlaceSelections
+  if (statusFilter !== "all") {
+    if (statusFilter === "none") {
+      whereCondition.tripPlaceSelections = { none: { tripId: id } };
+    } else {
+      whereCondition.tripPlaceSelections = { some: { tripId: id, status: statusFilter } };
+    }
+  }
+
+  // Fetch paginated top places for this destination
+  const [totalCount, dbPlaces] = await Promise.all([
+    prisma.place.count({ where: whereCondition }),
+    prisma.place.findMany({
+      where: whereCondition,
+      orderBy: { popularityScore: 'desc' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        description: true,
+        area: true,
+        typicalCostInr: true,
+        durationMinutes: true,
+        accessibilityScore: true,
+        fatigueCost: true
+      }
+    })
+  ]);
 
   // Map to DTO
   const places: PlaceDTO[] = dbPlaces.map(p => {
@@ -46,7 +92,13 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
     };
   });
 
-  const categories = Array.from(new Set(dbPlaces.map(p => p.category))).sort();
+  // Get categories for the select dropdown (we can just query distinct categories for this destination once)
+  const categoriesRaw = await prisma.place.findMany({
+    where: { destinationId: trip.destinationId, category: { notIn: ["stay", "transport"] } },
+    distinct: ['category'],
+    select: { category: true }
+  });
+  const categories = categoriesRaw.map(c => c.category).sort();
 
   return (
     <div className="space-y-6 animate-fade-up pb-20">
@@ -60,7 +112,16 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
         </div>
       </div>
       
-      <PlaceBrowser tripId={id} initialPlaces={places} categories={categories} />
+      <PlaceBrowser 
+        tripId={id} 
+        initialPlaces={places} 
+        categories={categories} 
+        initialSearch={q}
+        initialCategory={category}
+        initialStatus={statusFilter}
+        currentPage={page}
+        totalPages={Math.ceil(totalCount / pageSize)}
+      />
     </div>
   );
 }

@@ -31,8 +31,10 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
       tripAccommodations: true,
       packingItems: { select: { id: true }, take: 1 },
       itineraryDays: {
-        include: {
-          items: { include: { place: true } },
+        select: {
+          items: {
+            select: { estimatedCostInr: true }
+          }
         }
       }
     },

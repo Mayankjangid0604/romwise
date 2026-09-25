@@ -8,8 +8,8 @@ type PaceConfig = {
 };
 
 const PACE_MAP: Record<string, PaceConfig> = {
-  relaxed: { maxActivitiesPerDay: 3, bufferMinutes: 45 },
-  moderate: { maxActivitiesPerDay: 4, bufferMinutes: 30 },
+  easy: { maxActivitiesPerDay: 3, bufferMinutes: 45 },
+  balanced: { maxActivitiesPerDay: 4, bufferMinutes: 30 },
   full: { maxActivitiesPerDay: 5, bufferMinutes: 30 },
 };
 

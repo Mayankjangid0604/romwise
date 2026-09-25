@@ -2,6 +2,7 @@ import { generateItineraryV2 } from "./engine";
 import { resolveDestination } from "../destination-resolver";
 import { getTripDuration, TripType, getTripStartEndDateTimes } from "../date-utils";
 import type { TripBrainInput } from "../trip-brain";
+import { deriveAccessibilityRequirement } from "../trip-brain";
 import { DestinationNotFoundError, DestinationDataError } from "../trip-brain";
 
 export async function generateGroundedItineraryV2(input: TripBrainInput) {
@@ -30,8 +31,8 @@ export async function generateGroundedItineraryV2(input: TripBrainInput) {
     {
       destinationId: resolved.id,
       allPreferences: input.allPreferences,
-      budgetPerDayInr: input.budgetInr,
-      accessibilityRequirement: "none", // Simplification
+      budgetPerDayInr: numDays > 0 ? Math.round(input.budgetInr / numDays) : input.budgetInr,
+      accessibilityRequirement: deriveAccessibilityRequirement(input.accessibilityNotes),
       limit: 100 // V2 can handle more candidates deterministically
     },
     numDays,

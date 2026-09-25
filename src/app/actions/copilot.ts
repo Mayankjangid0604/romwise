@@ -150,7 +150,7 @@ If no edit is needed, set action to NO_ACTION.
               category: place.category,
               startTime: "10:00",
               endTime: "12:00",
-              estimatedCostInr: place.typicalCostInr || 0,
+              estimatedCostInr: place.typicalCostInr ?? null,
               order: day.items.length,
               placeId: place.id,
               reasoning: "Added by Copilot",

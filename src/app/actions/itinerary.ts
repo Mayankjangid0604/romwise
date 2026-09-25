@@ -162,7 +162,9 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
         data: {
           status: "planning",
           destinationId: result.resolvedDestination.id,
-          unscheduledPlaces: result.unscheduledMustVisits ? (result.unscheduledMustVisits as any) : Prisma.DbNull,
+          unscheduledPlaces: result.unscheduledMustVisits && result.unscheduledMustVisits.length > 0
+            ? (result.unscheduledMustVisits as unknown as Prisma.InputJsonValue)
+            : Prisma.DbNull,
         },
       });
 
@@ -248,6 +250,9 @@ export async function updateItineraryItem(
   if (!member) {
     return { success: false, error: "Not a member of this trip" };
   }
+  if (member.role === "viewer") {
+    return { success: false, error: "Viewers cannot edit itinerary" };
+  }
 
   if (!input.title.trim()) return { success: false, error: "Title is required" };
   if (!input.startTime.trim()) return { success: false, error: "Start time is required" };
@@ -276,6 +281,16 @@ export async function deleteItineraryItem(tripId: string, itemId: string): Promi
     where: { tripId, userId: session.user.id },
   });
   if (!member) return { success: false, error: "Not a member" };
+  if (member.role === "viewer") return { success: false, error: "Viewers cannot edit itinerary" };
+
+  // Verify item belongs to this trip (prevents IDOR)
+  const item = await prisma.itineraryItem.findUnique({
+    where: { id: itemId },
+    include: { itineraryDay: { select: { tripId: true } } },
+  });
+  if (!item || item.itineraryDay.tripId !== tripId) {
+    return { success: false, error: "Item not found in this trip" };
+  }
 
   await prisma.itineraryItem.delete({
     where: { id: itemId },
@@ -293,6 +308,16 @@ export async function addItineraryItem(tripId: string, dayId: string): Promise<I
     where: { tripId, userId: session.user.id },
   });
   if (!member) return { success: false, error: "Not a member" };
+  if (member.role === "viewer") return { success: false, error: "Viewers cannot edit itinerary" };
+
+  // Verify day belongs to this trip (prevents cross-trip injection)
+  const day = await prisma.itineraryDay.findUnique({
+    where: { id: dayId },
+    select: { tripId: true },
+  });
+  if (!day || day.tripId !== tripId) {
+    return { success: false, error: "Day not found in this trip" };
+  }
 
   await prisma.itineraryItem.create({
     data: {
@@ -311,3 +336,4 @@ export async function addItineraryItem(tripId: string, dayId: string): Promise<I
   revalidatePath(`/trips/${tripId}`);
   return { success: true };
 }
+

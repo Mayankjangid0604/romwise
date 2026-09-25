@@ -21,11 +21,27 @@ export default async function DashboardPage() {
 
   const [trips, recentActivitiesRaw] = await Promise.all([
     prisma.trip.findMany({
-      where: { creatorId: session.user.id },
+      where: { 
+        OR: [
+          { creatorId: session.user.id },
+          { groupMembers: { some: { userId: session.user.id } } }
+        ]
+      },
       orderBy: { createdAt: "desc" },
-      include: {
-        itineraryDays: { select: { id: true } },
-        groupMembers: { select: { id: true } },
+      select: {
+        id: true,
+        title: true,
+        destination: true,
+        startDate: true,
+        endDate: true,
+        budgetInr: true,
+        paceLevel: true,
+        _count: {
+          select: {
+            itineraryDays: true,
+            groupMembers: true,
+          }
+        }
       },
     }),
     prisma.recentActivity.findMany({
@@ -38,7 +54,8 @@ export default async function DashboardPage() {
   // De-duplicate redundant logs in UI
   const uniqueTripIds = Array.from(new Set(recentActivitiesRaw.map(r => r.tripId as string).filter(Boolean))).slice(0, 3);
   const recentTripsData = await prisma.trip.findMany({
-    where: { id: { in: uniqueTripIds } }
+    where: { id: { in: uniqueTripIds } },
+    select: { id: true, title: true, startDate: true, endDate: true }
   });
 
   const recentActivities = uniqueTripIds.map(id => {
@@ -59,9 +76,9 @@ export default async function DashboardPage() {
   const otherTrips = trips.filter(t => t.id !== upcomingTrip?.id);
 
   // Stats
-  const totalItineraryDays = trips.reduce((s, t) => s + t.itineraryDays.length, 0);
+  const totalItineraryDays = trips.reduce((s, t) => s + t._count.itineraryDays, 0);
   const totalBudget = trips.reduce((s, t) => s + t.budgetInr, 0);
-  const totalMembers = trips.reduce((s, t) => s + t.groupMembers.length, 0);
+  const totalMembers = trips.reduce((s, t) => s + t._count.groupMembers, 0);
 
   return (
     <PageShell width="default" className="max-w-7xl">

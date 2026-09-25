@@ -39,7 +39,7 @@ describe("Planner V2 Scheduling", () => {
       id: "c1", area: "test", center: null, places
     }];
 
-    const days = buildDays(clusters, 1, "moderate", new Date());
+    const days = buildDays(clusters, 1, "balanced", new Date());
     
     expect(days.length).toBe(1);
     
@@ -62,6 +62,25 @@ describe("Planner V2 Scheduling", () => {
     }
   });
 
+  it("respects easy/relaxed pace by scheduling fewer activities", () => {
+    const places = [
+      { ...basePlace, id: "p1", durationMinutes: 60 },
+      { ...basePlace, id: "p2", durationMinutes: 60 },
+      { ...basePlace, id: "p3", durationMinutes: 60 },
+      { ...basePlace, id: "p4", durationMinutes: 60 },
+      { ...basePlace, id: "p5", durationMinutes: 60 },
+    ];
+    
+    const clusters: GeographicCluster[] = [{ id: "c1", area: "test", center: null, places }];
+
+    const balancedDays = buildDays(clusters, 1, "balanced", new Date());
+    const easyDays = buildDays(clusters, 1, "easy", new Date());
+    
+    // Balanced usually schedules 4, easy schedules max 2 or 3
+    expect(easyDays[0].items.length).toBeLessThan(balancedDays[0].items.length);
+    expect(easyDays[0].items.length).toBeLessThanOrEqual(3);
+  });
+
   it("skips places that are closed", () => {
     const places = [
       { ...basePlace, id: "p1", category: "history", durationMinutes: 60, openingTime: "10:00", closingTime: "11:00" },
@@ -71,7 +90,7 @@ describe("Planner V2 Scheduling", () => {
       id: "c1", area: "test", center: null, places
     }];
 
-    const days = buildDays(clusters, 1, "moderate", new Date());
+    const days = buildDays(clusters, 1, "balanced", new Date());
     
     // Day starts at 09:00. P1 opens at 10:00. Start time is shifted to 10:00. Duration 60 mins -> ends at 11:00. 
     // It should be exactly valid.
