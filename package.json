@@ -9,7 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "postinstall": "prisma skills sync || exit 0",
+    "postinstall": "prisma generate",
     "db:seed": "npx tsx prisma/seed.ts",
     "db:seed:districts": "npx tsx prisma/seed-districts.ts",
     "db:seed:fixture": "npx tsx prisma/seed-fixture.ts",
