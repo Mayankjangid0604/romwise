@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { CollectionTheme, RecommendedDestination, CollectionRecommendationRequest } from "./types";
 import { COLLECTIONS } from "./collections";
+import { getTourismProminenceSql } from "./tourism-prior";
 
 function determineReadiness(placeCount: number): "BASIC" | "GOOD_COVERAGE" | "STRONG_COVERAGE" | "NONE" {
   if (placeCount >= 20) return "STRONG_COVERAGE";
@@ -47,6 +48,8 @@ export async function getDestinationsForCollection(
         ${Prisma.raw(collection.scoreSql)} as "rawScore",
         (
           -- Prominence Score Calculation
+          -- Base tourism prior
+          ${Prisma.raw(getTourismProminenceSql("d"))} +
           -- Maximize at 100 to prevent mega-cities from dominating purely by volume
           LEAST(COUNT(p.id), 25) * 2 + 
           LEAST(SUM(CASE WHEN p.category = 'stay' THEN 1 ELSE 0 END), 10) * 3 +

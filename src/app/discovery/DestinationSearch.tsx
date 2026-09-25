@@ -59,7 +59,7 @@ export function DestinationSearch() {
     const finalQuery = selectedName || query.trim();
     if (finalQuery) {
       setIsOpen(false);
-      router.push(`/trips/new?destination=${encodeURIComponent(finalQuery)}`);
+      router.push(`/discovery/${encodeURIComponent(finalQuery)}`);
     }
   };
 
@@ -110,7 +110,7 @@ export function DestinationSearch() {
         )}
       </div>
       <Button type="submit" className="h-12 px-6 rounded-xl shadow-sm">
-        Plan Trip
+        Explore
       </Button>
     </form>
   );

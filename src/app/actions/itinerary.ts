@@ -300,7 +300,7 @@ export async function deleteItineraryItem(tripId: string, itemId: string): Promi
   return { success: true };
 }
 
-export async function addItineraryItem(tripId: string, dayId: string): Promise<ItemEditResult> {
+export async function addItineraryItem(tripId: string, dayId: string, placeId?: string): Promise<ItemEditResult> {
   const session = await auth();
   if (!session?.user?.id) return { success: false, error: "Unauthorized" };
 
@@ -319,17 +319,34 @@ export async function addItineraryItem(tripId: string, dayId: string): Promise<I
     return { success: false, error: "Day not found in this trip" };
   }
 
+  let title = "New Activity";
+  let description = "Click to edit";
+  let category = "activity";
+  let estimatedCostInr: number | null = null;
+  
+  if (placeId) {
+    const place = await prisma.place.findUnique({ where: { id: placeId } });
+    if (place) {
+      title = place.name;
+      description = place.description || place.category;
+      category = place.category;
+      estimatedCostInr = place.typicalCostInr || null;
+    }
+  }
+
   await prisma.itineraryItem.create({
     data: {
       itineraryDayId: dayId,
-      title: "New Activity",
-      description: "Click to edit",
-      category: "activity",
+      title,
+      description,
+      category,
       startTime: "12:00",
       endTime: "13:00",
-      costSource: "unknown",
+      estimatedCostInr,
+      costSource: placeId ? "estimated" : "unknown",
       reasoning: "Manually added",
       order: 999, // Will be sorted to the end
+      placeId: placeId || null,
     },
   });
 
@@ -337,3 +354,30 @@ export async function addItineraryItem(tripId: string, dayId: string): Promise<I
   return { success: true };
 }
 
+export async function searchPlacesForTrip(tripId: string, query: string) {
+  const session = await auth();
+  if (!session?.user?.id) return [];
+
+  const trip = await prisma.trip.findUnique({
+    where: { id: tripId },
+    select: { destinationId: true }
+  });
+
+  if (!trip?.destinationId || query.trim().length < 2) return [];
+
+  const places = await prisma.place.findMany({
+    where: {
+      destinationId: trip.destinationId,
+      name: { contains: query.trim(), mode: "insensitive" }
+    },
+    take: 10,
+    select: {
+      id: true,
+      name: true,
+      category: true,
+      description: true
+    }
+  });
+
+  return places;
+}

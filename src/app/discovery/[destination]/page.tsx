@@ -256,6 +256,36 @@ function DestinationDetailContent() {
         </Card>
       </div>
 
+      {/* ── Similar Destinations ── */}
+      {details.similarDestinations && details.similarDestinations.length > 0 && (
+        <>
+          <SectionHeading>You Might Also Like</SectionHeading>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            {details.similarDestinations.map((sim) => (
+              <Link key={sim.name} href={`/discovery/${encodeURIComponent(sim.name)}`} className="group block h-full">
+                <Card className="h-full overflow-hidden p-0 flex flex-col hover:border-lagoon-300 transition-colors">
+                  <div className="h-32 bg-ink-100 relative">
+                    {sim.imageUrl ? (
+                      <img src={sim.imageUrl} alt={sim.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    ) : (
+                      <div className="w-full h-full bg-lagoon-100 flex items-center justify-center">
+                        <span className="text-lagoon-400 font-medium">No Image</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-display font-medium text-ink-900 group-hover:text-lagoon-700 transition-colors">
+                      {sim.name}
+                    </h3>
+                    <p className="text-xs text-ink-500">{sim.state}</p>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
+
       {/* ── Quick Plan Form ── */}
       <SectionHeading>Plan Your Trip Here</SectionHeading>
       <Card className="mb-8">

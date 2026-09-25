@@ -19,6 +19,8 @@ import {
 import { SortableItem, SortableItemType } from "./sortable-item";
 import { TransitLink } from "./transit-link";
 import { Timeline, TimelineItem } from "@/components/ui/timeline";
+import { AddActivityButton } from "./add-activity-button";
+
 
 export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
   const [items, setItems] = useState(day.items);
@@ -128,18 +130,9 @@ export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; d
             );
           })}
         </Timeline>
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={async () => {
-              const { addItineraryItem } = await import("@/app/actions/itinerary");
-              await addItineraryItem(tripId, day.id);
-            }}
-            className="text-[0.875rem] font-medium text-lagoon-600 hover:text-lagoon-800 flex items-center gap-1 transition-colors"
-          >
-            <span className="text-lg">+</span> Add Activity
-          </button>
-        </div>
+        <AddActivityButton tripId={tripId} dayId={day.id} />
       </SortableContext>
     </DndContext>
   );
 }
+

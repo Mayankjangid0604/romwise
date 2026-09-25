@@ -21,6 +21,11 @@ export type DestinationDetails = {
   }[];
   localCuisine: string[];
   practicalTips: string[];
+  similarDestinations: {
+    name: string;
+    state: string;
+    imageUrl?: string;
+  }[];
 };
 
 const SEASON_TO_MONTHS: Record<string, string[]> = {
@@ -128,6 +133,30 @@ export async function getDestinationDetails(name: string, _context?: string): Pr
       tipForVisiting: p.vibes || "Enjoy the experience!"
     }));
 
+  const similarDestinationsRaw = await prisma.travelDestination.findMany({
+    where: {
+      id: { not: dest.id },
+      OR: [
+        { state: dest.state },
+        dest.destinationType ? { destinationType: dest.destinationType } : { state: dest.state }
+      ]
+    },
+    take: 3,
+    orderBy: { places: { _count: 'desc' } },
+    include: {
+      images: {
+        take: 1,
+        select: { url: true }
+      }
+    }
+  });
+
+  const similarDestinations = similarDestinationsRaw.map(d => ({
+    name: d.name,
+    state: d.state,
+    imageUrl: d.images[0]?.url || undefined
+  }));
+
   return {
     name: dest.name,
     tagline: `Explore ${dest.name}, ${dest.state}`,
@@ -140,6 +169,7 @@ export async function getDestinationDetails(name: string, _context?: string): Pr
     mustVisitPlaces,
     localCuisine: cuisineFromPlaces(dest.places),
     practicalTips: tipsFromDestination(dest, dest.places),
+    similarDestinations,
   };
 }
 
