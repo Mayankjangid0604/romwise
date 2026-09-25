@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { updateItineraryItem } from "@/app/actions/itinerary";
+import { updateItineraryItem, deleteItineraryItem } from "@/app/actions/itinerary";
 import { Alert, Button, Field, Input } from "@/components/ui";
+import { Trash2 } from "lucide-react";
 
 type Props = {
   tripId: string;
@@ -46,6 +47,19 @@ export function InlineEditPanel({
       if (result.success) {
         setSaved(true);
         setOpen(false);
+      } else {
+        setError(result.error);
+      }
+    });
+  }
+
+  function handleDelete() {
+    if (!confirm("Are you sure you want to remove this activity?")) return;
+    setError(null);
+    startTransition(async () => {
+      const result = await deleteItineraryItem(tripId, itemId);
+      if (result.success) {
+        // Will unmount naturally when revalidated
       } else {
         setError(result.error);
       }
@@ -130,13 +144,24 @@ export function InlineEditPanel({
         />
       </Field>
 
-      <div className="flex gap-2 pt-1">
-        <Button size="sm" onClick={handleSave} disabled={pending}>
-          {pending ? "Saving…" : "Save Changes"}
-        </Button>
-        <Button variant="secondary" size="sm" onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
+      <div className="flex justify-between items-center pt-1 mt-2">
+        <div className="flex gap-2">
+          <Button size="sm" onClick={handleSave} disabled={pending}>
+            {pending ? "Saving…" : "Save Changes"}
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+        </div>
+        <button
+          type="button"
+          onClick={handleDelete}
+          disabled={pending}
+          className="text-danger-600 hover:text-danger-800 p-2"
+          title="Remove activity"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
       </div>
     </div>
   );

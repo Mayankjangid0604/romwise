@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { SortableDay } from "@/components/itinerary/sortable-day";
 import { GenerateButton } from "../generate-button";
 import { CalendarDays, Sparkles } from "lucide-react";
-import { Card } from "@/components/ui";
+import { Alert, Card } from "@/components/ui";
+import { AlertCircle } from "lucide-react";
 
 export default async function ItineraryPage(props: { params: Promise<{ id: string }> }) {
   const session = await auth();
@@ -23,7 +24,16 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
             orderBy: { order: 'asc' },
             include: {
               votes: true,
-              comments: { include: { user: true } }
+              comments: { include: { user: true } },
+              place: {
+                select: {
+                  lat: true,
+                  lng: true,
+                  area: true,
+                  accessibilityScore: true,
+                  fatigueCost: true
+                }
+              }
             }
           }
         }
@@ -71,6 +81,18 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
               <GenerateButton tripId={id} initialStatus={trip.status} />
             </div>
           </Card>
+
+          {trip.unscheduledPlaces && Array.isArray(typeof trip.unscheduledPlaces === 'string' ? JSON.parse(trip.unscheduledPlaces) : trip.unscheduledPlaces) && (typeof trip.unscheduledPlaces === 'string' ? JSON.parse(trip.unscheduledPlaces) : trip.unscheduledPlaces).length > 0 && (
+            <Alert tone="caution" title="Some Must-Visit Places Couldn't Be Scheduled">
+              <ul className="list-disc pl-5 mt-2 space-y-1">
+                {(typeof trip.unscheduledPlaces === 'string' ? JSON.parse(trip.unscheduledPlaces) : trip.unscheduledPlaces as any[]).map((place: any, i: number) => (
+                  <li key={i}>
+                    <strong>{place.name}</strong>: {place.reason}
+                  </li>
+                ))}
+              </ul>
+            </Alert>
+          )}
 
           <div className="space-y-12">
             {trip.itineraryDays.map((day) => (

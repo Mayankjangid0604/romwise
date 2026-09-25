@@ -37,7 +37,15 @@ export function scoreCandidates(
 ): CandidatePlaceV2[] {
   return places.map(place => {
     // Interest score is pre-calculated from getCandidatePlaces as place.preferenceScore
-    const interest = place.preferenceScore; 
+    let interest = place.preferenceScore; 
+    
+    // User status overrides
+    if (place.userStatus === "must-visit") {
+      interest += 500; // massive boost
+    } else if (place.userStatus === "interested") {
+      interest += 100; // significant boost
+    }
+    
     const category = 10; // baseline
     const popularity = Math.min(place.popularityScore, 100);
     const dataQuality = computeDataQualityScore(place);

@@ -81,6 +81,7 @@ export type TripBrainInput = {
   accessibilityNotes?: string;
   travelSegments?: Record<string, string>[];
   accommodations?: Record<string, string>[];
+  placeSelections?: { placeId: string; status: string }[];
 };
 
 export type GeneratedActivity = {
@@ -723,6 +724,7 @@ export type TripBrainResult = {
   usedFallback: boolean;
   season: ReturnType<typeof deriveSeason>;
   conflicts: ReturnType<typeof detectPreferenceConflicts>;
+  unscheduledMustVisits?: { placeId: string; name: string; reason: string }[];
 };
 
 export async function generateGroundedItinerary(

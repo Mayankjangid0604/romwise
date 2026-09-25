@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import {
   generateGroundedItinerary,
   DestinationNotFoundError,
@@ -29,6 +30,7 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
       groupMembers: {
         include: { travelerPreferences: true },
       },
+      tripPlaceSelections: true,
     },
   });
 
@@ -112,6 +114,7 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
         paceLevel: (trip.paceLevel as "easy" | "balanced" | "full") || "balanced",
         allPreferences,
         accessibilityNotes: creatorMember?.accessibilityNotes || undefined,
+        placeSelections: trip.tripPlaceSelections,
       };
 
       // V2 is the default deterministic engine. V1 (Gemini) only used if explicitly requested.
@@ -159,6 +162,7 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
         data: {
           status: "planning",
           destinationId: result.resolvedDestination.id,
+          unscheduledPlaces: result.unscheduledMustVisits ? (result.unscheduledMustVisits as any) : Prisma.DbNull,
         },
       });
 
@@ -257,6 +261,50 @@ export async function updateItineraryItem(
       startTime: input.startTime.trim(),
       endTime: input.endTime.trim(),
       estimatedCostInr: input.estimatedCostInr,
+    },
+  });
+
+  revalidatePath(`/trips/${tripId}`);
+  return { success: true };
+}
+
+export async function deleteItineraryItem(tripId: string, itemId: string): Promise<ItemEditResult> {
+  const session = await auth();
+  if (!session?.user?.id) return { success: false, error: "Unauthorized" };
+
+  const member = await prisma.groupMember.findFirst({
+    where: { tripId, userId: session.user.id },
+  });
+  if (!member) return { success: false, error: "Not a member" };
+
+  await prisma.itineraryItem.delete({
+    where: { id: itemId },
+  });
+
+  revalidatePath(`/trips/${tripId}`);
+  return { success: true };
+}
+
+export async function addItineraryItem(tripId: string, dayId: string): Promise<ItemEditResult> {
+  const session = await auth();
+  if (!session?.user?.id) return { success: false, error: "Unauthorized" };
+
+  const member = await prisma.groupMember.findFirst({
+    where: { tripId, userId: session.user.id },
+  });
+  if (!member) return { success: false, error: "Not a member" };
+
+  await prisma.itineraryItem.create({
+    data: {
+      itineraryDayId: dayId,
+      title: "New Activity",
+      description: "Click to edit",
+      category: "activity",
+      startTime: "12:00",
+      endTime: "13:00",
+      costSource: "unknown",
+      reasoning: "Manually added",
+      order: 999, // Will be sorted to the end
     },
   });
 

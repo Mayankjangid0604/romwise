@@ -10,6 +10,7 @@ import {
   Route,
   Info,
   Users,
+  MapPin,
 } from "lucide-react";
 
 const tabs = [
@@ -17,6 +18,7 @@ const tabs = [
   { label: "Itinerary", path: "/itinerary", icon: CalendarDays },
   { label: "Packing", path: "/packing", icon: PackageCheck },
   { label: "Budget", path: "/budget", icon: Wallet },
+  { label: "Places", path: "/places", icon: MapPin },
   { label: "Route", path: "/route", icon: Route },
   { label: "Info", path: "/info", icon: Info },
   { label: "Group", path: "/group", icon: Users },

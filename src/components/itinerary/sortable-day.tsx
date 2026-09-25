@@ -23,6 +23,11 @@ import { Timeline, TimelineItem } from "@/components/ui/timeline";
 export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
   const [items, setItems] = useState(day.items);
   const [prevDayItems, setPrevDayItems] = useState(day.items);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   if (day.items !== prevDayItems) {
     setPrevDayItems(day.items);
@@ -77,8 +82,23 @@ export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; d
     }
   }
 
+  if (!isMounted) {
+    return (
+      <div className="opacity-0">
+        <Timeline>
+          {items.map((item: SortableItemType) => (
+            <TimelineItem key={item.id} title="">
+              <div className="h-32 bg-ink-100 rounded-lg animate-pulse" />
+            </TimelineItem>
+          ))}
+        </Timeline>
+      </div>
+    );
+  }
+
   return (
     <DndContext
+      id={`dnd-day-${day.id}`}
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
@@ -112,6 +132,17 @@ export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; d
             );
           })}
         </Timeline>
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={async () => {
+              const { addItineraryItem } = await import("@/app/actions/itinerary");
+              await addItineraryItem(tripId, day.id);
+            }}
+            className="text-[0.875rem] font-medium text-lagoon-600 hover:text-lagoon-800 flex items-center gap-1 transition-colors"
+          >
+            <span className="text-lg">+</span> Add Activity
+          </button>
+        </div>
       </SortableContext>
     </DndContext>
   );

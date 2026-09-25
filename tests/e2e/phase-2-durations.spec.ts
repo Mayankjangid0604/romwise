@@ -23,13 +23,14 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
 
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const after3Days = new Date();
-      after3Days.setDate(after3Days.getDate() + 4);
+      
+      // PICNIC is a same-day trip
+      const startDate = tomorrow.toISOString().split('T')[0];
+      const endDate = startDate;
 
-      await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
-      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#startDate').fill(startDate);
+      await page.locator('#endDate').fill(endDate);
       await page.locator('#budget').fill('20000');
-      await page.getByLabel('Trip Duration / Type').selectOption('PICNIC');
       await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
       // Button is already clicked
@@ -43,7 +44,7 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
       });
 
       expect(trip).not.toBeNull();
-      expect(trip?.tripType).toBe('PICNIC');
+      expect(trip?.tripType).toBe('DAY_TRIP'); // Derived trip type for same day
     } finally {
       await prisma.user.delete({ where: { id: user.id } });
     }
@@ -68,13 +69,12 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
 
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const after3Days = new Date();
-      after3Days.setDate(after3Days.getDate() + 4);
+      const after1Day = new Date(tomorrow);
+      after1Day.setDate(after1Day.getDate() + 1);
 
       await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
-      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after1Day.toISOString().split('T')[0]);
       await page.locator('#budget').fill('20000');
-      await page.getByLabel('Trip Duration / Type').selectOption('OVERNIGHT');
       await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
       // Button is already clicked
@@ -113,13 +113,12 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
 
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const after3Days = new Date();
-      after3Days.setDate(after3Days.getDate() + 4);
+      const after2Days = new Date(tomorrow);
+      after2Days.setDate(after2Days.getDate() + 2);
 
       await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
-      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after2Days.toISOString().split('T')[0]);
       await page.locator('#budget').fill('20000');
-      await page.getByLabel('Trip Duration / Type').selectOption('WEEKEND');
       await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
       // Button is already clicked
@@ -158,13 +157,10 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
 
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const after3Days = new Date();
-      after3Days.setDate(after3Days.getDate() + 4);
 
       await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
-      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(tomorrow.toISOString().split('T')[0]);
       await page.locator('#budget').fill('20000');
-      await page.getByLabel('Trip Duration / Type').selectOption('DAY_TRIP');
       await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
       // Button is already clicked

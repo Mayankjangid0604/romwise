@@ -146,6 +146,7 @@ model Place {
   placeType          String?           // Sub-type: hotel, hostel, guest_house, restaurant, cafe, etc.
   wheelchair         String?           // OSM wheelchair tag: yes/no/limited
   FavoritePlace      FavoritePlace[]
+  tripPlaceSelections TripPlaceSelection[]
   images             Image[]
   itineraryItems     ItineraryItem[]
   destination        TravelDestination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
@@ -201,6 +202,8 @@ model Trip {
   destinationRef      TravelDestination?  @relation(fields: [destinationId], references: [id])
   tripAccommodations  TripAccommodation[]
   tripShares          TripShare[]
+  tripPlaceSelections TripPlaceSelection[]
+  unscheduledPlaces   Json?               // Store feedback on omitted places
 }
 
 model GroupMember {
@@ -489,4 +492,19 @@ model ImportBatch {
   skipped       Int      @default(0)
   failed        Int      @default(0)
   notes         String?
+}
+
+model TripPlaceSelection {
+  id        String   @id @default(cuid())
+  tripId    String
+  placeId   String
+  status    String   @default("interested") // "must-visit", "interested", "exclude"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, placeId])
+  @@index([tripId])
+  @@index([placeId])
 }

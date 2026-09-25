@@ -19,6 +19,7 @@ export type CandidatePlaceV2 = {
   preferenceScore: number;
   accessibilityScore: number | null;
   fatigueCost: number | null;
+  userStatus?: "must-visit" | "interested" | "exclude" | null;
   
   // V2 specific augmented fields
   v2Score?: {
@@ -60,6 +61,11 @@ export type V2GeneratedDay = {
 
 export type V2PlannerResult = {
   days: V2GeneratedDay[];
+  unscheduledMustVisits: {
+    placeId: string;
+    name: string;
+    reason: string;
+  }[];
   metrics: {
     candidateCount: number;
     selectedCount: number;

@@ -10,7 +10,8 @@ export async function generateItineraryV2(
   query: CandidateQuery,
   numDays: number,
   pace: string,
-  startDate: Date
+  startDate: Date,
+  placeSelections?: { placeId: string; status: string }[]
 ): Promise<V2PlannerResult> {
   const t0 = Date.now();
   
@@ -20,10 +21,15 @@ export async function generateItineraryV2(
   // Exclude 'stay' and 'transport' explicitly just in case they slipped through
   const filteredCandidates = rawCandidates.filter(c => c.category !== "stay" && c.category !== "transport");
   
-  const v2Candidates = filteredCandidates.map(c => ({
-    ...c,
-    // Add null fallbacks if missing (should be present in CandidatePlace type)
-  }));
+  const v2Candidates = filteredCandidates
+    .map(c => {
+      const selection = placeSelections?.find(s => s.placeId === c.id);
+      return {
+        ...c,
+        userStatus: (selection?.status as "must-visit" | "interested" | "exclude" | null) || null,
+      };
+    })
+    .filter(c => c.userStatus !== "exclude");
 
   // 2. Candidate Scoring (Phase 7-11)
   const scoredCandidates = scoreCandidates(v2Candidates, query.budgetPerDayInr || 0, query.accessibilityRequirement || "none");
@@ -39,8 +45,19 @@ export async function generateItineraryV2(
   metrics.candidateCount = filteredCandidates.length;
   metrics.generationDurationMs = Date.now() - t0;
   
+  // 6. Feedback for unscheduled must-visits
+  const scheduledPlaceIds = new Set(days.flatMap(d => d.items.map(i => i.placeId)));
+  const unscheduledMustVisits = v2Candidates
+    .filter(c => c.userStatus === "must-visit" && !scheduledPlaceIds.has(c.id))
+    .map(c => ({
+      placeId: c.id,
+      name: c.name,
+      reason: "Could not fit within available time constraints or opening hours."
+    }));
+
   return {
     days,
+    unscheduledMustVisits,
     metrics
   };
 }

@@ -36,7 +36,8 @@ export async function generateGroundedItineraryV2(input: TripBrainInput) {
     },
     numDays,
     input.paceLevel,
-    startEnd.startDateTime ?? new Date()
+    startEnd.startDateTime ?? new Date(),
+    input.placeSelections
   );
 
   if (result.days.length === 0 || result.days[0].items.length === 0) {
@@ -50,6 +51,7 @@ export async function generateGroundedItineraryV2(input: TripBrainInput) {
     usedGemini: false,
     usedFallback: false, // V2 is the deterministic engine itself
     candidateCount: result.metrics.candidateCount,
-    season: "unknown"
+    season: "unknown",
+    unscheduledMustVisits: result.unscheduledMustVisits
   };
 }

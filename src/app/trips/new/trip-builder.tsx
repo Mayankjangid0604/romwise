@@ -93,15 +93,7 @@ export function TripBuilder({
                 <option value="full">Full (Action-packed, lots of walking)</option>
               </Select>
             </Field>
-            <Field label="Trip Duration / Type" htmlFor="tripType">
-              <Select id="tripType" name="tripType" defaultValue="MULTI_DAY" className="w-full">
-                <option value="PICNIC">Picnic (Few hours)</option>
-                <option value="DAY_TRIP">Day Trip (Single day)</option>
-                <option value="OVERNIGHT">Overnight (1 night)</option>
-                <option value="WEEKEND">Weekend (2-3 days)</option>
-                <option value="MULTI_DAY">Multi-Day (3+ days)</option>
-              </Select>
-            </Field>
+
           </div>
         </Card>
 

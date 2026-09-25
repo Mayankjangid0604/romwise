@@ -220,7 +220,11 @@ function createItem(place: CandidatePlaceV2, startMins: number, endMins: number,
     costSource: place.typicalCostInr === 0 ? "free" : (place.typicalCostInr !== null ? "db" : "unknown"),
     lat: place.lat,
     lng: place.lng,
-    reasoning: `Scheduled automatically based on ${place.v2Score?.total ? 'high rank' : 'proximity'}.`,
+    reasoning: place.userStatus === "must-visit" 
+      ? "Selected because it's a Must-Visit place." 
+      : place.userStatus === "interested"
+      ? "Selected based on your interest."
+      : `Scheduled automatically based on ${place.v2Score?.total ? 'high rank' : 'proximity'}.`,
     order,
   };
 }

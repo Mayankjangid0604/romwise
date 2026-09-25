@@ -52,7 +52,6 @@ export async function createTrip(
   const budgetStr = formData.get("budget") as string;
   const maxTravelersStr = formData.get("maxTravelers") as string;
   const paceLevel = formData.get("paceLevel") as string;
-  const tripType = (formData.get("tripType") as string) || TripType.MULTI_DAY;
   const dateStatus = (formData.get("dateStatus") as string) || "unknown";
   const timeStatus = (formData.get("timeStatus") as string) || "UNKNOWN";
   const startTime = (formData.get("startTime") as string) || null;
@@ -101,28 +100,8 @@ export async function createTrip(
   if (!title) fieldErrors.title = "Trip title is required";
   if (!destination) fieldErrors.destination = "Destination is required";
   if (!budgetStr) fieldErrors.budget = "Budget is required";
-
-  // Validate tripType
-  const validTripTypes = new Set(Object.values(TripType));
-  if (!validTripTypes.has(tripType as TripType)) {
-    fieldErrors.tripType = "Invalid trip type";
-  }
-
-  // Date validation is type-dependent
-  const isFlexible = tripType === TripType.FLEXIBLE;
-  const isSingleAnchor = (
-    [TripType.ONE_DAY, TripType.PICNIC, TripType.DAY_TRIP, TripType.OVERNIGHT, TripType.WEEKEND] as string[]
-  ).includes(tripType);
-  const isMultiDay = tripType === TripType.MULTI_DAY;
-
-  if (!isFlexible && !startDateStr) {
-    fieldErrors.startDate = "Start date is required";
-  }
-  if (isMultiDay && !endDateStr) {
-    fieldErrors.endDate = "End date is required for multi-day trips";
-  }
-
-  if (!budgetStr) fieldErrors.budget = "Budget is required";
+  if (!startDateStr) fieldErrors.startDate = "Start date is required";
+  if (!endDateStr) fieldErrors.endDate = "End date is required";
 
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors };
 
@@ -148,12 +127,12 @@ export async function createTrip(
     }
   }
 
-  if (isMultiDay && endDateStr) {
+  if (endDateStr) {
     endDate = new Date(endDateStr);
     if (isNaN(endDate.getTime())) {
       fieldErrors.endDate = "Invalid end date";
-    } else if (startDate && endDate <= startDate) {
-      fieldErrors.endDate = "End date must be after start date";
+    } else if (startDate && endDate < startDate) {
+      fieldErrors.endDate = "End date must be on or after start date";
     } else if (startDate && endDate) {
       const dayCount =
         Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
@@ -163,10 +142,13 @@ export async function createTrip(
 
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors };
 
-  // Server-side endDate computation for single-anchor types
-  // CLIENT MUST NOT send endDate for these — we compute it here to enforce it.
-  if (isSingleAnchor && startDate) {
-    endDate = computeEndDate(tripType, startDate);
+  let derivedTripType: string = TripType.MULTI_DAY;
+  if (startDate && endDate) {
+    const dayDiff = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (dayDiff === 0) derivedTripType = TripType.DAY_TRIP;
+    else if (dayDiff === 1) derivedTripType = TripType.OVERNIGHT;
+    else if (dayDiff === 2) derivedTripType = TripType.WEEKEND;
+    else derivedTripType = TripType.MULTI_DAY;
   }
 
   const matchedDestination = await resolveDestination(destination);
@@ -180,7 +162,7 @@ export async function createTrip(
       budgetInr,
       maxTravelers,
       paceLevel,
-      tripType,
+      tripType: derivedTripType,
       dateStatus,
       timeStatus,
       startTime,
