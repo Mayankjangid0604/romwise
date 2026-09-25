@@ -39,15 +39,15 @@ vi.mock("next/cache", () => ({
 describe("Copilot Null-Cost Rule", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(authModule.auth).mockResolvedValue({ user: { id: "user1" } } as any);
   });
 
   it("should preserve typicalCostInr=null as estimatedCostInr=null (not 0) when adding a place", async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(prisma.groupMember.findFirst).mockResolvedValue({ role: "creator" } as any);
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(prisma.trip.findUnique).mockResolvedValue({
       id: "trip1", destination: "Goa", itineraryDays: [{ id: "day1", dayNumber: 1, items: [] }]
     } as any);
@@ -61,7 +61,7 @@ describe("Copilot Null-Cost Rule", () => {
     } as any);
 
     // Mock Place with typicalCostInr = null
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(prisma.travelDestination.findFirst).mockResolvedValue({
       places: [
         { id: "place1", name: "Secret Beach", category: "beach", typicalCostInr: null, description: "nice" }

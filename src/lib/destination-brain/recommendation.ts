@@ -66,9 +66,19 @@ export async function getDestinationsForCollection(
     WHERE "rawScore" > 0
       AND "totalPlaces" >= 5
       ${req.state ? Prisma.sql`AND "state" = ${req.state}` : Prisma.empty}
+      ${req.q ? Prisma.sql`AND (name ILIKE ${'%' + req.q + '%'} OR state ILIKE ${'%' + req.q + '%'})` : Prisma.empty}
     -- Rank by rawScore, multiplied by density (rawScore/totalPlaces) to penalize generic mega-cities, then scale by prominence.
     -- Logarithmic scaling on totalPlaces prevents 300-place cities from getting a 10x multiplier over 30-place towns.
-    ORDER BY ("rawScore" * ("rawScore" / CAST("totalPlaces" AS FLOAT)) * "prominenceScore") DESC, "totalPlaces" DESC
+    ORDER BY 
+      ${req.q ? Prisma.sql`
+        CASE 
+          WHEN name ILIKE ${req.q} THEN 1000000 
+          WHEN name ILIKE ${req.q + '%'} THEN 100000 
+          WHEN state ILIKE ${req.q} THEN 10000
+          ELSE 0 
+        END + 
+      ` : Prisma.empty}
+      ("rawScore" * ("rawScore" / CAST("totalPlaces" AS FLOAT)) * "prominenceScore") DESC, "totalPlaces" DESC
     LIMIT ${limit}
   `;
 

@@ -21,6 +21,7 @@ export type CandidatePlace = {
   popularityScore: number;
   hiddenGem: boolean;
   preferenceScore: number;
+  placeType: string | null;
   // Accessibility fields from DB
   accessibilityScore: number | null;
   fatigueCost: number | null;
@@ -74,7 +75,7 @@ export async function getCandidatePlaces(
 
   const candidates: CandidatePlace[] = [];
   for (const place of rawPlaces) {
-    if (isHardExcluded(place.category, buildHardExclusionSet(allPreferences))) {
+    if (isHardExcluded({ category: place.category, placeType: place.placeType }, buildHardExclusionSet(allPreferences))) {
       continue;
     }
 
@@ -98,7 +99,7 @@ export async function getCandidatePlaces(
       }
     }
 
-    const preferenceScore = scorePlaceForPreferences(place.category, aggregated);
+    const preferenceScore = scorePlaceForPreferences({ category: place.category, placeType: place.placeType }, aggregated);
     const seasonScore = scoreForSeason(place.bestSeason, query.season);
 
     // B-003: Accessibility score boost for high-accessibility places
@@ -132,6 +133,7 @@ export async function getCandidatePlaces(
       popularityScore: place.popularityScore,
       hiddenGem: place.hiddenGem,
       preferenceScore: preferenceScore + seasonScore + accessibilityBoost,
+      placeType: place.placeType,
       accessibilityScore: place.accessibilityScore,
       fatigueCost: place.fatigueCost,
     });

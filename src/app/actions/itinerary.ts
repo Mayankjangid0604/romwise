@@ -313,9 +313,9 @@ export async function addItineraryItem(tripId: string, dayId: string, placeId?: 
   // Verify day belongs to this trip (prevents cross-trip injection)
   const day = await prisma.itineraryDay.findUnique({
     where: { id: dayId },
-    select: { tripId: true },
+    select: { trip: { select: { id: true, destinationId: true } } },
   });
-  if (!day || day.tripId !== tripId) {
+  if (!day || day.trip?.id !== tripId) {
     return { success: false, error: "Day not found in this trip" };
   }
 
@@ -324,13 +324,62 @@ export async function addItineraryItem(tripId: string, dayId: string, placeId?: 
   let category = "activity";
   let estimatedCostInr: number | null = null;
   
+  // Find existing items to determine non-overlapping schedule
+  const existingItems = await prisma.itineraryItem.findMany({
+    where: { itineraryDayId: dayId },
+    orderBy: { order: "asc" },
+  });
+
+  let startTime = "09:00";
+  let endTime = "10:00";
+  let order = 0;
+
+  if (existingItems.length > 0) {
+    const lastItem = existingItems[existingItems.length - 1];
+    order = lastItem.order + 1;
+    
+    // Parse last item's endTime
+    const [h, m] = lastItem.endTime.split(":").map(Number);
+    if (!isNaN(h) && !isNaN(m)) {
+      // Start 15 mins after previous ends
+      let startM = m + 15;
+      let startH = h;
+      if (startM >= 60) {
+        startM -= 60;
+        startH += 1;
+      }
+      // Assuming a 2-hour duration for a new activity
+      const endM = startM;
+      let endH = startH + 2;
+      if (endH > 23) endH = 23;
+
+      startTime = `${startH.toString().padStart(2, "0")}:${startM.toString().padStart(2, "0")}`;
+      endTime = `${endH.toString().padStart(2, "0")}:${endM.toString().padStart(2, "0")}`;
+    }
+  }
+  
   if (placeId) {
     const place = await prisma.place.findUnique({ where: { id: placeId } });
-    if (place) {
-      title = place.name;
-      description = place.description || place.category;
-      category = place.category;
-      estimatedCostInr = place.typicalCostInr || null;
+    if (!place) {
+      return { success: false, error: "Place not found" };
+    }
+    if (place.destinationId !== day.trip.destinationId) {
+      return { success: false, error: "Place does not belong to this trip's destination" };
+    }
+    
+    title = place.name;
+    description = place.description || place.category;
+    category = place.category;
+    estimatedCostInr = place.typicalCostInr ?? null; // Use null if 0 is not appropriate, or keep as is if 0 is valid. TypicalCostInr is a number.
+
+    // Adjust duration if known
+    if (place.durationMinutes && startTime !== "09:00") {
+      const [h, m] = startTime.split(":").map(Number);
+      let endM = m + place.durationMinutes;
+      let endH = h + Math.floor(endM / 60);
+      endM = endM % 60;
+      if (endH > 23) endH = 23;
+      endTime = `${endH.toString().padStart(2, "0")}:${endM.toString().padStart(2, "0")}`;
     }
   }
 
@@ -340,12 +389,12 @@ export async function addItineraryItem(tripId: string, dayId: string, placeId?: 
       title,
       description,
       category,
-      startTime: "12:00",
-      endTime: "13:00",
+      startTime,
+      endTime,
       estimatedCostInr,
       costSource: placeId ? "estimated" : "unknown",
       reasoning: "Manually added",
-      order: 999, // Will be sorted to the end
+      order,
       placeId: placeId || null,
     },
   });

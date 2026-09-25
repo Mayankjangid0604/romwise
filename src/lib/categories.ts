@@ -43,6 +43,16 @@ export const PREFERENCE_CATEGORIES = [
   "relaxation",
   "nightlife",
   "nature",
+  // Spiritual preferences
+  "spiritual_general",
+  "hindu_heritage",
+  "islamic_heritage",
+  "sikh_heritage",
+  "christian_heritage",
+  "buddhist_heritage",
+  "jain_heritage",
+  "other_sacred_heritage",
+  "fewer_spiritual",
 ] as const;
 
 export type PreferenceCategory = (typeof PREFERENCE_CATEGORIES)[number];

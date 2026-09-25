@@ -73,7 +73,7 @@ describe("scorePlaceForPreferences", () => {
       { category: "sightseeing", priority: "must-have" }, // +40
     ];
     const aggregated = aggregatePreferences(prefs);
-    const score = scorePlaceForPreferences("sightseeing", aggregated);
+    const score = scorePlaceForPreferences({ category: "sightseeing" }, aggregated);
     expect(score).toBe(40);
   });
 
@@ -82,13 +82,13 @@ describe("scorePlaceForPreferences", () => {
       { category: "culture", priority: "very-important" }, // +20
     ];
     const aggregated = aggregatePreferences(prefs);
-    const score = scorePlaceForPreferences("history", aggregated);
+    const score = scorePlaceForPreferences({ category: "history" }, aggregated);
     expect(score).toBe(20);
   });
 
   it("returns 0 for unmapped category", () => {
     const aggregated = aggregatePreferences([]);
-    const score = scorePlaceForPreferences("unknown_category", aggregated);
+    const score = scorePlaceForPreferences({ category: "unknown_category" }, aggregated);
     expect(score).toBe(0);
   });
 
@@ -97,30 +97,30 @@ describe("scorePlaceForPreferences", () => {
       { category: "dining", priority: "must-have" },
     ];
     const aggregated = aggregatePreferences(prefs);
-    expect(scorePlaceForPreferences("sightseeing", aggregated)).toBe(0);
+    expect(scorePlaceForPreferences({ category: "sightseeing" }, aggregated)).toBe(0);
   });
 });
 
 describe("isHardExcluded", () => {
   it("place with nightlife category is excluded when nightlife is never", () => {
     const exclusions = new Set(["nightlife"]);
-    expect(isHardExcluded("nightlife", exclusions)).toBe(true);
+    expect(isHardExcluded({ category: "nightlife" }, exclusions)).toBe(true);
   });
 
   it("place with history category is excluded when culture is never (via mapping)", () => {
     // history maps to culture in PLACE_TO_PREFERENCE_CATEGORY
     const exclusions = new Set(["culture"]);
-    expect(isHardExcluded("history", exclusions)).toBe(true);
+    expect(isHardExcluded({ category: "history" }, exclusions)).toBe(true);
   });
 
   it("place is not excluded when its mapped category is not excluded", () => {
     const exclusions = new Set(["nightlife"]);
-    expect(isHardExcluded("sightseeing", exclusions)).toBe(false);
+    expect(isHardExcluded({ category: "sightseeing" }, exclusions)).toBe(false);
   });
 
   it("unmapped place category is never excluded", () => {
     const exclusions = new Set(["nightlife", "culture", "shopping"]);
-    expect(isHardExcluded("totally_unknown_place_type", exclusions)).toBe(false);
+    expect(isHardExcluded({ category: "totally_unknown_place_type" }, exclusions)).toBe(false);
   });
 });
 

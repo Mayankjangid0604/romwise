@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Input, Button } from "@/components/ui";
 import { Search, MapPin } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -12,17 +12,33 @@ interface DestinationResult {
   state: string;
 }
 
-export function DestinationSearch() {
-  const [query, setQuery] = useState("");
+function DestinationSearchInner() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
+  const [query, setQuery] = useState(searchParams.get("q") || "");
   const [results, setResults] = useState<DestinationResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
-  const router = useRouter();
   const debouncedQuery = useDebounce(query, 300);
   const containerRef = useRef<HTMLFormElement>(null);
 
+  // When searching, if on /discovery with a collection, push state. Otherwise do the API call.
   useEffect(() => {
+    if (pathname === '/discovery' && searchParams.has('collection')) {
+      const params = new URLSearchParams(searchParams.toString());
+      if (debouncedQuery && debouncedQuery.length > 0) {
+        params.set('q', debouncedQuery);
+      } else {
+        params.delete('q');
+      }
+      // Replace instead of push to avoid massive history state while typing
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      return;
+    }
+
     async function fetchResults() {
       if (!debouncedQuery || debouncedQuery.length < 2) {
         setResults([]);
@@ -42,7 +58,7 @@ export function DestinationSearch() {
       }
     }
     fetchResults();
-  }, [debouncedQuery]);
+  }, [debouncedQuery, pathname, searchParams, router]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -59,9 +75,18 @@ export function DestinationSearch() {
     const finalQuery = selectedName || query.trim();
     if (finalQuery) {
       setIsOpen(false);
-      router.push(`/discovery/${encodeURIComponent(finalQuery)}`);
+      
+      if (pathname === '/discovery' && searchParams.has('collection')) {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('q', finalQuery);
+        router.push(`${pathname}?${params.toString()}`);
+      } else {
+        router.push(`/discovery/${encodeURIComponent(finalQuery)}`);
+      }
     }
   };
+
+  const showDropdown = isOpen && query.length >= 2 && !(pathname === '/discovery' && searchParams.has('collection'));
 
   return (
     <form ref={containerRef} onSubmit={e => handleSearch(e)} className="flex gap-2 max-w-xl mb-10 relative z-40">
@@ -81,7 +106,7 @@ export function DestinationSearch() {
           onFocus={() => setIsOpen(true)}
         />
         
-        {isOpen && query.length >= 2 && (
+        {showDropdown && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-ink-100 overflow-hidden z-50">
             {isLoading ? (
               <div className="p-4 text-sm text-ink-500 text-center">Searching...</div>
@@ -113,5 +138,13 @@ export function DestinationSearch() {
         Explore
       </Button>
     </form>
+  );
+}
+
+export function DestinationSearch() {
+  return (
+    <Suspense fallback={<div className="h-12 w-full max-w-xl bg-ink-100 animate-pulse rounded-xl mb-10" />}>
+      <DestinationSearchInner />
+    </Suspense>
   );
 }

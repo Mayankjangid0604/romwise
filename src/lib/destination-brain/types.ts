@@ -65,5 +65,6 @@ export interface CollectionRecommendationRequest {
   theme: CollectionTheme;
   limit?: number;
   state?: string;
+  q?: string;
   minDurationDays?: number;
 }

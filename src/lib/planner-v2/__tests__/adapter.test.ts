@@ -16,7 +16,7 @@ vi.mock("../../destination-resolver", () => ({
 
 describe("Adapter Regression Tests", () => {
   it("passes accessibilityNotes properly to the V2 Planner", async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(destinationResolver.resolveDestination).mockResolvedValue({
       id: "dest1",
       name: "Dest 1",
@@ -25,7 +25,7 @@ describe("Adapter Regression Tests", () => {
       synonyms: []
     } as any);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(engineModule.generateItineraryV2).mockResolvedValue({
       days: [{ dayNumber: 1, date: new Date(), items: [{}] }],
       metrics: { candidateCount: 1 } as any,
@@ -66,7 +66,7 @@ describe("Adapter Regression Tests", () => {
   });
 
   it("computes budgetPerDayInr correctly based on total budget and trip duration", async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(destinationResolver.resolveDestination).mockResolvedValue({
       id: "dest1",
       name: "Dest 1",
@@ -75,7 +75,7 @@ describe("Adapter Regression Tests", () => {
       synonyms: []
     } as any);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(engineModule.generateItineraryV2).mockResolvedValue({
       days: [{ dayNumber: 1, date: new Date(), items: [{}] }],
       metrics: { candidateCount: 1 } as any,
@@ -111,7 +111,7 @@ describe("Adapter Regression Tests", () => {
   });
   
   it("handles zero/invalid duration safely by falling back to full budget", async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(destinationResolver.resolveDestination).mockResolvedValue({
       id: "dest1",
       name: "Dest 1",
@@ -120,7 +120,7 @@ describe("Adapter Regression Tests", () => {
       synonyms: []
     } as any);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     vi.mocked(engineModule.generateItineraryV2).mockResolvedValue({
       days: [{ dayNumber: 1, date: new Date(), items: [{}] }],
       metrics: { candidateCount: 1 } as any,

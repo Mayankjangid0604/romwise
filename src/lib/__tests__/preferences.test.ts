@@ -30,8 +30,8 @@ describe("isValidPriority", () => {
 });
 
 describe("categories and priorities", () => {
-  it("has 8 activity categories", () => {
-    expect(CATEGORIES).toHaveLength(8);
+  it("has 17 activity categories", () => {
+    expect(CATEGORIES).toHaveLength(17);
   });
 
   it("has 6 priority levels", () => {

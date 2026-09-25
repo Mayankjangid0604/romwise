@@ -51,42 +51,50 @@ export function GenerateButton({ tripId, initialStatus }: { tripId: string, init
   const [season, setSeason] = useState<string | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Clean up polling interval on unmount
+  // Clean up polling timer on unmount
   useEffect(() => {
     return () => {
-      if (pollRef.current) clearInterval(pollRef.current);
+      if (pollRef.current) clearTimeout(pollRef.current as unknown as number);
     };
   }, []);
 
   const draftCountRef = useRef(0);
   const startPolling = useCallback(() => {
-    if (pollRef.current) clearInterval(pollRef.current);
+    if (pollRef.current) clearTimeout(pollRef.current as unknown as number);
     draftCountRef.current = 0;
-    pollRef.current = setInterval(async () => {
+
+    const poll = async () => {
       try {
         const res = await fetch(`/api/trips/${tripId}/status?t=${Date.now()}`);
-        const data = await res.json();
+        if (!res.ok) {
+          pollRef.current = setTimeout(poll, 2000);
+          return;
+        }
 
+        const data = await res.json();
+        
         if (data.status === "planning") {
-          if (pollRef.current) clearInterval(pollRef.current);
           window.location.reload();
         } else if (data.status === "draft") {
           draftCountRef.current += 1;
-          // Tolerate up to 3 'draft' responses (6 seconds) before failing
-          // This prevents transient race conditions where the DB hasn't committed or is replicated
           if (draftCountRef.current >= 3) {
-            if (pollRef.current) clearInterval(pollRef.current);
             setIsGenerating(false);
             setError("We couldn't generate this itinerary right now. Your trip details are saved — please try again.");
+          } else {
+            pollRef.current = setTimeout(poll, 2000);
           }
         } else {
           // Reset if it's "generating"
           draftCountRef.current = 0;
+          pollRef.current = setTimeout(poll, 2000);
         }
       } catch (err) {
         console.error("Failed to poll status:", err);
+        pollRef.current = setTimeout(poll, 2000);
       }
-    }, 2000);
+    };
+    
+    pollRef.current = setTimeout(poll, 2000);
   }, [tripId]);
 
   // Auto-start polling if we mounted in generating state

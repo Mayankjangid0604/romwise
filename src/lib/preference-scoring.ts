@@ -83,12 +83,34 @@ export function getHardExclusions(
  * Uses PLACE_TO_PREFERENCE_CATEGORY to map place category → preference category.
  */
 export function scorePlaceForPreferences(
-  placeCategory: string,
+  place: { category: string; placeType?: string | null },
   aggregated: Map<string, ScoredPreference>,
 ): number {
-  const prefCategory = PLACE_TO_PREFERENCE_CATEGORY[placeCategory as PlaceCategory];
-  if (!prefCategory) return 0;
-  return aggregated.get(prefCategory)?.score ?? 0;
+  let score = 0;
+  
+  if (place.category === "spiritual") {
+    // If user prefers fewer spiritual sites, penalize them
+    const fewerSpiritual = aggregated.get("fewer_spiritual")?.score ?? 0;
+    if (fewerSpiritual > 0) {
+      score -= fewerSpiritual; // penalty if "fewer_spiritual" is preferred/must-have
+    }
+    
+    // Evaluate specific spiritual preferences
+    const specificPrefCategory = getSpiritualPreferenceCategory(place.placeType);
+    const specificScore = aggregated.get(specificPrefCategory)?.score ?? 0;
+    
+    // Evaluate general spiritual preferences if no specific one is found
+    const generalScore = aggregated.get("spiritual_general")?.score ?? 0;
+    
+    score += Math.max(specificScore, generalScore);
+  }
+
+  const prefCategory = PLACE_TO_PREFERENCE_CATEGORY[place.category as PlaceCategory];
+  if (prefCategory) {
+    score += aggregated.get(prefCategory)?.score ?? 0;
+  }
+  
+  return score;
 }
 
 /**
@@ -96,12 +118,37 @@ export function scorePlaceForPreferences(
  * This is a HARD server-side constraint that must be enforced regardless of Gemini output.
  */
 export function isHardExcluded(
-  placeCategory: string,
+  place: { category: string; placeType?: string | null },
   hardExclusions: Set<string>,
 ): boolean {
-  const prefCategory = PLACE_TO_PREFERENCE_CATEGORY[placeCategory as PlaceCategory];
+  if (place.category === "spiritual") {
+    if (hardExclusions.has("fewer_spiritual") || hardExclusions.has("spiritual_general")) {
+      return true; // Exclude if they hard-avoid all spiritual sites
+    }
+    const specificPrefCategory = getSpiritualPreferenceCategory(place.placeType);
+    if (hardExclusions.has(specificPrefCategory)) {
+      return true;
+    }
+  }
+
+  const prefCategory = PLACE_TO_PREFERENCE_CATEGORY[place.category as PlaceCategory];
   if (!prefCategory) return false;
   return hardExclusions.has(prefCategory);
+}
+
+function getSpiritualPreferenceCategory(placeType?: string | null): string {
+  if (!placeType) return "spiritual_general";
+  const type = placeType.toLowerCase();
+  if (type.includes("temple")) {
+    if (type.includes("jain")) return "jain_heritage";
+    return "hindu_heritage";
+  }
+  if (type.includes("mosque") || type.includes("dargah")) return "islamic_heritage";
+  if (type.includes("gurdwara")) return "sikh_heritage";
+  if (type.includes("church")) return "christian_heritage";
+  if (type.includes("monastery") || type.includes("stupa") || type.includes("buddhist")) return "buddhist_heritage";
+  
+  return "other_sacred_heritage";
 }
 
 /**

@@ -14,16 +14,19 @@ import { COLLECTIONS, getDestinationsForCollection, CollectionTheme, Recommended
 import { DestinationSearch } from "./DestinationSearch";
 
 export default async function DiscoveryPage(props: {
-  searchParams: Promise<{ collection?: string }>;
+  searchParams: Promise<{ collection?: string; q?: string }>;
 }) {
-  const { collection: collectionParam } = await props.searchParams;
+  const { collection: collectionParam, q: queryParam } = await props.searchParams;
 
   const activeCollection = collectionParam 
     ? COLLECTIONS[collectionParam as CollectionTheme] 
     : null;
 
   const results = activeCollection 
-    ? await getDestinationsForCollection({ theme: activeCollection.id as CollectionTheme }) 
+    ? await getDestinationsForCollection({ 
+        theme: activeCollection.id as CollectionTheme,
+        q: queryParam 
+      }) 
     : null;
 
   return (
