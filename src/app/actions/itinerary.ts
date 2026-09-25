@@ -119,6 +119,13 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
         ? await generateGroundedItinerary(inputPayload)
         : await generateGroundedItineraryV2(inputPayload);
 
+      // Lifecycle guard: check if trip was deleted during background generation
+      const currentTrip = await prisma.trip.findUnique({ where: { id: tripId }, select: { id: true } });
+      if (!currentTrip) {
+        console.log(`[Itinerary] Trip ${tripId} was deleted during generation. Aborting.`);
+        return;
+      }
+
       // Save itinerary to DB
       await prisma.itineraryDay.deleteMany({ where: { tripId } });
 
@@ -162,7 +169,14 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
       });
 
       console.log(`[Itinerary] Generation completed for trip ${tripId}`);
-    } catch (err) {
+    } catch (err: unknown) {
+      // If the error is simply because the trip was deleted, ignore it
+      const errObj = err as { code?: string };
+      if (errObj?.code === "P2003" || errObj?.code === "P2025") {
+         console.log(`[Itinerary] Trip ${tripId} deleted during generation. Aborting safely.`);
+         return;
+      }
+
       console.error(`[Itinerary] Generation failed for trip ${tripId}:`, err);
       // Always reset trip status so it doesn't get stuck on "generating"
       try {
@@ -170,8 +184,10 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
           where: { id: tripId },
           data: { status: "draft" },
         });
-      } catch (resetErr) {
-        console.error("[Itinerary] Failed to reset trip status:", resetErr);
+      } catch (resetErr: unknown) {
+        if ((resetErr as { code?: string })?.code !== "P2025") {
+          console.error("[Itinerary] Failed to reset trip status:", resetErr);
+        }
       }
     }
   });

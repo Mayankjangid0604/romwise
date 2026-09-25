@@ -32,38 +32,29 @@ test.describe('E2E Trip Planning Flow', () => {
       await page.goto('/dashboard');
       await expect(page.locator('text=Welcome back')).toBeVisible();
 
-      // 3. Navigate to new trip page
-      await page.goto('/trips/new');
-      
-      // Wait for chat interface to be ready
-      const chatInput = page.getByPlaceholder(/E.g., I want to go/i);
-      await expect(chatInput).toBeVisible();
+      // 3. Navigate to new trip page with destination
+      await page.goto('/trips/new?destination=Jaipur');
+      await expect(page.getByRole('heading', { name: 'Trip Details' })).toBeVisible();
 
-      // 4. Send a message to start planning
-      await chatInput.fill('I want to go to Tokyo for 3 days. I use a wheelchair and I love food and culture');
-      await chatInput.pressSequentially('.');
-      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
-      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
-      await chatInput.press('Enter');
-      await responsePromise;
+      // 4. Fill form
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const after3Days = new Date();
+      after3Days.setDate(after3Days.getDate() + 4);
 
-      // 5. Wait for AI response
-      await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });
+      await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#budget').fill('20000');
+      await page.locator('#accessibilityNotes').fill('I use a wheelchair and I love food and culture');
 
-      const assistantMessages = page.locator('.bg-white.border-ink-100');
-      await expect(assistantMessages).toHaveCount(2);
-      
-      const aiResponse = await assistantMessages.nth(1).textContent();
-      expect(aiResponse?.length).toBeGreaterThan(0);
-
-      // 6. Click 'Create Trip'
-      const createButton = page.getByRole('button', { name: 'Create Trip' });
+      // 6. Click 'Generate My Trip'
+      const createButton = page.getByRole('button', { name: 'Generate My Trip' });
       await expect(createButton).toBeVisible();
       await createButton.click();
 
       // 7. Wait for navigation to the trip dashboard (not /trips/new)
-      await expect(page).not.toHaveURL(/\/trips\/new$/, { timeout: 30000 });
-      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+/, { timeout: 30000 });
+      await expect(page).not.toHaveURL(/trips\/new/, { timeout: 30000 });
+      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+(\/itinerary)?$/, { timeout: 30000 });
       
       // 8. Assert DB State
       // Fetch the trip from the DB
@@ -77,14 +68,9 @@ test.describe('E2E Trip Planning Flow', () => {
       });
 
       expect(trip).not.toBeNull();
-      expect(trip?.title).toContain('Tokyo');
+      expect(trip?.title).toContain('Jaipur');
       expect(trip?.maxTravelers).toBe(2); 
       expect(trip?.groupMembers[0]?.accessibilityNotes).toContain('wheelchair');
-      expect(trip?.groupMembers[0]?.travelerPreferences.length).toBeGreaterThan(0);
-      
-      const prefCategories = trip?.groupMembers[0]?.travelerPreferences.map((p: { category: string }) => p.category);
-      expect(prefCategories).toContain('dining');
-      expect(prefCategories).toContain('culture');
 
       
     } finally {

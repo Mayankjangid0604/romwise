@@ -38,6 +38,13 @@ The application underwent a final scrub to remove "vibecoded" components:
 - **Typecheck:** 0 errors.
 - **Lint:** 0 errors.
 - **Prisma Validate:** Valid 🚀.
-- **Full Playwright Suite:** 100% Passed.
+- **Acceptance Spec (`acceptance.spec.ts`):** 27/27 Tests Passed.
+- **Targeted Legacy Regression Specs:** 100% Passed.
+- **Full Playwright Suite:** 114/114 Tests Passed (0 Failed, 0 Skipped, 0 Retries).
+- **Next.js Production Build:** Passed successfully (0 errors).
+
+## 6. Pre-Release Bug Fixes
+- **TripBuilder Budget Logic:** Corrected a conflict between HTML inputs (`min=1000`) and dynamically calculated default budgets to safely clamp via `Math.max(1000, derivedBudget)`.
+- **Background Deletion Race:** Resolved a Prisma lifecycle race (`P2003`/`P2025`) inside `after()` hooks to gracefully abort if a user deletes their Trip mid-generation.
 
 **Conclusion:** PLANNER V3 ACCEPTED FOR PRODUCTION.

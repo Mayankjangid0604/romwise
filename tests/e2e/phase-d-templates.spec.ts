@@ -4,7 +4,7 @@ import { prisma } from '../../src/lib/db';
 test.describe('Phase D - Templates & Overrides', () => {
   test.setTimeout(60000);
 
-  test('Templates inject text and user can override', async ({ page }) => {
+  test('User can manually configure pace and budget', async ({ page }) => {
     // 1. Create a unique test user
     const testEmail = `e2e_tpl_${Date.now()}@example.com`;
     const user = await prisma.user.create({
@@ -22,37 +22,30 @@ test.describe('Phase D - Templates & Overrides', () => {
       expect(loginRes.ok()).toBeTruthy();
 
       // 3. Navigate to new trip page
-      await page.goto('/trips/new');
-      
-      // Wait for chat interface to be ready
-      const chatInput = page.getByPlaceholder(/E.g., I want to go/i);
-      await expect(chatInput).toBeVisible();
+      await page.goto('/trips/new?destination=Jaipur');
+      await expect(page.getByRole('heading', { name: 'Trip Details' })).toBeVisible();
 
-      // Click the "Family Vacation" template
-      await page.click('text=Family Vacation');
-      
-      // Check that the input has the template text
-      await expect(chatInput).toHaveValue(/Plan a 5-day family trip to Jaipur for 4 people \(2 adults, 2 kids\)/i);
+      // Configure budget, travelers, pace, and dates
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const after3Days = new Date();
+      after3Days.setDate(after3Days.getDate() + 4);
 
-      // User decides to override pace and budget manually in the input
-      await chatInput.fill('Plan a 5-day family trip to Jaipur for 4 people (2 adults, 2 kids), FULL PACE, budget 100000');
-      await chatInput.pressSequentially('.');
-      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
-      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
-      await chatInput.press('Enter');
-      await responsePromise;
+      await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#budget').fill('100000');
+      await page.locator('#maxTravelers').fill('4');
+      await page.getByLabel('Pace Level').selectOption('full');
 
-      // Wait for AI to process and state to update
-      await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });
-      
-      // Now click "Create Trip"
-      const createButton = page.getByRole('button', { name: /Create Trip/i });
+      // Now click "Generate My Trip"
+      const createButton = page.getByRole('button', { name: /Generate My Trip/i });
       await expect(createButton).toBeVisible();
       await createButton.click();
       
       // Wait for redirect to /trips/[id]
       await page.waitForURL(url => url.pathname.startsWith('/trips/') && !url.pathname.endsWith('/new'), { timeout: 30000 });
-      const tripId = page.url().split('/').pop();
+      const urlParts = page.url().split('/');
+      const tripId = urlParts[urlParts.length - 1] === 'itinerary' ? urlParts[urlParts.length - 2] : urlParts[urlParts.length - 1];
       
       // Verify in the database that the explicit override was respected
       const trip = await prisma.trip.findUnique({

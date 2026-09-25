@@ -39,7 +39,6 @@ export function TripBuilder({
       formData.append("destination", destination);
       formData.append("title", `Trip to ${destination}`);
       formData.append("dateStatus", "exact");
-      formData.append("tripType", "MULTI_DAY");
       formData.append("autoGenerate", "true");
 
       const state = await createTrip({}, formData);
@@ -82,7 +81,7 @@ export function TripBuilder({
               <Input type="date" id="endDate" name="endDate" defaultValue={initialData?.endDate} required className="w-full" />
             </Field>
             <Field label="Total Budget (₹)" htmlFor="budget">
-              <Input type="number" id="budget" name="budget" defaultValue={initialData?.budget || (initialDetails ? initialDetails.averageDailyBudgetInr * 2 : 20000)} required min="1000" className="w-full" />
+              <Input type="number" id="budget" name="budget" defaultValue={initialData?.budget || Math.max(1000, initialDetails ? initialDetails.averageDailyBudgetInr * 2 : 20000)} required min="1000" className="w-full" />
             </Field>
             <Field label="Travelers" htmlFor="maxTravelers">
               <Input type="number" id="maxTravelers" name="maxTravelers" defaultValue={2} required min="1" max="20" className="w-full" />
@@ -92,6 +91,15 @@ export function TripBuilder({
                 <option value="easy">Easy (Relaxed, fewer activities)</option>
                 <option value="balanced">Balanced (Mix of chill and active)</option>
                 <option value="full">Full (Action-packed, lots of walking)</option>
+              </Select>
+            </Field>
+            <Field label="Trip Duration / Type" htmlFor="tripType">
+              <Select id="tripType" name="tripType" defaultValue="MULTI_DAY" className="w-full">
+                <option value="PICNIC">Picnic (Few hours)</option>
+                <option value="DAY_TRIP">Day Trip (Single day)</option>
+                <option value="OVERNIGHT">Overnight (1 night)</option>
+                <option value="WEEKEND">Weekend (2-3 days)</option>
+                <option value="MULTI_DAY">Multi-Day (3+ days)</option>
               </Select>
             </Field>
           </div>

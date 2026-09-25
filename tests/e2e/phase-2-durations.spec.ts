@@ -18,25 +18,24 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
       });
       expect(loginRes.ok()).toBeTruthy();
 
-      await page.goto('/trips/new');
-      const chatInput = page.getByPlaceholder(/E.g., I want to go/i);
-      await expect(chatInput).toBeVisible();
+      await page.goto('/trips/new?destination=Jaipur');
+      await expect(page.getByRole('heading', { name: 'Trip Details' })).toBeVisible();
 
-      await chatInput.fill('I want to go to Jaipur for a picnic today. Just me. We like nature');
-      await chatInput.pressSequentially('.');
-      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
-      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
-      await chatInput.press('Enter');
-      await responsePromise;
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const after3Days = new Date();
+      after3Days.setDate(after3Days.getDate() + 4);
 
-      await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });
+      await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#budget').fill('20000');
+      await page.getByLabel('Trip Duration / Type').selectOption('PICNIC');
+      await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
-      const createButton = page.getByRole('button', { name: 'Create Trip' });
-      await expect(createButton).toBeVisible();
-      await createButton.click();
+      // Button is already clicked
 
-      await expect(page).not.toHaveURL(/\/trips\/new$/, { timeout: 30000 });
-      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+/, { timeout: 30000 });
+      await expect(page).not.toHaveURL(/trips\/new/, { timeout: 30000 });
+      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+(\/itinerary)?$/, { timeout: 30000 });
 
       const trip = await prisma.trip.findFirst({
         where: { creatorId: user.id },
@@ -64,25 +63,24 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
       });
       expect(loginRes.ok()).toBeTruthy();
 
-      await page.goto('/trips/new');
-      const chatInput = page.getByPlaceholder(/E.g., I want to go/i);
-      await expect(chatInput).toBeVisible();
+      await page.goto('/trips/new?destination=Jaipur');
+      await expect(page.getByRole('heading', { name: 'Trip Details' })).toBeVisible();
 
-      await chatInput.fill('I want to go to Jaipur for an overnight trip starting tomorrow. Just me. We like history');
-      await chatInput.pressSequentially('.');
-      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
-      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
-      await chatInput.press('Enter');
-      await responsePromise;
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const after3Days = new Date();
+      after3Days.setDate(after3Days.getDate() + 4);
 
-      await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });
+      await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#budget').fill('20000');
+      await page.getByLabel('Trip Duration / Type').selectOption('OVERNIGHT');
+      await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
-      const createButton = page.getByRole('button', { name: 'Create Trip' });
-      await expect(createButton).toBeVisible();
-      await createButton.click();
+      // Button is already clicked
 
-      await expect(page).not.toHaveURL(/\/trips\/new$/, { timeout: 30000 });
-      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+/, { timeout: 30000 });
+      await expect(page).not.toHaveURL(/trips\/new/, { timeout: 30000 });
+      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+(\/itinerary)?$/, { timeout: 30000 });
 
       const trip = await prisma.trip.findFirst({
         where: { creatorId: user.id },
@@ -110,25 +108,24 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
       });
       expect(loginRes.ok()).toBeTruthy();
 
-      await page.goto('/trips/new');
-      const chatInput = page.getByPlaceholder(/E.g., I want to go/i);
-      await expect(chatInput).toBeVisible();
+      await page.goto('/trips/new?destination=Jaipur');
+      await expect(page.getByRole('heading', { name: 'Trip Details' })).toBeVisible();
 
-      await chatInput.fill('I want to go to Jaipur for the weekend this Friday to Sunday. Just me. We like food');
-      await chatInput.pressSequentially('.');
-      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
-      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
-      await chatInput.press('Enter');
-      await responsePromise;
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const after3Days = new Date();
+      after3Days.setDate(after3Days.getDate() + 4);
 
-      await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });
+      await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#budget').fill('20000');
+      await page.getByLabel('Trip Duration / Type').selectOption('WEEKEND');
+      await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
-      const createButton = page.getByRole('button', { name: 'Create Trip' });
-      await expect(createButton).toBeVisible();
-      await createButton.click();
+      // Button is already clicked
 
-      await expect(page).not.toHaveURL(/\/trips\/new$/, { timeout: 30000 });
-      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+/, { timeout: 30000 });
+      await expect(page).not.toHaveURL(/trips\/new/, { timeout: 30000 });
+      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+(\/itinerary)?$/, { timeout: 30000 });
 
       const trip = await prisma.trip.findFirst({
         where: { creatorId: user.id },
@@ -156,25 +153,24 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
       });
       expect(loginRes.ok()).toBeTruthy();
 
-      await page.goto('/trips/new');
-      const chatInput = page.getByPlaceholder(/E.g., I want to go/i);
-      await expect(chatInput).toBeVisible();
+      await page.goto('/trips/new?destination=Jaipur');
+      await expect(page.getByRole('heading', { name: 'Trip Details' })).toBeVisible();
 
-      await chatInput.fill('I want to go to Jaipur for a day trip starting at 9 AM and ending at 9 PM. Just me. We like history');
-      await chatInput.pressSequentially('.');
-      await expect(page.getByRole('button', { name: 'Send' })).toBeEnabled();
-      const responsePromise = page.waitForResponse(r => r.url().includes('/api/chat/planner') && r.status() === 200);
-      await chatInput.press('Enter');
-      await responsePromise;
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const after3Days = new Date();
+      after3Days.setDate(after3Days.getDate() + 4);
 
-      await expect(page.locator('.animate-bounce').first()).toBeHidden({ timeout: 20000 });
+      await page.locator('#startDate').fill(tomorrow.toISOString().split('T')[0]);
+      await page.locator('#endDate').fill(after3Days.toISOString().split('T')[0]);
+      await page.locator('#budget').fill('20000');
+      await page.getByLabel('Trip Duration / Type').selectOption('DAY_TRIP');
+      await page.getByRole('button', { name: 'Generate My Trip' }).click();
       
-      const createButton = page.getByRole('button', { name: 'Create Trip' });
-      await expect(createButton).toBeVisible();
-      await createButton.click();
+      // Button is already clicked
 
-      await expect(page).not.toHaveURL(/\/trips\/new$/, { timeout: 30000 });
-      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+/, { timeout: 30000 });
+      await expect(page).not.toHaveURL(/trips\/new/, { timeout: 30000 });
+      await expect(page).toHaveURL(/\/trips\/[a-zA-Z0-9_-]+(\/itinerary)?$/, { timeout: 30000 });
 
       const trip = await prisma.trip.findFirst({
         where: { creatorId: user.id },
