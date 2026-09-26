@@ -6,10 +6,10 @@ import { Button } from "@/components/ui";
 
 export function HotelSelectButton({
   tripId,
-  placeId,
+  stayId,
 }: {
   tripId: string;
-  placeId: string;
+  stayId: string;
 }) {
   const [pending, startTransition] = useTransition();
 
@@ -17,7 +17,7 @@ export function HotelSelectButton({
     <Button
       size="sm"
       onClick={() =>
-        startTransition(() => selectHotel(tripId, placeId))
+        startTransition(() => selectHotel(tripId, stayId))
       }
       disabled={pending}
     >

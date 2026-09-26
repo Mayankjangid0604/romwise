@@ -11,6 +11,7 @@
  */
 
 import { PrismaClient } from "@prisma/client";
+import { resolveImportedCategory, TRANSIT_CATEGORY } from "../../../src/lib/transit-filter";
 
 const prisma = new PrismaClient();
 
@@ -334,7 +335,7 @@ async function importCategory(
         // Check existing
         const existing = await prisma.place.findFirst({
           where: { sourceType: "WIKIDATA", sourceRecordId: sourceId },
-          select: { id: true, dataStatus: true },
+          select: { id: true, dataStatus: true, category: true, placeType: true },
         });
 
         if (existing && (existing.dataStatus === "verified" || existing.dataStatus === "manually_curated")) {
@@ -342,11 +343,19 @@ async function importCategory(
           continue;
         }
 
+        // Each category is a separate pass; a station that is also a heritage building
+        // must not be re-labelled as history/sightseeing (i.e. offered as an attraction).
+        const category = resolveImportedCategory(cat.roamwiseCategory, existing?.category, name);
+        const placeType =
+          category === TRANSIT_CATEGORY && cat.roamwiseCategory !== TRANSIT_CATEGORY
+            ? (existing?.category === TRANSIT_CATEGORY && existing.placeType) || "transit_hub"
+            : cat.placeType;
+
         const placeData = {
           name,
           lat, lng: lon,
-          category: cat.roamwiseCategory,
-          placeType: cat.placeType,
+          category,
+          placeType,
           description: description || null,
           popularityScore: 75, // Notable Wikidata entities get higher base score
           sourceType: "WIKIDATA" as const,
@@ -378,14 +387,15 @@ async function importCategory(
       } catch (err: any) {
         if (err.code === "P2002") {
           // Duplicate slug — retry with timestamp suffix
+          const retryCategory = resolveImportedCategory(cat.roamwiseCategory, null, name);
           try {
             await prisma.place.create({
               data: {
                 name, slug: `${slug}-${Date.now().toString(36)}`,
                 destinationId: dest.id,
                 lat, lng: lon,
-                category: cat.roamwiseCategory,
-                placeType: cat.placeType,
+                category: retryCategory,
+                placeType: retryCategory === cat.roamwiseCategory ? cat.placeType : "transit_hub",
                 description: description || null,
                 popularityScore: 75,
                 sourceType: "WIKIDATA", sourceRecordId: sourceId,

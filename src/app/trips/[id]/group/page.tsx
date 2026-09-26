@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { getTripRole, requireTripRole } from "@/lib/security";
-import { getActiveShares } from "@/app/actions/share";
+import { getTripRole } from "@/lib/security";
 import { redirect } from "next/navigation";
 import { GroupDashboard } from "@/components/group/group-dashboard";
 
@@ -12,40 +11,41 @@ export default async function GroupPage(props: { params: Promise<{ id: string }>
     redirect("/login");
   }
 
-  const role = await getTripRole(id, session.user.id);
+  // Role, trip (+ creator) and share links load in parallel; these used to be ~8
+  // sequential round trips (getActiveShares re-derived the role before querying).
+  const [role, trip, shares] = await Promise.all([
+    getTripRole(id, session.user.id),
+    prisma.trip.findUnique({
+      where: { id },
+      include: {
+        groupMembers: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              }
+            }
+          }
+        },
+        creator: { select: { id: true, name: true, email: true } },
+      }
+    }),
+    prisma.tripShare.findMany({
+      where: { tripId: id, active: true },
+      select: { id: true, role: true, token: true },
+    }),
+  ]);
+
   if (!role) {
     redirect("/dashboard");
   }
-
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            }
-          }
-        }
-      }
-    }
-  });
-
   if (!trip) redirect("/dashboard");
 
-  let activeShares: { id: string; role: string; token: string; }[] = [];
-  if (role === "creator") {
-    activeShares = await getActiveShares(id);
-  }
-
-  // Find the creator to add to the members list
-  const creator = await prisma.user.findUnique({
-    where: { id: trip.creatorId },
-    select: { id: true, name: true, email: true },
-  });
+  // Share tokens are only ever handed to the creator
+  const activeShares = role === "creator" ? shares : [];
+  const creator = trip.creator;
 
   return (
     <div className="space-y-8">

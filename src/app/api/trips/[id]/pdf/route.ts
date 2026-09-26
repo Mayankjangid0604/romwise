@@ -100,6 +100,14 @@ export async function GET(
   } catch (error) {
     // Sanitize error output
     console.error("PDF generation failed.");
+    // Headless Chromium isn't available on every runtime (e.g. Vercel's default Node
+    // runtime has no browser binary). Instead of a bare 500, fall back to the print page,
+    // which does its own auth/membership check and opens the browser's print dialog
+    // ("Save as PDF").
+    const { id } = await props.params;
+    if (/^[a-z0-9-]+$/i.test(id)) {
+      return NextResponse.redirect(new URL(`/trips/${id}/print`, req.url), 303);
+    }
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

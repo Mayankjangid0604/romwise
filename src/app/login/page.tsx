@@ -5,13 +5,18 @@ import { login, type AuthState } from "@/app/actions/auth";
 import { requestOtp, verifyOtpAction } from "@/app/actions/phone-auth";
 import Link from "next/link";
 import { Alert, Card, Field, Input, Button, CenteredShell } from "@/components/ui";
+import { CallbackUrlInput, AuthSwitchLink } from "@/components/auth/callback-url";
 import { Plane, Sparkles, Users, WifiOff } from "lucide-react";
 
 const emailInitial: AuthState = {};
 
 export default function LoginPage() {
-  const [method, setMethod] = useState<"email" | "phone">("phone");
+  // Email first: signup creates email accounts, and no SMS provider is wired up in
+  // production (lib/sms.ts only has a dev console provider), so phone login can't work there.
+  const [method, setMethod] = useState<"email" | "phone">("email");
   const [emailState, emailAction, emailPending] = useActionState(login, emailInitial);
+  // Bumping the key remounts PhoneForm, resetting its OTP state without a full page reload
+  const [phoneFormKey, setPhoneFormKey] = useState(0);
 
   return (
     <div className="min-h-screen flex">
@@ -97,18 +102,18 @@ export default function LoginPage() {
             {method === "email" ? (
               <EmailForm state={emailState} action={emailAction} pending={emailPending} />
             ) : (
-              <PhoneForm />
+              <PhoneForm key={phoneFormKey} onReset={() => setPhoneFormKey((k) => k + 1)} />
             )}
           </Card>
 
           <p className="text-center text-[0.875rem] text-ink-600 mt-6">
             Don&apos;t have an account?{" "}
-            <Link
+            <AuthSwitchLink
               href="/signup"
               className="font-medium text-lagoon-700 hover:text-lagoon-800"
             >
               Sign up
-            </Link>
+            </AuthSwitchLink>
           </p>
         </div>
       </div>
@@ -128,6 +133,7 @@ function EmailForm({
   return (
     <form action={action} className="space-y-4">
       {state.error && <Alert tone="danger">{state.error}</Alert>}
+      <CallbackUrlInput />
 
       <Field label="Email" htmlFor="email">
         <Input id="email" name="email" type="email" required />
@@ -144,7 +150,7 @@ function EmailForm({
   );
 }
 
-function PhoneForm() {
+function PhoneForm({ onReset }: { onReset: () => void }) {
   const [phoneState, phoneAction, phonePending] = useActionState(requestOtp, {
     step: "phone" as const,
   });
@@ -162,6 +168,7 @@ function PhoneForm() {
         </p>
 
         <input type="hidden" name="phone" value={phoneState.phone} />
+        <CallbackUrlInput />
 
         <Field label="Verification code" htmlFor="code">
           <Input
@@ -182,7 +189,7 @@ function PhoneForm() {
 
         <button
           type="button"
-          onClick={() => window.location.reload()}
+          onClick={onReset}
           className="w-full text-[0.8125rem] text-lagoon-700 hover:text-lagoon-800 font-medium"
         >
           Use a different number

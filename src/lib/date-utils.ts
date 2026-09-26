@@ -92,15 +92,14 @@ export function getTripDuration(
       return defaultDays;
 
     default:
-      // MULTI_DAY or legacy unknown — derive from dates
+      // MULTI_DAY or legacy unknown — derive from dates, counting *calendar* days.
+      // Callers such as the V2 planner pass time-adjusted datetimes (start 09:00, end
+      // 20:00); ceil() of the raw millisecond span turned Nov 13 09:00 → Nov 15 20:00 into
+      // 4 days, so every multi-day itinerary got a phantom day after the trip ended.
       if (trip.startDate && trip.endDate) {
-        return Math.max(
-          1,
-          Math.ceil(
-            (trip.endDate.getTime() - trip.startDate.getTime()) /
-              (1000 * 60 * 60 * 24),
-          ) + 1,
-        );
+        const startDay = Date.UTC(trip.startDate.getUTCFullYear(), trip.startDate.getUTCMonth(), trip.startDate.getUTCDate());
+        const endDay = Date.UTC(trip.endDate.getUTCFullYear(), trip.endDate.getUTCMonth(), trip.endDate.getUTCDate());
+        return Math.max(1, Math.round((endDay - startDay) / (1000 * 60 * 60 * 24)) + 1);
       }
       return defaultDays;
   }
@@ -305,4 +304,25 @@ export function getTripStartEndDateTimes(trip: {
   }
 
   return { startDateTime, endDateTime };
+}
+
+/** "Day 2 · Tue, 14 Oct" — falls back to "Day 2" when the day has no calendar date. */
+export function formatDayLabel(dayNumber: number, date?: Date | string | null): string {
+  if (!date) return `Day ${dayNumber}`;
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return `Day ${dayNumber}`;
+  return `Day ${dayNumber} · ${d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" })}`;
+}
+
+/**
+ * Trip type for a trip created from explicit start/end dates (the New Trip form).
+ * WEEKEND/OVERNIGHT are fixed-length types (2 days), so only use them when the chosen
+ * range really is that long: a 3-calendar-day range used to become WEEKEND, which then
+ * planned 2 days and silently dropped the last one.
+ */
+export function deriveTripTypeFromDates(startDate: Date, endDate: Date): TripType {
+  const dayDiff = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  if (dayDiff <= 0) return TripType.DAY_TRIP;
+  if (dayDiff === 1) return TripType.OVERNIGHT;
+  return TripType.MULTI_DAY;
 }

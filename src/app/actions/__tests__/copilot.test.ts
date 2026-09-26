@@ -4,6 +4,7 @@ import { executeCopilotIntent } from "../copilot";
 import * as authModule from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { AIGateway } from "@/lib/ai/gateway";
+import { NOT_TRANSIT_WHERE } from "@/lib/transit-filter";
 
 vi.mock("@/lib/auth", () => ({
   auth: vi.fn(),
@@ -34,6 +35,10 @@ vi.mock("@/lib/db", () => ({
 
 vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
+}));
+
+vi.mock("@/lib/db-rate-limit", () => ({
+  checkRateLimitDb: vi.fn(async () => ({ allowed: true })),
 }));
 
 describe("Copilot Null-Cost Rule", () => {
@@ -79,5 +84,42 @@ describe("Copilot Null-Cost Rule", () => {
         })
       })
     );
+  });
+});
+
+describe("Copilot never adds transit points as activities", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authModule.auth).mockResolvedValue({ user: { id: "user1" } } as any);
+    vi.mocked(prisma.groupMember.findFirst).mockResolvedValue({ role: "creator" } as any);
+    vi.mocked(prisma.trip.findUnique).mockResolvedValue({
+      id: "trip1", destination: "Jaipur", itineraryDays: [{ id: "day1", dayNumber: 1, items: [] }]
+    } as any);
+  });
+
+  it.each(["Jaipur Junction railway station", "Sindhi Camp bus stand", "Jaipur Airport"])(
+    "declines ADD_PLACE for %s instead of creating an 'Explore …' activity",
+    async (keyword) => {
+      vi.mocked(AIGateway.generateStructured).mockResolvedValue({
+        data: { message: "Added!", intent: { action: "ADD_PLACE", targetDayNumber: 1, newPlaceKeyword: keyword } },
+      } as any);
+
+      const res = await executeCopilotIntent("trip1", `add ${keyword} to day 1`);
+
+      expect(res).toMatchObject({ success: true, action: "NO_ACTION" });
+      expect(prisma.itineraryItem.create).not.toHaveBeenCalled();
+    },
+  );
+
+  it("only looks up non-transit places for a keyword", async () => {
+    vi.mocked(AIGateway.generateStructured).mockResolvedValue({
+      data: { message: "Adding", intent: { action: "ADD_PLACE", targetDayNumber: 1, newPlaceKeyword: "heritage" } },
+    } as any);
+    vi.mocked(prisma.travelDestination.findFirst).mockResolvedValue({ places: [] } as any);
+
+    await executeCopilotIntent("trip1", "add something heritage");
+
+    const where = (vi.mocked(prisma.travelDestination.findFirst).mock.calls[0][0] as any).include.places.where;
+    expect(where.AND).toContainEqual(NOT_TRANSIT_WHERE);
   });
 });

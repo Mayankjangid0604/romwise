@@ -4,6 +4,13 @@ import { auth } from "@/lib/auth";
 import { checkRateLimitDb } from "@/lib/db-rate-limit";
 import { z } from "zod";
 import { resolveDestination, searchTravelDestinations } from "@/lib/destination-resolver";
+import { withAiCache, normalizePromptText, sha256 } from "@/lib/ai/cache";
+import { getModelForTask } from "@/lib/ai/router";
+
+// Identical conversations get the same answer for the rest of the day, instead of
+// another Gemini call. The date is part of the key because answers contain relative
+// dates ("next month"), so nothing is ever served across days.
+const PLANNER_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 export const maxDuration = 60;
 
@@ -69,6 +76,8 @@ const plannerResponseSchema = z.object({
     name: z.string()
   })).optional(),
 });
+
+class InvalidAiResponseError extends Error {}
 
 export type PlannerExtractedData = z.infer<typeof extractedDataSchema>;
 export type PlannerPreferenceItem = z.infer<typeof preferenceItemSchema>;
@@ -289,22 +298,60 @@ Output ONLY valid JSON (no markdown, no code fences):
 }
 `;
 
-    const prompt = `Here is the conversation so far:\n${chatHistory}\n\nWhat is your next response?`;
+    // The instructions ask for relative dates ("next month"); without today's date the model
+    // falls back to its training-time notion of "now" and can return dates in the past.
+    const today = new Date().toISOString().slice(0, 10);
+    const prompt = `Today's date is ${today}.\n\nHere is the conversation so far:\n${chatHistory}\n\nWhat is your next response?`;
 
-    const result = await AIGateway.generateStructured<unknown>({
-      prompt,
-      systemInstruction,
-      context: {
-        userId: session.user.id,
-        task: "conversation",
+    let cacheHit = false;
+    let aiData: z.infer<typeof plannerResponseSchema>;
+    try {
+      const cached = await withAiCache(
+        {
+          task: "conversation",
+          model: getModelForTask("conversation").model,
+          version: sha256(systemInstruction).slice(0, 12),
+          input: {
+            day: new Date().toISOString().slice(0, 10),
+            messages: messages.map((m: { role: string; content: string }) => ({
+              role: m.role === "user" ? "user" : "assistant",
+              content: normalizePromptText(String(m.content ?? "")),
+            })),
+          },
+          ttlMs: PLANNER_CACHE_TTL_MS,
+          validate: (data) => {
+            const r = plannerResponseSchema.safeParse(data);
+            return r.success ? r.data : null;
+          },
+        },
+        async () => {
+          const result = await AIGateway.generateStructured<unknown>({
+            prompt,
+            systemInstruction,
+            context: {
+              userId: session.user!.id,
+              task: "conversation",
+            }
+          });
+          const valid = plannerResponseSchema.safeParse(result.data);
+          if (!valid.success) {
+            console.error("AI returned invalid structure:", result.data, valid.error);
+            throw new InvalidAiResponseError();
+          }
+          return valid.data;
+        },
+      );
+      cacheHit = cached.cacheHit;
+      aiData = cached.value;
+    } catch (err) {
+      if (err instanceof InvalidAiResponseError) {
+        return NextResponse.json({ error: "Invalid response from AI" }, { status: 502 });
       }
-    });
-
-    const parsed = plannerResponseSchema.safeParse(result.data);
-    if (!parsed.success) {
-      console.error("AI returned invalid structure:", result.data, parsed.error);
-      return NextResponse.json({ error: "Invalid response from AI" }, { status: 502 });
+      throw err;
     }
+
+    // Destination resolution depends on current DB data, so it runs on hits too
+    const parsed = { data: aiData };
 
     if (parsed.data.type === "complete" && parsed.data.extractedData?.destination) {
       const destination = parsed.data.extractedData.destination;
@@ -324,7 +371,7 @@ Output ONLY valid JSON (no markdown, no code fences):
       }
     }
 
-    return NextResponse.json(parsed.data);
+    return NextResponse.json(parsed.data, { headers: { "X-Roamwise-AI-Cache": cacheHit ? "hit" : "miss" } });
   } catch (error) {
     console.error("Chat planner error:", error);
     return NextResponse.json({ error: "Failed to generate response" }, { status: 500 });

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import {
   optimizeRoute,
+  buildRouteStops,
   type RouteStop,
 } from "@/lib/route-optimizer";
 import {
@@ -35,19 +36,25 @@ export default async function RoutePage(props: {
   const { id } = await props.params;
   const { day: dayParam } = await props.searchParams;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: true,
-      destinationRef: true,
-      itineraryDays: {
-        orderBy: { dayNumber: "asc" },
-        include: { items: { orderBy: { order: "asc" }, include: { place: true } } },
+  // Parallel flat queries instead of one nested include tree (Prisma resolves each
+  // relation level as a separate sequential round trip). Same `trip` shape as before.
+  const [tripRow, groupMembers, itineraryDays] = await Promise.all([
+    prisma.trip.findUnique({ where: { id }, include: { destinationRef: true } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true } }),
+    prisma.itineraryDay.findMany({
+      where: { tripId: id },
+      orderBy: { dayNumber: "asc" },
+      include: {
+        items: {
+          orderBy: { order: "asc" },
+          include: { place: { select: { lat: true, lng: true } } },
+        },
       },
-    },
-  });
+    }),
+  ]);
 
-  if (!trip) redirect("/dashboard");
+  if (!tripRow) redirect("/dashboard");
+  const trip = { ...tripRow, groupMembers, itineraryDays };
 
   const isMember = trip.groupMembers.some(
     (m) => m.userId === session.user!.id,
@@ -76,11 +83,14 @@ export default async function RoutePage(props: {
   }
 
   // Resolve origin — use returnDestination or fall back to first waypoint concept
-  let originStop: JourneyStop | null = null;
-  if (trip.returnDestination) {
-    const resolved = await resolveDestination(trip.returnDestination);
-    if (resolved) originStop = { name: resolved.name, lat: resolved.lat, lng: resolved.lng };
-  }
+  // Resolve the return point and every waypoint concurrently (was one await per stop)
+  const [resolvedReturn, ...resolvedWaypoints] = await Promise.all([
+    trip.returnDestination ? resolveDestination(trip.returnDestination) : Promise.resolve(null),
+    ...waypointNames.map((wp) => resolveDestination(wp)),
+  ]);
+  const originStop: JourneyStop | null = resolvedReturn
+    ? { name: resolvedReturn.name, lat: resolvedReturn.lat, lng: resolvedReturn.lng }
+    : null;
 
   // Resolve all destinations in order
   const destinationStops: JourneyStop[] = [];
@@ -88,9 +98,8 @@ export default async function RoutePage(props: {
   if (trip.destinationRef) {
     destinationStops.push({ name: trip.destinationRef.name, lat: trip.destinationRef.lat, lng: trip.destinationRef.lng });
   }
-  // Waypoints
-  for (const wp of waypointNames) {
-    const resolved = await resolveDestination(wp);
+  // Waypoints (order preserved)
+  for (const resolved of resolvedWaypoints) {
     if (resolved) destinationStops.push({ name: resolved.name, lat: resolved.lat, lng: resolved.lng });
   }
 
@@ -100,29 +109,17 @@ export default async function RoutePage(props: {
 
   // ── Day Route ─────────────────────────────────────────────────────────────
 
-  const selectedDay = dayParam ? parseInt(dayParam, 10) : 1;
-  const dayData = trip.itineraryDays.find((d) => d.dayNumber === selectedDay);
+  // Unknown/invalid ?day= falls back to the first day in place (a redirect to
+  // ?day=1 would loop forever if the trip has no day numbered 1).
+  const requestedDay = dayParam ? parseInt(dayParam, 10) : NaN;
+  const dayData =
+    trip.itineraryDays.find((d) => d.dayNumber === requestedDay) ?? trip.itineraryDays[0];
+  const selectedDay = dayData.dayNumber;
 
-  if (!dayData) redirect(`/trips/${id}/route?day=1`);
-
-  const stops: RouteStop[] = dayData.items
-    .map((item) => {
-      const lat = item.place?.lat;
-      const lng = item.place?.lng;
-      if (lat == null || lng == null) return null;
-      if (lat === 0 && lng === 0) return null;
-      return {
-        id: item.id,
-        title: item.title,
-        category: item.category,
-        startTime: item.startTime,
-        endTime: item.endTime,
-        order: item.order,
-        lat,
-        lng,
-      };
-    })
-    .filter((s): s is RouteStop => s !== null);
+  // Built from the day's current items on every request, so places added after
+  // generation are included in the optimization.
+  const stops: RouteStop[] = buildRouteStops(dayData.items);
+  const unmappedCount = dayData.items.length - stops.length;
 
   const result = optimizeRoute(stops);
 
@@ -230,6 +227,18 @@ export default async function RoutePage(props: {
               <Stat label="Saved" value="Already optimal" tone="muted" />
             )}
           </div>
+
+          <p className="text-[0.75rem] text-ink-500">
+            Optimizing <Figure>{stops.length}</Figure> of <Figure>{dayData.items.length}</Figure> stops
+            for Day {selectedDay}
+            {unmappedCount > 0 && (
+              <> — {unmappedCount} custom {unmappedCount === 1 ? "activity has" : "activities have"} no map location and {unmappedCount === 1 ? "is" : "are"} not routed</>
+            )}
+            .{" "}
+            <Link href={`/trips/${id}/itinerary`} className="text-lagoon-600 hover:text-lagoon-800 font-medium">
+              Add or reorder places in the itinerary
+            </Link>
+          </p>
 
           {mapCenter && (
             <div className="h-[400px] sm:h-[500px]">

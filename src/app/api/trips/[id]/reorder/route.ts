@@ -42,6 +42,13 @@ export async function POST(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // The day must belong to the trip we authorized against (prevents reordering —
+  // and rewriting the times of — another trip's day by passing its dayId)
+  const day = await prisma.itineraryDay.findUnique({ where: { id: String(dayId) }, select: { tripId: true } });
+  if (!day || day.tripId !== id) {
+    return NextResponse.json({ error: "Day not found in this trip" }, { status: 404 });
+  }
+
   // 1. Fetch current items
   const currentItems = await prisma.itineraryItem.findMany({
     where: { itineraryDayId: dayId },

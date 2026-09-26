@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { generateTripItinerary } from "@/app/actions/itinerary";
 import { Button, Alert } from "@/components/ui";
 import { Loader2 } from "lucide-react";
@@ -44,6 +45,7 @@ function useProgressStages(active: boolean) {
 }
 
 export function GenerateButton({ tripId, initialStatus }: { tripId: string, initialStatus?: string }) {
+  const router = useRouter();
   const [, startTransition] = useTransition();
   const [isGenerating, setIsGenerating] = useState(initialStatus === "generating");
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +76,10 @@ export function GenerateButton({ tripId, initialStatus }: { tripId: string, init
         const data = await res.json();
         
         if (data.status === "planning") {
-          window.location.reload();
+          // Soft refresh: re-render the server components with the new itinerary
+          // instead of a full document reload of the same page.
+          setIsGenerating(false);
+          router.refresh();
         } else if (data.status === "draft") {
           draftCountRef.current += 1;
           if (draftCountRef.current >= 3) {
@@ -95,7 +100,7 @@ export function GenerateButton({ tripId, initialStatus }: { tripId: string, init
     };
     
     pollRef.current = setTimeout(poll, 2000);
-  }, [tripId]);
+  }, [tripId, router]);
 
   // Auto-start polling if we mounted in generating state
   useEffect(() => {

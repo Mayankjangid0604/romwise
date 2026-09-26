@@ -1,6 +1,8 @@
 import { prisma } from "./db";
 import { isHardExcluded, scorePlaceForPreferences, aggregatePreferences } from "./preference-scoring";
 import { getDestinationDescendants } from "./destination-hierarchy";
+import { NON_ITINERARY_CATEGORIES } from "./categories";
+import { NOT_TRANSIT_WHERE, isTransitPoint } from "./transit-filter";
 import type { MemberPreference } from "./preference-scoring";
 import type { AccessibilityRequirement } from "./trip-brain";
 
@@ -67,6 +69,9 @@ export async function getCandidatePlaces(
     where: {
       destinationId: { in: destinationIds },
       dataStatus: { notIn: ["deprecated", "REJECTED"] },
+      // Hotels and transit hubs are never itinerary activities (V2 filtered stays/transport
+      // afterwards; the V1 Gemini prompt received them as candidates)
+      AND: [{ category: { notIn: [...NON_ITINERARY_CATEGORIES] } }, NOT_TRANSIT_WHERE],
     },
     orderBy: [{ popularityScore: "desc" }],
   });
@@ -75,6 +80,7 @@ export async function getCandidatePlaces(
 
   const candidates: CandidatePlace[] = [];
   for (const place of rawPlaces) {
+    if (isTransitPoint(place)) continue; // defence in depth; the query already excludes these
     if (isHardExcluded({ category: place.category, placeType: place.placeType }, buildHardExclusionSet(allPreferences))) {
       continue;
     }

@@ -4,6 +4,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { AIGateway } from "@/lib/ai/gateway";
 import { revalidatePath } from "next/cache";
+import { checkRateLimitDb } from "@/lib/db-rate-limit";
+import { NOT_TRANSIT_WHERE, isTransitName } from "@/lib/transit-filter";
+
+const COPILOT_MAX_PER_MINUTE = 10;
 
 export type CopilotIntentResult = 
   | { success: true; message: string; action: string }
@@ -71,6 +75,12 @@ export async function executeCopilotIntent(tripId: string, message: string): Pro
     return { success: false, error: "Unauthorized: Viewers cannot modify the itinerary" };
   }
 
+  // Each message is a Gemini call — same DB-backed limiter the API routes use
+  const limit = await checkRateLimitDb(`copilot:${session.user.id}`, COPILOT_MAX_PER_MINUTE, 60_000);
+  if (!limit.allowed) {
+    return { success: false, error: `You're sending messages too quickly. Try again in ${limit.retryAfterSeconds} seconds.` };
+  }
+
   const trip = await prisma.trip.findUnique({
     where: { id: tripId },
     include: {
@@ -105,6 +115,7 @@ If the user wants to add an activity, set action to ADD_PLACE, provide a targetD
 If the user wants to remove an activity, set action to REMOVE_ITEM and provide the exact targetItemTitle.
 If the user wants to swap an activity, set action to REPLACE_ITEM, provide the exact targetItemTitle, and a newPlaceKeyword.
 If no edit is needed, set action to NO_ACTION.
+Only suggest places people visit (sights, food, experiences). Never add transit infrastructure — railway or metro stations, bus stands, airports, ferry terminals — or hotels as activities; if asked to, set action to NO_ACTION and explain why.
 `;
 
   try {
@@ -120,7 +131,15 @@ If no edit is needed, set action to NO_ACTION.
     let actionTaken = intent.action;
 
     // Prisma modifications
-    if (intent.action === "REMOVE_ITEM") {
+    if (
+      (intent.action === "ADD_PLACE" || intent.action === "REPLACE_ITEM") &&
+      // newPlaceKeyword isn't a required schema field — the model can omit it
+      isTransitName(intent.newPlaceKeyword ?? "")
+    ) {
+      // The fallbacks below would otherwise create an "Explore <keyword>" sightseeing item
+      appliedMessage = `${intent.newPlaceKeyword} is a transit point, not a place to visit, so I haven't added it as an activity. You can add trains, buses and flights under Transit on the trip overview.`;
+      actionTaken = "NO_ACTION";
+    } else if (intent.action === "REMOVE_ITEM") {
       const targetTitle = intent.targetItemTitle.toLowerCase();
       const targetItem = trip.itineraryDays.flatMap(d => d.items).find(i => i.title.toLowerCase().includes(targetTitle));
       if (targetItem) {
@@ -137,7 +156,16 @@ If no edit is needed, set action to NO_ACTION.
         // Safe database lookup: use actual entities
         const dest = await prisma.travelDestination.findFirst({
           where: { name: trip.destination },
-          include: { places: { where: { description: { contains: intent.newPlaceKeyword } }, take: 1 } }
+          include: {
+            places: {
+              where: {
+                description: { contains: intent.newPlaceKeyword },
+                category: { notIn: ["stay", "transport"] },
+                AND: [NOT_TRANSIT_WHERE],
+              },
+              take: 1,
+            },
+          }
         });
         const place = dest?.places?.[0];
         

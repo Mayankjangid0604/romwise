@@ -9,6 +9,7 @@ import {
   type ReplanProposal,
 } from "@/lib/replanner";
 import { revalidatePath } from "next/cache";
+import { canEditTrip, roleIn } from "@/lib/security";
 
 export async function getReplanProposal(
   tripId: string,
@@ -70,10 +71,9 @@ export async function acceptReplan(
   });
   if (!trip) throw new Error("Trip not found");
 
-  const isMember = trip.groupMembers.some(
-    (m) => m.userId === session.user!.id,
-  );
-  if (!isMember) throw new Error("Not a member of this trip");
+  const role = roleIn(trip.groupMembers, session.user!.id);
+  if (!role) throw new Error("Not a member of this trip");
+  if (!canEditTrip(role)) throw new Error("Viewers cannot modify this trip");
 
   const tripDays = await prisma.itineraryDay.findMany({
     where: { tripId },

@@ -5,6 +5,8 @@
  * Maps OSM key=value pairs to Roamwise PlaceCategory values.
  */
 
+import { isTransitName } from "../../../src/lib/transit-filter";
+
 export type OsmTags = Record<string, string | undefined>;
 
 export type CategoryMapping = {
@@ -28,11 +30,27 @@ export function mapOsmTags(tags: OsmTags): CategoryMapping | null {
   if (tags.tourism === "resort") return { category: "stay", placeType: "resort" };
 
   // --- TRANSPORT ---
-  if (tags.aeroway === "aerodrome") return { category: "transport", placeType: "airport" };
-  if (tags.railway === "station") return { category: "transport", placeType: "railway_station" };
+  // Checked before historic/tourism tags: a station that is also tagged tourism=attraction
+  // or historic=building is still a transit point, not a place to visit.
+  if (tags.aeroway === "aerodrome" || tags.aeroway === "airport") return { category: "transport", placeType: "airport" };
+  if (tags.aeroway === "terminal") return { category: "transport", placeType: "airport_terminal" };
+  if (tags.aeroway === "helipad") return { category: "transport", placeType: "helipad" };
+  if (tags.station === "subway" || tags.railway === "subway_entrance" ||
+      (tags.public_transport === "station" && (tags.subway === "yes" || tags.light_rail === "yes" || tags.monorail === "yes"))) {
+    return { category: "transport", placeType: "metro_station" };
+  }
+  if (tags.railway === "station" || tags.railway === "halt" || tags.railway === "stop" ||
+      tags.building === "train_station" || (tags.public_transport === "station" && tags.train === "yes")) {
+    return { category: "transport", placeType: tags.railway === "halt" ? "railway_halt" : "railway_station" };
+  }
   if (tags.amenity === "bus_station") return { category: "transport", placeType: "bus_station" };
   if (tags.public_transport === "station" && tags.bus === "yes") return { category: "transport", placeType: "bus_station" };
+  if (tags.highway === "bus_stop") return { category: "transport", placeType: "bus_stop" };
   if (tags.amenity === "ferry_terminal") return { category: "transport", placeType: "ferry_terminal" };
+  if (tags.amenity === "taxi") return { category: "transport", placeType: "taxi_stand" };
+  if (tags.public_transport === "station" || tags.building === "transportation") return { category: "transport", placeType: "transit_hub" };
+  // Name says it's a station/bus stand/airport even if the tags don't
+  if (tags.name && isTransitName(tags.name)) return { category: "transport", placeType: "transit_hub" };
 
   // --- FOOD ---
   if (tags.amenity === "restaurant") return { category: "restaurant", placeType: "restaurant" };

@@ -11,8 +11,13 @@ import {
 } from "@/lib/trip-brain";
 import { generateGroundedItineraryV2 } from "@/lib/planner-v2/adapter";
 import { checkGenerationEntitlement } from "@/lib/entitlements";
+import { getDestinationDescendants } from "@/lib/destination-hierarchy";
+import { NON_ITINERARY_CATEGORIES } from "@/lib/categories";
+import { NOT_TRANSIT_WHERE, isTransitPoint } from "@/lib/transit-filter";
+import { computeAppendSlot, timeToMinutes } from "@/lib/itinerary-slots";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { canEditTrip, roleIn } from "@/lib/security";
 
 export type ItineraryGenerationResult =
   | { success: true; usedGemini: boolean; usedFallback: boolean; candidateCount: number; season: string }
@@ -38,9 +43,13 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
     return { success: false, error: "Trip not found", errorType: "unknown" };
   }
 
-  const isMember = trip.groupMembers.some((m) => m.userId === session.user!.id);
-  if (!isMember) {
+  const role = roleIn(trip.groupMembers, session.user.id);
+  if (!role) {
     return { success: false, error: "Not a member of this trip", errorType: "auth" };
+  }
+  // Regenerating replaces the whole itinerary — never allowed for read-only viewers
+  if (!canEditTrip(role)) {
+    return { success: false, error: "Viewers cannot generate the itinerary", errorType: "auth" };
   }
 
   if (trip.status === "generating") {
@@ -300,7 +309,11 @@ export async function deleteItineraryItem(tripId: string, itemId: string): Promi
   return { success: true };
 }
 
-export async function addItineraryItem(tripId: string, dayId: string, placeId?: string): Promise<ItemEditResult> {
+export type AddItemResult =
+  | { success: true; itemId: string; dayNumber: number; startTime: string; endTime: string }
+  | { success: false; error: string };
+
+export async function addItineraryItem(tripId: string, dayId: string, placeId?: string): Promise<AddItemResult> {
   const session = await auth();
   if (!session?.user?.id) return { success: false, error: "Unauthorized" };
 
@@ -313,7 +326,10 @@ export async function addItineraryItem(tripId: string, dayId: string, placeId?: 
   // Verify day belongs to this trip (prevents cross-trip injection)
   const day = await prisma.itineraryDay.findUnique({
     where: { id: dayId },
-    select: { trip: { select: { id: true, destinationId: true } } },
+    select: {
+      dayNumber: true,
+      trip: { select: { id: true, destinationId: true, unscheduledPlaces: true } },
+    },
   });
   if (!day || day.trip?.id !== tripId) {
     return { success: false, error: "Day not found in this trip" };
@@ -323,110 +339,162 @@ export async function addItineraryItem(tripId: string, dayId: string, placeId?: 
   let description = "Click to edit";
   let category = "activity";
   let estimatedCostInr: number | null = null;
-  
-  // Find existing items to determine non-overlapping schedule
-  const existingItems = await prisma.itineraryItem.findMany({
-    where: { itineraryDayId: dayId },
-    orderBy: { order: "asc" },
-  });
+  let costSource = "unknown";
+  let durationMinutes: number | null = null;
 
-  let startTime = "09:00";
-  let endTime = "10:00";
-  let order = 0;
-
-  if (existingItems.length > 0) {
-    const lastItem = existingItems[existingItems.length - 1];
-    order = lastItem.order + 1;
-    
-    // Parse last item's endTime
-    const [h, m] = lastItem.endTime.split(":").map(Number);
-    if (!isNaN(h) && !isNaN(m)) {
-      // Start 15 mins after previous ends
-      let startM = m + 15;
-      let startH = h;
-      if (startM >= 60) {
-        startM -= 60;
-        startH += 1;
-      }
-      // Assuming a 2-hour duration for a new activity
-      const endM = startM;
-      let endH = startH + 2;
-      if (endH > 23) endH = 23;
-
-      startTime = `${startH.toString().padStart(2, "0")}:${startM.toString().padStart(2, "0")}`;
-      endTime = `${endH.toString().padStart(2, "0")}:${endM.toString().padStart(2, "0")}`;
-    }
-  }
-  
   if (placeId) {
     const place = await prisma.place.findUnique({ where: { id: placeId } });
     if (!place) {
       return { success: false, error: "Place not found" };
     }
-    if (place.destinationId !== day.trip.destinationId) {
+    // Same destination scope the planner uses: the trip's destination plus its sub-destinations
+    const allowedDestinationIds = day.trip.destinationId
+      ? await getDestinationDescendants(day.trip.destinationId)
+      : [];
+    if (!allowedDestinationIds.includes(place.destinationId)) {
       return { success: false, error: "Place does not belong to this trip's destination" };
     }
-    
+    if ((NON_ITINERARY_CATEGORIES as readonly string[]).includes(place.category) || isTransitPoint(place)) {
+      return { success: false, error: "Stays and transport hubs can't be added as itinerary activities" };
+    }
+
     title = place.name;
     description = place.description || place.category;
     category = place.category;
-    estimatedCostInr = place.typicalCostInr ?? null; // Use null if 0 is not appropriate, or keep as is if 0 is valid. TypicalCostInr is a number.
-
-    // Adjust duration if known
-    if (place.durationMinutes && startTime !== "09:00") {
-      const [h, m] = startTime.split(":").map(Number);
-      let endM = m + place.durationMinutes;
-      let endH = h + Math.floor(endM / 60);
-      endM = endM % 60;
-      if (endH > 23) endH = 23;
-      endTime = `${endH.toString().padStart(2, "0")}:${endM.toString().padStart(2, "0")}`;
-    }
+    estimatedCostInr = place.typicalCostInr ?? null;
+    // Match the generator's provenance labels so cost badges render consistently
+    costSource = place.typicalCostInr === 0 ? "free" : place.typicalCostInr != null ? "db" : "unknown";
+    durationMinutes = place.durationMinutes;
   }
 
-  await prisma.itineraryItem.create({
+  // Append after whichever existing item ends last (order and times can diverge after manual edits)
+  const existingItems = await prisma.itineraryItem.findMany({
+    where: { itineraryDayId: dayId },
+    select: { order: true, endTime: true },
+  });
+  const order = existingItems.reduce((max, i) => Math.max(max, i.order + 1), 0);
+  const latestEnd = existingItems
+    .map((i) => i.endTime)
+    .filter((t) => timeToMinutes(t) !== null)
+    .sort((a, b) => timeToMinutes(a)! - timeToMinutes(b)!)
+    .pop() ?? null;
+
+  const slot = computeAppendSlot(latestEnd, durationMinutes);
+  if (!slot.ok) return { success: false, error: slot.reason };
+
+  const created = await prisma.itineraryItem.create({
     data: {
       itineraryDayId: dayId,
       title,
       description,
       category,
-      startTime,
-      endTime,
+      startTime: slot.startTime,
+      endTime: slot.endTime,
       estimatedCostInr,
-      costSource: placeId ? "estimated" : "unknown",
+      costSource,
       reasoning: "Manually added",
       order,
       placeId: placeId || null,
     },
   });
 
-  revalidatePath(`/trips/${tripId}`);
-  return { success: true };
+  // A place the planner couldn't fit is no longer "unscheduled" once the user adds it
+  const unscheduled = Array.isArray(day.trip.unscheduledPlaces)
+    ? (day.trip.unscheduledPlaces as { name?: unknown }[])
+    : [];
+  if (placeId && unscheduled.length > 0) {
+    const remaining = unscheduled.filter(
+      (p) => typeof p.name !== "string" || p.name.toLowerCase() !== title.toLowerCase(),
+    );
+    if (remaining.length !== unscheduled.length) {
+      await prisma.trip.update({
+        where: { id: tripId },
+        data: {
+          unscheduledPlaces: remaining.length > 0 ? (remaining as Prisma.InputJsonValue) : Prisma.DbNull,
+        },
+      });
+    }
+  }
+
+  // Layout-level so every trip tab (itinerary, route, budget, overview) re-reads the new item
+  revalidatePath(`/trips/${tripId}`, "layout");
+  return {
+    success: true,
+    itemId: created.id,
+    dayNumber: day.dayNumber,
+    startTime: slot.startTime,
+    endTime: slot.endTime,
+  };
 }
 
-export async function searchPlacesForTrip(tripId: string, query: string) {
+export type AddablePlace = {
+  id: string;
+  name: string;
+  category: string;
+  area: string | null;
+  description: string | null;
+  typicalCostInr: number | null;
+  durationMinutes: number | null;
+};
+
+/**
+ * Places the user can add to this trip's itinerary: the trip destination (and its
+ * sub-destinations), excluding stays/transport and anything already scheduled.
+ * With no query, returns the most popular unscheduled places as suggestions.
+ */
+export async function listAddablePlaces(tripId: string, query = ""): Promise<AddablePlace[]> {
   const session = await auth();
   if (!session?.user?.id) return [];
 
+  const member = await prisma.groupMember.findFirst({
+    where: { tripId, userId: session.user.id },
+    select: { id: true },
+  });
+  if (!member) return [];
+
   const trip = await prisma.trip.findUnique({
     where: { id: tripId },
-    select: { destinationId: true }
+    select: { destinationId: true },
   });
+  if (!trip?.destinationId) return [];
 
-  if (!trip?.destinationId || query.trim().length < 2) return [];
+  const q = query.trim().slice(0, 100);
+  const [destinationIds, scheduled] = await Promise.all([
+    getDestinationDescendants(trip.destinationId),
+    prisma.itineraryItem.findMany({
+      where: { itineraryDay: { tripId }, placeId: { not: null } },
+      select: { placeId: true },
+    }),
+  ]);
+  const scheduledIds = scheduled.map((s) => s.placeId).filter((id): id is string => id !== null);
 
-  const places = await prisma.place.findMany({
-    where: {
-      destinationId: trip.destinationId,
-      name: { contains: query.trim(), mode: "insensitive" }
-    },
-    take: 10,
+  const where: Prisma.PlaceWhereInput = {
+    destinationId: { in: destinationIds },
+    category: { notIn: [...NON_ITINERARY_CATEGORIES] },
+    dataStatus: { notIn: ["deprecated", "REJECTED"] },
+    ...(scheduledIds.length > 0 ? { id: { notIn: scheduledIds } } : {}),
+    AND: [NOT_TRANSIT_WHERE],
+  };
+  if (q.length >= 2) {
+    where.OR = [
+      { name: { contains: q, mode: "insensitive" } },
+      { area: { contains: q, mode: "insensitive" } },
+      { category: { contains: q, mode: "insensitive" } },
+    ];
+  }
+
+  return prisma.place.findMany({
+    where,
+    orderBy: [{ popularityScore: "desc" }, { name: "asc" }],
+    take: q.length >= 2 ? 20 : 12,
     select: {
       id: true,
       name: true,
       category: true,
-      description: true
-    }
+      area: true,
+      description: true,
+      typicalCostInr: true,
+      durationMinutes: true,
+    },
   });
-
-  return places;
 }

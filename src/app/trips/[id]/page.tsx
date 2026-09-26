@@ -16,6 +16,8 @@ import {
   buttonStyles,
 } from "@/components/ui";
 import { imageProvider } from "@/lib/providers/images";
+import { Suspense } from "react";
+import { StaySuggestions, StaySuggestionsSkeleton } from "./stay-suggestions";
 
 export default async function TripOverviewPage(props: { params: Promise<{ id: string }> }) {
   const session = await auth();
@@ -23,39 +25,54 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
 
   const { id } = await props.params;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: { include: { user: true } },
-      travelSegments: true,
-      tripAccommodations: true,
-      packingItems: { select: { id: true }, take: 1 },
-      itineraryDays: {
+  // Independent queries run in parallel (one nested `include` tree ran ~8 sequential
+  // round trips). Nothing is rendered until membership is confirmed below.
+  // Users are selected by name only — never whole User rows (password hash, email).
+  const [trip, groupMembers, travelSegments, tripAccommodations, packingCount, dayCount, itemStats] =
+    await Promise.all([
+      prisma.trip.findUnique({
+        where: { id },
         select: {
-          items: {
-            select: { estimatedCostInr: true }
-          }
-        }
-      }
-    },
-  });
+          id: true,
+          title: true,
+          destination: true,
+          tripType: true,
+          status: true,
+          paceLevel: true,
+          budgetInr: true,
+          creatorId: true,
+          startDate: true,
+          endDate: true,
+          destinationRef: { select: { id: true, slug: true, name: true, lat: true, lng: true, destinationType: true } },
+        },
+      }),
+      prisma.groupMember.findMany({
+        where: { tripId: id },
+        select: { id: true, userId: true, user: { select: { name: true } } },
+      }),
+      prisma.travelSegment.findMany({ where: { tripId: id } }),
+      prisma.tripAccommodation.findMany({ where: { tripId: id } }),
+      prisma.packingItem.count({ where: { tripId: id } }),
+      prisma.itineraryDay.count({ where: { tripId: id } }),
+      prisma.itineraryItem.aggregate({
+        where: { itineraryDay: { tripId: id } },
+        _count: { _all: true },
+        _sum: { estimatedCostInr: true },
+      }),
+    ]);
 
   if (!trip) redirect("/dashboard");
 
-  const isMember = trip.groupMembers.some(
+  const isMember = groupMembers.some(
     (m) => m.userId === session.user!.id,
   );
   if (!isMember) redirect("/dashboard");
 
   const isCreator = trip.creatorId === session.user!.id;
 
-  const totalCost = trip.itineraryDays.reduce(
-    (sum, day) =>
-      sum + day.items.reduce((daySum, item) => daySum + (item.estimatedCostInr ?? 0), 0),
-    0,
-  );
-  
-  const hasItinerary = trip.itineraryDays.length > 0 && trip.itineraryDays.some(d => d.items.length > 0);
+  const totalCost = itemStats._sum.estimatedCostInr ?? 0;
+  const itemCount = itemStats._count._all;
+  const hasItinerary = dayCount > 0 && itemCount > 0;
 
   const destinationImage = await imageProvider.searchDestinationImage(trip.destination);
 
@@ -82,19 +99,29 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
               {trip.tripType.replace("_", " ")}
             </Badge>
             <div className="flex flex-wrap gap-2">
-              <OfflineSaveButton trip={trip} userId={session?.user?.id || ""} />
+              <OfflineSaveButton tripId={trip.id} userId={session.user.id} />
               <Link 
                 href={`/trips/${trip.id}/live`} 
                 className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
               >
                 Live Mode
               </Link>
-              <Link 
-                href={`/api/trips/${trip.id}/pdf`} 
+              {/* Plain <a>, not next/link: <Link> prefetches on viewport/hover, which ran the
+                  headless-Chromium PDF route handler on every overview visit. */}
+              <a
+                href={`/api/trips/${trip.id}/pdf`}
                 target="_blank"
+                rel="noopener"
                 className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
               >
                 <FileText className="w-4 h-4" /> PDF
+              </a>
+              <Link
+                href={`/trips/${trip.id}/print`}
+                prefetch={false}
+                className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
+              >
+                Print
               </Link>
               {isCreator && (
                 <DeleteTripButton tripId={trip.id} tripTitle={trip.title} />
@@ -137,7 +164,7 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
               {hasItinerary ? "Your itinerary is ready to go." : "Your trip is still in the planning phase."}
             </p>
             <p className="text-ink-500 text-sm">
-              {trip.groupMembers.length} {trip.groupMembers.length === 1 ? 'traveler' : 'travelers'} • {trip.paceLevel} pace
+              {groupMembers.length} {groupMembers.length === 1 ? 'traveler' : 'travelers'} • {trip.paceLevel} pace
             </p>
           </div>
           
@@ -163,10 +190,10 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             </div>
             {hasItinerary ? (
               <div className="space-y-4 text-sm">
-                <p className="text-ink-700">You have activities planned across {trip.itineraryDays.length} days.</p>
+                <p className="text-ink-700">You have activities planned across {dayCount} days.</p>
                 <div className="flex items-center gap-2 text-ink-500">
                   <div className="w-2 h-2 rounded-full bg-lagoon-400"></div>
-                  {trip.itineraryDays.reduce((sum, day) => sum + day.items.length, 0)} places to visit
+                  {itemCount} places to visit
                 </div>
               </div>
             ) : (
@@ -190,18 +217,18 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             <h2 className="text-sm font-semibold text-ink-500 uppercase tracking-wider mb-4">Trip Readiness</h2>
             <TripProgress
               hasItinerary={hasItinerary}
-              hasPacking={trip.packingItems.length > 0}
+              hasPacking={packingCount > 0}
               hasBudget={trip.budgetInr > 0}
-              hasGroup={trip.groupMembers.length > 1}
-              hasTransit={trip.travelSegments.length > 0}
-              hasStay={trip.tripAccommodations.length > 0}
+              hasGroup={groupMembers.length > 1}
+              hasTransit={travelSegments.length > 0}
+              hasStay={tripAccommodations.length > 0}
             />
           </div>
           {/* Group avatars */}
           <div className="mt-6 pt-6 border-t border-ink-100">
             <div className="flex items-center justify-between">
               <div className="flex -space-x-2">
-                {trip.groupMembers.slice(0, 5).map((m) => (
+                {groupMembers.slice(0, 5).map((m) => (
                   <div
                     key={m.id}
                     className="w-8 h-8 rounded-full bg-lagoon-100 border-2 border-white flex items-center justify-center text-xs font-semibold text-lagoon-700"
@@ -210,9 +237,9 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
                     {m.user.name?.charAt(0)?.toUpperCase() || "?"}
                   </div>
                 ))}
-                {trip.groupMembers.length > 5 && (
+                {groupMembers.length > 5 && (
                   <div className="w-8 h-8 rounded-full bg-ink-200 border-2 border-white flex items-center justify-center text-xs font-semibold text-ink-600">
-                    +{trip.groupMembers.length - 5}
+                    +{groupMembers.length - 5}
                   </div>
                 )}
               </div>
@@ -238,9 +265,9 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             <AddTransitButton tripId={trip.id} />
           </div>
           
-          {trip.travelSegments.length > 0 ? (
+          {travelSegments.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {trip.travelSegments.map(ts => (
+              {travelSegments.map(ts => (
                 <Card key={ts.id} className="p-4 flex gap-4 items-center bg-white border-ink-100 hover:shadow-sm transition-shadow">
                   <div className="w-10 h-10 rounded-full bg-lagoon-50 text-lagoon-600 flex items-center justify-center shrink-0">
                     {ts.mode === "FLIGHT" ? <Plane className="w-5 h-5" /> : ts.mode === "TRAIN" ? <Train className="w-5 h-5" /> : <Car className="w-5 h-5" />}
@@ -273,15 +300,24 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             <AddStayButton tripId={trip.id} />
           </div>
           
-          {trip.tripAccommodations.length > 0 ? (
+          {tripAccommodations.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {trip.tripAccommodations.map(ac => (
+              {tripAccommodations.map(ac => (
                 <Card key={ac.id} className="p-4 flex gap-4 items-start bg-white border-ink-100 hover:shadow-sm transition-shadow">
                   <div className="w-10 h-10 rounded-full bg-ember-50 text-ember-600 flex items-center justify-center shrink-0">
                     <Bed className="w-5 h-5" />
                   </div>
                   <div className="min-w-0 w-full">
-                    <div className="font-semibold text-ink-900 text-sm truncate">{ac.name}</div>
+                    <div className="font-semibold text-ink-900 text-sm truncate flex items-center gap-2">
+                      <span className="truncate">{ac.name}</span>
+                      {ac.selectionRef?.startsWith("sample:") && <Badge tone="caution">Sample</Badge>}
+                    </div>
+                    {ac.costPerNightInr != null && (
+                      <div className="text-xs text-ink-500 mt-1">
+                        <Figure>{formatInr(ac.costPerNightInr)}</Figure>/night
+                        {ac.totalCostInr != null && <> · <Figure>{formatInr(ac.totalCostInr)}</Figure> total</>}
+                      </div>
+                    )}
                     {ac.location && <div className="text-xs text-ink-500 mt-1 flex items-center gap-1.5"><MapPin className="w-3 h-3 shrink-0"/> <span className="truncate">{ac.location}</span></div>}
                     <div className="text-xs text-ink-500 mt-3 grid grid-cols-2 gap-2 bg-ink-50 p-2 rounded-lg">
                       <div className="flex flex-col">
@@ -299,10 +335,20 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             </div>
           ) : (
             <div className="p-6 border border-dashed border-ink-200 rounded-xl text-center bg-ink-50/50">
-              <p className="text-sm text-ink-500 mb-3">No stays added yet.</p>
+              <p className="text-sm text-ink-500 mb-3">No stays added yet. Pick a suggested hotel below or add your own.</p>
               <AddStayButton tripId={trip.id} />
             </div>
           )}
+
+          {/* Compact hotel suggestions from the Stay tab's ranking; streams in separately */}
+          <div className="mt-4">
+            <Suspense fallback={<StaySuggestionsSkeleton />}>
+              <StaySuggestions
+                trip={trip}
+                selectedRef={tripAccommodations.find((a) => a.selectionRef !== null)?.selectionRef ?? null}
+              />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

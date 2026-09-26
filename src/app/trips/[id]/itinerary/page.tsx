@@ -2,49 +2,75 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { SortableDay } from "@/components/itinerary/sortable-day";
+import { AddPlacePanel } from "@/components/itinerary/add-place-panel";
+import { formatDayLabel } from "@/lib/date-utils";
 import { GenerateButton } from "../generate-button";
 import { CalendarDays, Sparkles } from "lucide-react";
 import { Alert, Card } from "@/components/ui";
 import { AlertCircle } from "lucide-react";
 
-export default async function ItineraryPage(props: { params: Promise<{ id: string }> }) {
+const GENERATION_NOTICES: Record<string, string> = {
+  entitlement: "Your trip was saved, but you've used your free itinerary generations, so no itinerary was generated.",
+  destination_not_found: "Your trip was saved, but we don't have place data for this destination yet, so no itinerary was generated.",
+  no_place_data: "Your trip was saved, but we don't have enough places for this destination to build an itinerary yet.",
+};
+
+export default async function ItineraryPage(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ generation?: string }>;
+}) {
   const session = await auth();
   if (!session?.user?.id) notFound();
 
   const { id } = await props.params;
+  const { generation } = await props.searchParams;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: true,
-      itineraryDays: {
-        orderBy: { dayNumber: 'asc' },
-        include: {
-          items: {
-            orderBy: { order: 'asc' },
-            include: {
-              votes: true,
-              comments: { include: { user: true } },
-              place: {
-                select: {
-                  lat: true,
-                  lng: true,
-                  area: true,
-                  accessibilityScore: true,
-                  fatigueCost: true
-                }
-              }
-            }
+  // Parallel flat queries, joined in memory. The nested include tree
+  // (days → items → votes / comments → user / place) cost one sequential DB round
+  // trip per level — the slowest page in the app. Same `trip` shape as before.
+  const inTrip = { itineraryItem: { itineraryDay: { tripId: id } } };
+  const [tripRow, groupMembers, days, items, votes, comments] = await Promise.all([
+    prisma.trip.findUnique({ where: { id } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true, role: true } }),
+    prisma.itineraryDay.findMany({ where: { tripId: id }, orderBy: { dayNumber: 'asc' } }),
+    prisma.itineraryItem.findMany({
+      where: { itineraryDay: { tripId: id } },
+      orderBy: { order: 'asc' },
+      include: {
+        place: {
+          select: {
+            lat: true,
+            lng: true,
+            area: true,
+            accessibilityScore: true,
+            fatigueCost: true
           }
         }
       }
-    }
-  });
+    }),
+    prisma.vote.findMany({ where: inTrip }),
+    prisma.comment.findMany({ where: inTrip, include: { user: { select: { name: true } } } }),
+  ]);
+
+  const itineraryDays = days.map((day) => ({
+    ...day,
+    items: items
+      .filter((item) => item.itineraryDayId === day.id)
+      .map((item) => ({
+        ...item,
+        votes: votes.filter((v) => v.itineraryItemId === item.id),
+        comments: comments.filter((c) => c.itineraryItemId === item.id),
+      })),
+  }));
+  const trip = tripRow ? { ...tripRow, groupMembers, itineraryDays } : null;
 
   const isCreator = trip?.creatorId === session.user.id;
   const isMember = trip?.groupMembers.some((m) => m.userId === session.user!.id);
 
   if (!trip || (!isCreator && !isMember)) notFound();
+
+  const myRole = trip.groupMembers.find((m) => m.userId === session.user!.id)?.role;
+  const canEdit = isCreator || (myRole !== undefined && myRole !== "viewer");
 
   const totalActivities = trip.itineraryDays.reduce((sum, d) => sum + d.items.length, 0);
 
@@ -62,6 +88,11 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
             Let Roamwise AI create a personalized, budget-aware day-by-day plan 
             based on your destination, preferences, and group size.
           </p>
+          {generation && trip.status !== "generating" && (
+            <Alert tone="caution" className="mb-6 max-w-md text-left">
+              {GENERATION_NOTICES[generation] ?? "Your trip was saved, but we couldn't start generating the itinerary. Try again below."}
+            </Alert>
+          )}
           <GenerateButton tripId={id} initialStatus={trip.status} />
         </div>
       ) : (
@@ -77,7 +108,18 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
                 <p className="text-xs text-ink-500">{totalActivities} activities total</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {canEdit && (
+                <AddPlacePanel
+                  tripId={trip.id}
+                  presentation="dialog"
+                  days={trip.itineraryDays.map((d) => ({
+                    id: d.id,
+                    dayNumber: d.dayNumber,
+                    label: formatDayLabel(d.dayNumber, d.date),
+                  }))}
+                />
+              )}
               <GenerateButton tripId={id} initialStatus={trip.status} />
             </div>
           </Card>

@@ -5,6 +5,7 @@ import { scoreCandidates } from "./scoring";
 import { buildClusters } from "./clustering";
 import { buildDays } from "./scheduling";
 import { validateDays } from "./validation";
+import { isTransitPoint } from "../transit-filter";
 
 export async function generateItineraryV2(
   query: CandidateQuery,
@@ -18,8 +19,9 @@ export async function generateItineraryV2(
   // 1. Candidate Retrieval (Phase 5 & 6)
   const rawCandidates = await getCandidatePlaces(query);
   
-  // Exclude 'stay' and 'transport' explicitly just in case they slipped through
-  const filteredCandidates = rawCandidates.filter(c => c.category !== "stay" && c.category !== "transport");
+  // Exclude hotels and transit hubs explicitly in case they slipped through (a railway
+  // station mislabelled "history" by an importer is still not a place to visit)
+  const filteredCandidates = rawCandidates.filter(c => c.category !== "stay" && !isTransitPoint(c));
   
   const v2Candidates = filteredCandidates
     .map(c => {

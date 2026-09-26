@@ -8,9 +8,10 @@ import {
   PackageCheck,
   Wallet,
   Route,
-  Info,
+  SlidersHorizontal,
   Users,
   MapPin,
+  BedDouble,
 } from "lucide-react";
 
 const tabs = [
@@ -18,9 +19,12 @@ const tabs = [
   { label: "Itinerary", path: "/itinerary", icon: CalendarDays },
   { label: "Packing", path: "/packing", icon: PackageCheck },
   { label: "Budget", path: "/budget", icon: Wallet },
+  // Stay and Preferences existed but had no inbound link anywhere in the UI.
+  { label: "Stay", path: "/stay", icon: BedDouble },
   { label: "Places", path: "/places", icon: MapPin },
   { label: "Route", path: "/route", icon: Route },
-  { label: "Info", path: "/info", icon: Info },
+  // Replaces "Info" (/info was a "will be implemented here" placeholder; it now redirects here).
+  { label: "Preferences", path: "/preferences", icon: SlidersHorizontal },
   { label: "Group", path: "/group", icon: Users },
 ];
 

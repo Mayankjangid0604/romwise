@@ -90,7 +90,7 @@ export async function POST(
 
       return tx.expense.findUnique({
         where: { id: exp.id },
-        include: { payer: true, ExpenseParticipant: true },
+        include: { payer: { select: { id: true, name: true } }, ExpenseParticipant: true },
       });
     });
 

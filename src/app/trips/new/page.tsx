@@ -21,6 +21,7 @@ export default async function NewTripPage(props: { searchParams: Promise<{ desti
       <PageHeader backHref="/dashboard" backLabel="Dashboard" title="Plan Your Next Adventure" />
       <Suspense fallback={<div>Loading...</div>}>
         <TripBuilder 
+          key={destination || "no-destination"}
           initialDestination={destination || ""} 
           initialDetails={initialDetails} 
           initialData={searchParams}

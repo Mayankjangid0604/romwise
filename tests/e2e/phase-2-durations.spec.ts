@@ -94,7 +94,9 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
     }
   });
 
-  test('can create a WEEKEND trip', async ({ page }) => {
+  // A 3-calendar-day range is a MULTI_DAY trip: it used to be stored as WEEKEND, whose fixed
+  // 2-day duration made the planner drop the last day (see PROGRESS.md, item 9).
+  test('a 3-day date range is planned as a 3-day MULTI_DAY trip', async ({ page }) => {
     const testEmail = `e2e_${Date.now()}_weekend@example.com`;
     const user = await prisma.user.create({
       data: { email: testEmail, name: 'E2E Weekend User' }
@@ -132,7 +134,7 @@ test.describe('Phase 2 - Durations & Flexible Trips', () => {
       });
 
       expect(trip).not.toBeNull();
-      expect(trip?.tripType).toBe('WEEKEND');
+      expect(trip?.tripType).toBe('MULTI_DAY');
     } finally {
       await prisma.user.delete({ where: { id: user.id } });
     }

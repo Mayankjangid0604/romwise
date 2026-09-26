@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { DownloadCloud, CheckCircle2 } from "lucide-react";
 import { saveTripToOffline } from "@/lib/idb";
+import { getOfflineTripData } from "@/app/actions/offline";
 import { buttonStyles } from "@/components/ui/button";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function OfflineSaveButton({ trip, userId }: { trip: any, userId: string }) {
+// Takes only ids: the snapshot is fetched on click, so the overview page doesn't ship
+// the whole trip (and its members' user records) to the browser on every view.
+export function OfflineSaveButton({ tripId, userId }: { tripId: string, userId: string }) {
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -17,6 +19,8 @@ export function OfflineSaveButton({ trip, userId }: { trip: any, userId: string 
   const handleSave = async () => {
     setSaving(true);
     try {
+      const trip = await getOfflineTripData(tripId);
+      if (!trip) throw new Error("Trip not available for offline save");
       localStorage.setItem('roamwise_user_id', userId);
       await saveTripToOffline(trip, userId);
       setSaved(true);

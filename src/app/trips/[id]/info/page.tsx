@@ -1,9 +1,8 @@
+import { redirect } from "next/navigation";
+
+// "Info" was a placeholder tab ("will be implemented here"). Accessibility notes and
+// preferences live on /preferences, so keep old /info links working by sending them there.
 export default async function InfoPage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
-  return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-4">Trip Info</h1>
-      <p>Accessibility notes and preferences will be implemented here.</p>
-    </div>
-  );
+  redirect(`/trips/${id}/preferences`);
 }

@@ -18,6 +18,16 @@ import { AIGateway } from "../ai/gateway";
 import { AIGatewayError } from "../ai/types";
 import { ValidationError } from "../group-alignment";
 
+// These tests exercise AI response parsing; caching is covered in ai/__tests__/cache.test.ts
+vi.mock("@/lib/ai/cache", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/ai/cache")>();
+  return {
+    ...actual,
+    withAiCache: async (_opts: unknown, compute: () => Promise<unknown>) => ({ value: await compute(), cacheHit: false }),
+  };
+});
+
+
 const mockGenerateStructured = vi.mocked(AIGateway.generateStructured);
 
 const VALID_AI_RESPONSE = JSON.stringify({

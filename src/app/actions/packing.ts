@@ -6,6 +6,7 @@ import { weatherProvider } from "@/lib/providers/weather";
 import { generateIntelligentPackingList } from "@/lib/packing";
 import { getTripDuration } from "@/lib/date-utils";
 import { revalidatePath } from "next/cache";
+import { canEditTrip, roleIn } from "@/lib/security";
 
 export async function generatePacking(tripId: string) {
 
@@ -18,10 +19,9 @@ export async function generatePacking(tripId: string) {
   });
   if (!trip) throw new Error("Trip not found");
 
-  const isMember = trip.groupMembers.some(
-    (m) => m.userId === session.user!.id,
-  );
-  if (!isMember) throw new Error("Not a member of this trip");
+  const role = roleIn(trip.groupMembers, session.user!.id);
+  if (!role) throw new Error("Not a member of this trip");
+  if (!canEditTrip(role)) throw new Error("Viewers cannot modify this trip");
 
   const durationDays = getTripDuration(trip, 3);
 
@@ -85,10 +85,9 @@ export async function togglePackingItem(itemId: string, checked: boolean) {
   });
   if (!item) throw new Error("Item not found");
 
-  const isMember = item.trip.groupMembers.some(
-    (m) => m.userId === session.user!.id,
-  );
-  if (!isMember) throw new Error("Not a member of this trip");
+  const role = roleIn(item.trip.groupMembers, session.user!.id);
+  if (!role) throw new Error("Not a member of this trip");
+  if (!canEditTrip(role)) throw new Error("Viewers cannot modify this trip");
 
   await prisma.packingItem.update({
     where: { id: itemId },
@@ -108,10 +107,9 @@ export async function toggleEssential(itemId: string, essential: boolean) {
   });
   if (!item) throw new Error("Item not found");
 
-  const isMember = item.trip.groupMembers.some(
-    (m) => m.userId === session.user!.id,
-  );
-  if (!isMember) throw new Error("Not a member of this trip");
+  const role = roleIn(item.trip.groupMembers, session.user!.id);
+  if (!role) throw new Error("Not a member of this trip");
+  if (!canEditTrip(role)) throw new Error("Viewers cannot modify this trip");
 
   await prisma.packingItem.update({
     where: { id: itemId },
@@ -136,10 +134,9 @@ export async function addCustomPackingItem(
   });
   if (!trip) throw new Error("Trip not found");
 
-  const isMember = trip.groupMembers.some(
-    (m) => m.userId === session.user!.id,
-  );
-  if (!isMember) throw new Error("Not a member of this trip");
+  const role = roleIn(trip.groupMembers, session.user!.id);
+  if (!role) throw new Error("Not a member of this trip");
+  if (!canEditTrip(role)) throw new Error("Viewers cannot modify this trip");
 
   if (!label.trim()) throw new Error("Label is required");
 

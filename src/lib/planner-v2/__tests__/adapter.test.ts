@@ -54,11 +54,12 @@ describe("Adapter Regression Tests", () => {
       expect.objectContaining({
         accessibilityRequirement: "low_walking",
         allPreferences: [],
-        budgetPerDayInr: 2500,
+        // Oct 1–3 is 3 calendar days (this asserted 4 before the off-by-one fix, see PROGRESS.md item 9)
+        budgetPerDayInr: 3333,
         destinationId: "dest1",
         limit: 100,
       }),
-      4,
+      3,
       "balanced",
       expect.anything(),
       undefined
@@ -101,9 +102,9 @@ describe("Adapter Regression Tests", () => {
 
     expect(engineModule.generateItineraryV2).toHaveBeenCalledWith(
       expect.objectContaining({
-        budgetPerDayInr: 1667,
+        budgetPerDayInr: 2000, // 10000 / 5 days (was 6 days / 1667 because of the off-by-one)
       }),
-      6,
+      5,
       "balanced",
       expect.anything(),
       undefined
@@ -146,9 +147,9 @@ describe("Adapter Regression Tests", () => {
 
     expect(engineModule.generateItineraryV2).toHaveBeenCalledWith(
       expect.objectContaining({
-        budgetPerDayInr: 2500, // Duration is at least 2 days based on date-utils
+        budgetPerDayInr: 5000, // same start and end date = a 1-day trip (was planned as 2)
       }),
-      2,
+      1,
       "balanced",
       expect.anything(),
       undefined

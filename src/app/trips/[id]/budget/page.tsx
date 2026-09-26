@@ -23,20 +23,26 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
 
   const { id } = await props.params;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: { include: { user: true } },
-      tripAccommodations: true,
-      expenses: { include: { payer: true, ExpenseParticipant: true }, orderBy: { date: "desc" } },
-      itineraryDays: {
-        orderBy: { dayNumber: "asc" },
-        include: { items: { orderBy: { order: "asc" } } },
-      },
-    },
-  });
+  // Parallel flat queries instead of one nested include tree (Prisma resolves each
+  // relation level as a separate sequential round trip). Same `trip` shape as before.
+  const [tripRow, groupMembers, tripAccommodations, expenses, itineraryDays] = await Promise.all([
+    prisma.trip.findUnique({ where: { id } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true, user: { select: { name: true } } } }),
+    prisma.tripAccommodation.findMany({ where: { tripId: id } }),
+    prisma.expense.findMany({
+      where: { tripId: id },
+      include: { payer: { select: { id: true, name: true } }, ExpenseParticipant: true },
+      orderBy: { date: "desc" },
+    }),
+    prisma.itineraryDay.findMany({
+      where: { tripId: id },
+      orderBy: { dayNumber: "asc" },
+      include: { items: { orderBy: { order: "asc" } } },
+    }),
+  ]);
 
-  if (!trip) redirect("/dashboard");
+  if (!tripRow) redirect("/dashboard");
+  const trip = { ...tripRow, groupMembers, tripAccommodations, expenses, itineraryDays };
 
   const isMember = trip.groupMembers.some(
     (m) => m.userId === session.user!.id,
@@ -53,8 +59,12 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
     })),
   );
 
-  const primaryAccommodation = trip.tripAccommodations[0];
-  const stayCostInr = primaryAccommodation?.totalCostInr ?? 0;
+  // The Stay-tab pick carries the price; manually typed stays have none. Previously this
+  // read tripAccommodations[0], so a manual stay listed first hid the hotel's cost.
+  const primaryAccommodation =
+    trip.tripAccommodations.find((a) => a.selectionRef !== null) ??
+    trip.tripAccommodations.find((a) => a.totalCostInr !== null);
+  const stayCostInr = trip.tripAccommodations.reduce((sum, a) => sum + (a.totalCostInr ?? 0), 0);
   const summary = computeBudgetSummary(budgetItems, trip.budgetInr);
   const totalSpendWithStay = summary.estimatedSpend + stayCostInr;
   const remainingWithStay = trip.budgetInr - totalSpendWithStay;
