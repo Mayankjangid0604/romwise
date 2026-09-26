@@ -12,13 +12,12 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
   const { id } = await props.params;
   const searchParams = await props.searchParams;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: true,
-      tripPlaceSelections: true
-    }
-  });
+  const [tripRow, groupMembers, tripPlaceSelections] = await Promise.all([
+    prisma.trip.findUnique({ where: { id } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true } }),
+    prisma.tripPlaceSelection.findMany({ where: { tripId: id } }),
+  ]);
+  const trip = tripRow ? { ...tripRow, groupMembers, tripPlaceSelections } : null;
 
   const isCreator = trip?.creatorId === session.user.id;
   const isMember = trip?.groupMembers.some((m) => m.userId === session.user!.id);
@@ -54,7 +53,9 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
   }
 
   // Fetch paginated top places for this destination
-  const [totalCount, dbPlaces] = await Promise.all([
+  // Categories for the dropdown load alongside the page of results (was a separate
+  // sequential query after them).
+  const [totalCount, dbPlaces, categoriesRaw] = await Promise.all([
     prisma.place.count({ where: whereCondition }),
     prisma.place.findMany({
       where: whereCondition,
@@ -72,7 +73,12 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
         accessibilityScore: true,
         fatigueCost: true
       }
-    })
+    }),
+    prisma.place.findMany({
+      where: { destinationId: trip.destinationId, category: { notIn: ["stay", "transport"] } },
+      distinct: ['category'],
+      select: { category: true }
+    }),
   ]);
 
   // Map to DTO
@@ -92,12 +98,6 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
     };
   });
 
-  // Get categories for the select dropdown (we can just query distinct categories for this destination once)
-  const categoriesRaw = await prisma.place.findMany({
-    where: { destinationId: trip.destinationId, category: { notIn: ["stay", "transport"] } },
-    distinct: ['category'],
-    select: { category: true }
-  });
   const categories = categoriesRaw.map(c => c.category).sort();
 
   return (

@@ -15,33 +15,44 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
 
   const { id } = await props.params;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: true,
-      itineraryDays: {
-        orderBy: { dayNumber: 'asc' },
-        include: {
-          items: {
-            orderBy: { order: 'asc' },
-            include: {
-              votes: true,
-              comments: { include: { user: { select: { name: true } } } },
-              place: {
-                select: {
-                  lat: true,
-                  lng: true,
-                  area: true,
-                  accessibilityScore: true,
-                  fatigueCost: true
-                }
-              }
-            }
+  // Parallel flat queries, joined in memory. The nested include tree
+  // (days → items → votes / comments → user / place) cost one sequential DB round
+  // trip per level — the slowest page in the app. Same `trip` shape as before.
+  const inTrip = { itineraryItem: { itineraryDay: { tripId: id } } };
+  const [tripRow, groupMembers, days, items, votes, comments] = await Promise.all([
+    prisma.trip.findUnique({ where: { id } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true, role: true } }),
+    prisma.itineraryDay.findMany({ where: { tripId: id }, orderBy: { dayNumber: 'asc' } }),
+    prisma.itineraryItem.findMany({
+      where: { itineraryDay: { tripId: id } },
+      orderBy: { order: 'asc' },
+      include: {
+        place: {
+          select: {
+            lat: true,
+            lng: true,
+            area: true,
+            accessibilityScore: true,
+            fatigueCost: true
           }
         }
       }
-    }
-  });
+    }),
+    prisma.vote.findMany({ where: inTrip }),
+    prisma.comment.findMany({ where: inTrip, include: { user: { select: { name: true } } } }),
+  ]);
+
+  const itineraryDays = days.map((day) => ({
+    ...day,
+    items: items
+      .filter((item) => item.itineraryDayId === day.id)
+      .map((item) => ({
+        ...item,
+        votes: votes.filter((v) => v.itineraryItemId === item.id),
+        comments: comments.filter((c) => c.itineraryItemId === item.id),
+      })),
+  }));
+  const trip = tripRow ? { ...tripRow, groupMembers, itineraryDays } : null;
 
   const isCreator = trip?.creatorId === session.user.id;
   const isMember = trip?.groupMembers.some((m) => m.userId === session.user!.id);

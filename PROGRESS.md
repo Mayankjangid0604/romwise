@@ -14,6 +14,8 @@ Details for every item are in the "Item notes" section below.
 |---|---|---|---|
 | 1 | Add-place flow + route reflects current items | DONE: "Add place" dialog (day picker) + per-day panel, suggestions list + search, route re-optimizes over current items (verified in browser) | clean / clean |
 | 2 | Navigation / page-reopen audit | DONE: 16 instances found by tracing every Link/router/redirect/reload call; all fixed and back/forward verified in a real browser | clean / clean |
+| 3 + 6 | Slow page opens (one investigation) | DONE: measured with injected DB latency; trip-tab clicks went from 0.7–1.2 s frozen to a skeleton in <100 ms, and page renders are 2–3.7× faster | clean / clean |
+| — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
 
 ## Item notes
 
@@ -51,3 +53,42 @@ Method: grepped every `href=`, `router.push/replace/refresh/back`, `redirect()`,
 Browser-verified after the fixes (production build): no PDF request on overview; no self-RSC request on collection pages; `/trips/new` search → `/trips/new?destination=Udaipur` with the form; `/info` → Preferences; tab clicks then Back ×3 / Forward ×2 walk `route → stay → itinerary → overview → itinerary → stay` exactly; a signed-out invitee goes invite → login → Sign up (callback kept) → lands on `/trips/<id>` as a member; `?callbackUrl=https://evil.example` is dropped.
 Not changed (proposal in WIREFRAME_NOTES.md): the "← Trip" back links on Packing/Stay/Preferences duplicate the tab bar and breadcrumb but aren't broken.
 Tests: `safe-redirect.test.ts` (19). Full suite 511/511.
+
+### 3 + 6. Slow page opens
+**How it was measured.** Local Postgres has ~0 ms latency, which hides the problem, so a small TCP proxy (in the session scratchpad, not committed) added a fixed delay per DB round trip: 20 ms and 100 ms RTT, i.e. a nearby vs. a cross-region or pooled/cold serverless Postgres. Two production builds ran side by side, the commit before this item (`d3b1553`) and after it, against the same DB and the same trip. Numbers are medians: 12 samples for document loads, 3–4 rounds of real Playwright clicks timed *inside the page* with a MutationObserver. Playwright's own `waitForSelector` backs off to ~500 ms polling and made an early run look like a regression.
+
+**Root causes found**
+1. **No `loading.tsx` anywhere.** A click showed nothing until the whole server render finished. Also, `<Link>`'s default prefetch for dynamic routes only goes "down to the nearest `loading.js`", so with none, *nothing* useful was prefetched.
+2. **The trip layout awaited `auth()` + a DB query.** Per the Next 16 docs, runtime data in a layout blocks every navigation into the segment before any loading UI can show.
+3. **Serial DB round trips.** Pages loaded one nested `include` tree; Prisma resolves each relation level as a separate sequential query. Overview ≈ 8 round trips, itinerary ≈ 6 (days → items → votes/comments/place → comment users), group ≈ 8 (`getTripRole` → trip → `getActiveShares` re-deriving the role → creator lookup), route resolved each waypoint with its own `await`.
+4. (Item 2) The overview's `<Link>` to the PDF route made every overview view render a PDF in headless Chromium server-side.
+
+**Fixes**
+- `loading.tsx` skeletons for every route with a real async wait: `trips/[id]` (all tabs, rendered under the still-interactive tab bar), `trips/[id]/itinerary` (timeline-shaped), `dashboard`, `dashboard/favorites`, `discovery`, `trips/new`. Shared `Skeleton` / `LoadingState` primitives (`role="status"`, screen-reader label).
+- Trip layout: the session + DB breadcrumb moved into its own `<Suspense>`; the layout itself awaits only `params`.
+- Overview, itinerary, budget, stay, route, places, group: independent queries run in `Promise.all` with explicit selects and are joined in memory; the `trip` object keeps the same shape, so render code is unchanged. Route resolves waypoints concurrently.
+- Not changed, noted for later: `relationJoins` (a Prisma preview flag that would collapse every nested include into one query app-wide), since a preview feature in production is your call.
+
+**Results: document load (server render), median**
+
+| Page | 20 ms RTT before → after | 100 ms RTT before → after |
+|---|---|---|
+| Trip overview | 189 → 60 ms | 829 → 225 ms |
+| Itinerary | 165 → 125 ms¹ | 829 → 224 ms |
+| Budget | 165 → 60 ms | 726 → 326 ms |
+| Stay | 165 → 80 ms | 725 → 425 ms |
+| Route | 144 → 79 ms | 626 → 326 ms |
+| Places | 128 → 128 ms¹ | 531 → 266 ms |
+| Group | 169 → 100 ms | 731 → 425 ms |
+| Dashboard / Packing | 67 / 76 ms (unchanged) | 220 / 318 ms (unchanged) |
+
+¹ measured before the final itinerary/places flattening; the 100 ms column is after it.
+
+**Results: real clicks at 100 ms RTT (what the user feels)**
+
+| | Before | After |
+|---|---|---|
+| Time to any visible response (trip tabs) | **700–1218 ms** (UI frozen, then everything at once) | **67–95 ms** (skeleton) |
+| Time to page content | 700–1218 ms | 378–499 ms |
+
+Honest trade-off: at *low* latency (20 ms RTT) content now lands ~100 ms later than before (≈380 ms vs 220–380 ms). Once React shows a Suspense fallback it keeps it for at least 300 ms to avoid flicker. The skeleton appears in ~75 ms instead of the UI sitting frozen, and the gain grows with latency (see the 100 ms column), which is the production condition that was reported.

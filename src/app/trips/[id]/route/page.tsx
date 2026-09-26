@@ -36,19 +36,25 @@ export default async function RoutePage(props: {
   const { id } = await props.params;
   const { day: dayParam } = await props.searchParams;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: true,
-      destinationRef: true,
-      itineraryDays: {
-        orderBy: { dayNumber: "asc" },
-        include: { items: { orderBy: { order: "asc" }, include: { place: true } } },
+  // Parallel flat queries instead of one nested include tree (Prisma resolves each
+  // relation level as a separate sequential round trip). Same `trip` shape as before.
+  const [tripRow, groupMembers, itineraryDays] = await Promise.all([
+    prisma.trip.findUnique({ where: { id }, include: { destinationRef: true } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true } }),
+    prisma.itineraryDay.findMany({
+      where: { tripId: id },
+      orderBy: { dayNumber: "asc" },
+      include: {
+        items: {
+          orderBy: { order: "asc" },
+          include: { place: { select: { lat: true, lng: true } } },
+        },
       },
-    },
-  });
+    }),
+  ]);
 
-  if (!trip) redirect("/dashboard");
+  if (!tripRow) redirect("/dashboard");
+  const trip = { ...tripRow, groupMembers, itineraryDays };
 
   const isMember = trip.groupMembers.some(
     (m) => m.userId === session.user!.id,
@@ -77,11 +83,14 @@ export default async function RoutePage(props: {
   }
 
   // Resolve origin — use returnDestination or fall back to first waypoint concept
-  let originStop: JourneyStop | null = null;
-  if (trip.returnDestination) {
-    const resolved = await resolveDestination(trip.returnDestination);
-    if (resolved) originStop = { name: resolved.name, lat: resolved.lat, lng: resolved.lng };
-  }
+  // Resolve the return point and every waypoint concurrently (was one await per stop)
+  const [resolvedReturn, ...resolvedWaypoints] = await Promise.all([
+    trip.returnDestination ? resolveDestination(trip.returnDestination) : Promise.resolve(null),
+    ...waypointNames.map((wp) => resolveDestination(wp)),
+  ]);
+  const originStop: JourneyStop | null = resolvedReturn
+    ? { name: resolvedReturn.name, lat: resolvedReturn.lat, lng: resolvedReturn.lng }
+    : null;
 
   // Resolve all destinations in order
   const destinationStops: JourneyStop[] = [];
@@ -89,9 +98,8 @@ export default async function RoutePage(props: {
   if (trip.destinationRef) {
     destinationStops.push({ name: trip.destinationRef.name, lat: trip.destinationRef.lat, lng: trip.destinationRef.lng });
   }
-  // Waypoints
-  for (const wp of waypointNames) {
-    const resolved = await resolveDestination(wp);
+  // Waypoints (order preserved)
+  for (const resolved of resolvedWaypoints) {
     if (resolved) destinationStops.push({ name: resolved.name, lat: resolved.lat, lng: resolved.lng });
   }
 

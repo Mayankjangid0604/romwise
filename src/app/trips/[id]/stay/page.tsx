@@ -23,19 +23,17 @@ export default async function StayPage(props: {
 
   const { id } = await props.params;
 
-  const trip = await prisma.trip.findUnique({
-    where: { id },
-    include: {
-      groupMembers: true,
-      tripAccommodations: true,
-      destinationRef: true,
-      itineraryDays: {
-        include: { items: true },
-      },
-    },
-  });
+  // Parallel flat queries instead of one nested include tree (Prisma resolves each
+  // relation level as a separate sequential round trip). Same `trip` shape as before.
+  const [tripRow, groupMembers, tripAccommodations, itineraryDays] = await Promise.all([
+    prisma.trip.findUnique({ where: { id }, include: { destinationRef: true } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true } }),
+    prisma.tripAccommodation.findMany({ where: { tripId: id } }),
+    prisma.itineraryDay.findMany({ where: { tripId: id }, include: { items: true } }),
+  ]);
 
-  if (!trip) redirect("/dashboard");
+  if (!tripRow) redirect("/dashboard");
+  const trip = { ...tripRow, groupMembers, tripAccommodations, itineraryDays };
 
   const isMember = trip.groupMembers.some(
     (m) => m.userId === session.user!.id,
