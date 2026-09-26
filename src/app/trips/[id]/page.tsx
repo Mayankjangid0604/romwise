@@ -16,6 +16,8 @@ import {
   buttonStyles,
 } from "@/components/ui";
 import { imageProvider } from "@/lib/providers/images";
+import { Suspense } from "react";
+import { StaySuggestions, StaySuggestionsSkeleton } from "./stay-suggestions";
 
 export default async function TripOverviewPage(props: { params: Promise<{ id: string }> }) {
   const session = await auth();
@@ -39,6 +41,9 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
           paceLevel: true,
           budgetInr: true,
           creatorId: true,
+          startDate: true,
+          endDate: true,
+          destinationRef: { select: { id: true, slug: true, name: true, lat: true, lng: true, destinationType: true } },
         },
       }),
       prisma.groupMember.findMany({
@@ -303,7 +308,16 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
                     <Bed className="w-5 h-5" />
                   </div>
                   <div className="min-w-0 w-full">
-                    <div className="font-semibold text-ink-900 text-sm truncate">{ac.name}</div>
+                    <div className="font-semibold text-ink-900 text-sm truncate flex items-center gap-2">
+                      <span className="truncate">{ac.name}</span>
+                      {ac.selectionRef?.startsWith("sample:") && <Badge tone="caution">Sample</Badge>}
+                    </div>
+                    {ac.costPerNightInr != null && (
+                      <div className="text-xs text-ink-500 mt-1">
+                        <Figure>{formatInr(ac.costPerNightInr)}</Figure>/night
+                        {ac.totalCostInr != null && <> · <Figure>{formatInr(ac.totalCostInr)}</Figure> total</>}
+                      </div>
+                    )}
                     {ac.location && <div className="text-xs text-ink-500 mt-1 flex items-center gap-1.5"><MapPin className="w-3 h-3 shrink-0"/> <span className="truncate">{ac.location}</span></div>}
                     <div className="text-xs text-ink-500 mt-3 grid grid-cols-2 gap-2 bg-ink-50 p-2 rounded-lg">
                       <div className="flex flex-col">
@@ -321,10 +335,20 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
             </div>
           ) : (
             <div className="p-6 border border-dashed border-ink-200 rounded-xl text-center bg-ink-50/50">
-              <p className="text-sm text-ink-500 mb-3">No stays added yet.</p>
+              <p className="text-sm text-ink-500 mb-3">No stays added yet. Pick a suggested hotel below or add your own.</p>
               <AddStayButton tripId={trip.id} />
             </div>
           )}
+
+          {/* Compact hotel suggestions from the Stay tab's ranking; streams in separately */}
+          <div className="mt-4">
+            <Suspense fallback={<StaySuggestionsSkeleton />}>
+              <StaySuggestions
+                trip={trip}
+                selectedRef={tripAccommodations.find((a) => a.selectionRef !== null)?.selectionRef ?? null}
+              />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ Details for every item are in the "Item notes" section below.
 | — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
 | 8 | Hotel sample data expansion | DONE: the 10-hotel list had been deleted (Stay page showed **0** hotels); replaced with a labelled 58-archetype catalogue → 21–28 stays per destination (1,459 across the 55 curated destinations), 11+ property types, ₹500–₹18,500/night | clean / clean |
 | 9 | Full pipeline trace (signup → packing) | DONE: traced in code and walked live; 8 new breaks fixed (incl. **every multi-day itinerary had a phantom extra day**, 3-day trips lost their last day, template trips 404'd on Places), dead code listed | clean / clean |
+| 10 | Hotel suggestions on trip overview | DONE: compact "Suggested stays" card (name, type, ★ rating + review count, ₹/night, sample-data label, "See all N stays") from the Stay tab's own ranking; streams in without delaying the overview | clean / clean |
 | 7 | Security re-audit | DONE: 2 of the 4 hardening guarantees had regressed (secrets in responses; rate limiting missing on 2 Gemini paths), plus 6 new authz gaps (viewers could mutate, reorder IDOR, …). All fixed, verified live, and guarded by tests | clean / clean |
 
 ## Item notes
@@ -194,3 +195,10 @@ Fixed earlier in this pass, found on the same chain: Stay page listed 0 hotels (
 - Trips created before this fix (3-day `WEEKEND`, or planned with the phantom day) keep their current itinerary until regenerated; no data migration was run.
 
 Tests: `trip-type-derivation.test.ts` (6), `template-actions.test.ts` (2), corrected `planner-v2/__tests__/adapter.test.ts`, updated `tests/e2e/phase-2-durations.spec.ts`.
+
+### 10. Hotel suggestions on the trip overview
+- `src/app/trips/[id]/stay-suggestions.tsx`: an async server component under the overview's **Stays** section. It shows the top 3 of the *same* ranking the Stay tab uses (`getTripStayRecommendations`: budget left after activities, distance to the itinerary's stops), each with **name, property type, ★ rating (sample review count) and price per night**, a "Sample data" badge, and "See all N stays & pick one →" linking to the Stay tab. It is not the full Stay UI: no scores, amenities or select buttons.
+- It skips the hotel already picked ("Other suggested stays"). The picked sample hotel on the overview now shows a "Sample" badge and its price. The empty state points to the suggestions.
+- **No slowdown:** it sits in its own `<Suspense>` with a skeleton and reuses the overview's already-loaded trip data (budget, dates, destination, current pick), so it adds only the ranking's own queries. A/B at 20 ms DB RTT against the pre-item build: overview main content 109 ms vs 117 ms (within run-to-run noise); suggestions stream in ~130 ms later.
+- Verified in the browser: the card's 3 hotels are exactly the Stay tab's top 3 excluding the pick, and the link lands on `/stay`.
+- Tests: `trips/[id]/__tests__/stay-suggestions.test.tsx` (4: top-3 content matches the ranking with name/rating/price and the sample label, selected hotel excluded, nothing without a destination, ranking uses itinerary stops + remaining budget).
