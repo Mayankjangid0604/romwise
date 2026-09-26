@@ -265,3 +265,6 @@ Tests: `trip-type-derivation.test.ts` (6), `template-actions.test.ts` (2), corre
 - Curated master data contains no transit points beyond the reviewed list.
 
 Plus cases in `add-place.test.ts` (mislabelled station rejected, suggestions filtered) and `copilot.test.ts` (3 transit keywords → NO_ACTION with no item created; lookup filtered). **Run against the pre-fix code, 8 of these checks fail.**
+
+### Pre-deploy fix (after final verification)
+- `public/sw.js` precached `/globe-pattern.svg`, which didn't exist. `cache.addAll` rejects if any URL 404s, so the service worker never installed: no offline page, and the PWA couldn't work offline. Home and signup also 404'd on it as a background image. Added the SVG and bumped the cache to `roamwise-cache-v2`. Verified on a 390×844 mobile viewport: the SW activates, caches all 5 assets, and an offline navigation shows "You're Offline". Re-run afterwards: typecheck clean, 61 files / 635 tests passed, build clean with 0 warnings, lint clean.
