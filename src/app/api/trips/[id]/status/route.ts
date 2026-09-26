@@ -13,8 +13,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const trip = await prisma.trip.findUnique({
-      where: { id },
+    // Scoped to trips the caller belongs to (any logged-in user could read any trip's status)
+    const trip = await prisma.trip.findFirst({
+      where: { id, groupMembers: { some: { userId: session.user.id } } },
       select: { status: true },
     });
 

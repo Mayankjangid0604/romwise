@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { canEditTrip, roleIn } from "@/lib/security";
+
+function optionalText(value: unknown, max = 200): string | null | undefined {
+  if (value === undefined || value === null || value === "") return null;
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 && trimmed.length <= max ? trimmed : undefined;
+}
 
 export async function POST(
   request: NextRequest,
@@ -19,19 +27,26 @@ export async function POST(
     include: { groupMembers: true }
   });
 
-  const isCreator = trip?.creatorId === session.user!.id;
-  const isMember = trip?.groupMembers.some(m => m.userId === session.user!.id);
-  if (!trip || (!isCreator && !isMember)) {
+  const role = trip ? roleIn(trip.groupMembers, session.user.id) : null;
+  if (!trip || !role) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
+  if (!canEditTrip(role)) {
+    return NextResponse.json({ error: "Viewers cannot modify this trip" }, { status: 403 });
+  }
 
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
+  const name = optionalText(body?.name);
+  const location = optionalText(body?.location);
+  if (!name || location === undefined) {
+    return NextResponse.json({ error: "A stay name (max 200 characters) is required" }, { status: 400 });
+  }
 
   await prisma.tripAccommodation.create({
     data: {
       tripId: id,
-      name: body.name,
-      location: body.location,
+      name,
+      location,
     }
   });
 

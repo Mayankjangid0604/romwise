@@ -53,6 +53,11 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("[destination-details] Error:", message);
-    return NextResponse.json({ error: message }, { status: message === "Destination not found" ? 404 : 500 });
+    // Only the known not-found case is user-facing; anything else (e.g. a Prisma error)
+    // stays in the server log instead of being echoed to the client.
+    if (message === "Destination not found") {
+      return NextResponse.json({ error: message }, { status: 404 });
+    }
+    return NextResponse.json({ error: "Could not load destination details" }, { status: 500 });
   }
 }

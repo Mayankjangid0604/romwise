@@ -16,6 +16,7 @@ import { NON_ITINERARY_CATEGORIES } from "@/lib/categories";
 import { computeAppendSlot, timeToMinutes } from "@/lib/itinerary-slots";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { canEditTrip, roleIn } from "@/lib/security";
 
 export type ItineraryGenerationResult =
   | { success: true; usedGemini: boolean; usedFallback: boolean; candidateCount: number; season: string }
@@ -41,9 +42,13 @@ export async function generateTripItinerary(tripId: string): Promise<ItineraryGe
     return { success: false, error: "Trip not found", errorType: "unknown" };
   }
 
-  const isMember = trip.groupMembers.some((m) => m.userId === session.user!.id);
-  if (!isMember) {
+  const role = roleIn(trip.groupMembers, session.user.id);
+  if (!role) {
     return { success: false, error: "Not a member of this trip", errorType: "auth" };
+  }
+  // Regenerating replaces the whole itinerary — never allowed for read-only viewers
+  if (!canEditTrip(role)) {
+    return { success: false, error: "Viewers cannot generate the itinerary", errorType: "auth" };
   }
 
   if (trip.status === "generating") {

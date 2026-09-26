@@ -4,11 +4,19 @@ import { prisma } from "@/lib/db";
 import { requireTripRole } from "@/lib/security";
 import { auth } from "@/lib/auth";
 import { analyzeGroupAlignment, GroupAlignmentInput } from "@/lib/group-alignment";
+import { checkRateLimitDb } from "@/lib/db-rate-limit";
 
 export async function getGroupAlignment(tripId: string) {
   const session = await auth();
   if (!session || !session.user || !session.user.id) throw new Error("Unauthorized");
   await requireTripRole(tripId, "viewer");
+
+  // This action is what the Group tab calls; it triggers a Gemini request, so it gets the
+  // same DB-backed limit as POST /api/group-alignment (which the UI doesn't use)
+  const limit = await checkRateLimitDb(`group-alignment-action:${session.user.id}`, 5, 60_000);
+  if (!limit.allowed) {
+    throw new Error(`Too many alignment requests. Try again in ${limit.retryAfterSeconds} seconds.`);
+  }
 
   // Fetch all members and their preferences
   const trip = await prisma.trip.findUnique({

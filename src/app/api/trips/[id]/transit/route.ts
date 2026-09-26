@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { canEditTrip, roleIn } from "@/lib/security";
+
+function optionalText(value: unknown, max = 200): string | null | undefined {
+  if (value === undefined || value === null || value === "") return null;
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 && trimmed.length <= max ? trimmed : undefined;
+}
+
+const TRANSIT_MODES = new Set(["FLIGHT", "TRAIN", "BUS", "CAR", "FERRY", "OTHER"]);
 
 export async function POST(
   request: NextRequest,
@@ -19,21 +29,29 @@ export async function POST(
     include: { groupMembers: true }
   });
 
-  const isCreator = trip?.creatorId === session.user!.id;
-  const isMember = trip?.groupMembers.some(m => m.userId === session.user!.id);
-  if (!trip || (!isCreator && !isMember)) {
+  const role = trip ? roleIn(trip.groupMembers, session.user.id) : null;
+  if (!trip || !role) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
+  if (!canEditTrip(role)) {
+    return NextResponse.json({ error: "Viewers cannot modify this trip" }, { status: 403 });
+  }
 
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
+  const originName = optionalText(body?.originName);
+  const destinationName = optionalText(body?.destinationName);
+  const mode = typeof body?.mode === "string" ? body.mode.toUpperCase() : "FLIGHT";
+  if (originName === undefined || destinationName === undefined || !TRANSIT_MODES.has(mode)) {
+    return NextResponse.json({ error: "Invalid transit details" }, { status: 400 });
+  }
 
   await prisma.travelSegment.create({
     data: {
       tripId: id,
       type: "TRANSIT",
-      originName: body.originName,
-      destinationName: body.destinationName,
-      mode: body.mode || "FLIGHT",
+      originName,
+      destinationName,
+      mode,
     }
   });
 

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { optimizeBudget, type BudgetItem, type RemovedItem } from "@/lib/budget";
 import { revalidatePath } from "next/cache";
+import { canEditTrip, roleIn } from "@/lib/security";
 
 export async function optimizeTripBudget(
   tripId: string,
@@ -25,10 +26,9 @@ export async function optimizeTripBudget(
 
   if (!trip) throw new Error("Trip not found");
 
-  const isMember = trip.groupMembers.some(
-    (m) => m.userId === session.user!.id,
-  );
-  if (!isMember) throw new Error("Not a member of this trip");
+  const role = roleIn(trip.groupMembers, session.user!.id);
+  if (!role) throw new Error("Not a member of this trip");
+  if (!canEditTrip(role)) throw new Error("Viewers cannot modify this trip");
 
   const budgetItems: BudgetItem[] = trip.itineraryDays.flatMap((day) =>
     day.items.map((item) => ({

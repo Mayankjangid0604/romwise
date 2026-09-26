@@ -18,6 +18,7 @@ Details for every item are in the "Item notes" section below.
 | 4 | Cache AI discovery results | DONE: DB-backed `AiResponseCache` + in-process L1, conservative prompt normalization, date/prompt-version aware keys; applied to the chat planner and group alignment; hits 0.3 ms (memory) / ~13 ms (DB) vs a 1.2 s simulated provider call | clean / clean |
 | 5 | Wireframe / page-flow redesign | DONE (proposal only): `WIREFRAME_NOTES.md`, with 12 flow findings (4 already fixed in item 2) and 5 proposed changes, none of which rename or remove a route | n/a (docs) / clean |
 | — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
+| 7 | Security re-audit | DONE: 2 of the 4 hardening guarantees had regressed (secrets in responses; rate limiting missing on 2 Gemini paths), plus 6 new authz gaps (viewers could mutate, reorder IDOR, …). All fixed, verified live, and guarded by tests | clean / clean |
 
 ## Item notes
 
@@ -113,3 +114,32 @@ Tests: `ai/__tests__/cache.test.ts` (24: normalization equivalence/non-collision
 
 ### 5. Wireframe / page-flow redesign
 See `WIREFRAME_NOTES.md`. It has a current page map, 12 flow-level findings (F1, F8, F9, F10 were fixed in item 2), and 5 proposals with ASCII wireframes. P1: one planning form instead of Discovery's quick-plan form *plus* `/trips/new`. P2: overview as a summary hub with grouped tabs. P3: one stay model. P4: dashboard duplicate trims. P5: make "mark for next generation" vs. "add to current plan" explicit. **None of the proposals rename or remove a URL**; the few URL-affecting candidates are listed separately with the redirect each would need. Nothing in the proposals was built.
+
+### 7. Security re-audit (vs. the production-hardening phase, 2026-09-13)
+Method: every server action (`src/app/actions`) and route handler (`src/app/api`) was read for session → membership → role → input → output, then each finding was reproduced against the running production build with real accounts (creator, member, viewer via invite link, outsider).
+
+**The four hardening guarantees**
+
+| Guarantee | Status now | Evidence |
+|---|---|---|
+| Session-derived identity only | ✅ Still true | Every action and route takes the acting user from `auth()`. Parameters naming *other* users are authorization-checked data, not identity: `removeGroupMember` is creator-only; expense payer/participants are validated as trip members. `security.test.ts` still passes. |
+| No secrets in responses | ❌ **Regressed**, now fixed | **Every trip member's bcrypt `passwordHash` and email were embedded in page HTML/JSON:** the overview (whole `trip` passed to the client `OfflineSaveButton`, since `78cb9f2`), itinerary (comment authors, `b6e4025`), budget and `POST /api/trips/[id]/expenses` (expense payers, `b045fdf`). Anyone who could open a trip could read them, including viewers from an invite link. Confirmed live (5 hashes in one overview page); after the fix there are 0 on every trip page, including as a viewer. Also `/api/destination-details` echoed raw `err.message` (Prisma internals on DB errors); it now returns a generic 500. |
+| Rate limiting functional | ✅ Works, ⚠️ two gaps fixed | Live: login gives "Invalid" ×5, then "Too many attempts" on the 6th **even with the correct password**; another IP is unaffected. `/api/chat/planner` returns 429 on request 6 (DB-backed counter). **Gaps:** the group-alignment *server action* (what the UI actually calls; only the unused API route was limited) and the copilot action both call Gemini with no limit. Both now use `checkRateLimitDb` (5/min and 10/min per user). |
+| bcrypt cost 12 | ✅ Still true | `hash(password, 12)` in signup; every stored hash in the DB starts `$2b$12$`. |
+
+**Other gaps introduced since that phase (all fixed)**
+1. **Viewers could change trips.** Viewers are meant to be read-only (`docs/architecture/COLLABORATION-MATRIX.md`), but 9 actions checked only membership: `generateTripItinerary` (**wipes and regenerates** the itinerary), `optimizeTripBudget` (**deletes** items), `acceptReplan`, 4 packing actions, `selectHotel`/`removeHotelSelection`, plus `POST /api/trips/[id]/stay|transit`. Now `canEditTrip(role)` everywhere; live, a viewer gets 403.
+2. **IDOR in `POST /api/trips/[id]/reorder`**: the body's `dayId` wasn't checked against the trip, so a member of *any* trip could rewrite another trip's day order/times. Live after the fix: 404 and the other trip unchanged.
+3. `searchPlacesForTrip` had no membership check (replaced in item 1 by the membership-checked `listAddablePlaces`).
+4. `GET /api/trips/[id]/status` answered for any trip id (now members only → 404).
+5. `GET /api/weather` was an unauthenticated proxy to the weather API (now 401 when signed out).
+6. Stay/transit POST had no input validation (undefined names → 500); now typed, length-limited, and the mode is allow-listed.
+
+**Guards added:** `no-user-record-leak.test.ts` (fails on any `user|creator|payer|…: true` include in `src/`; caught all 7 leak sites on the old code), `authorization-audit.test.ts` (every mutating server action must enforce edit rights or be on an audited own-data list; flagged all 9 viewer gaps on the old code), `reorder/__tests__/route.test.ts` (IDOR), `viewer-permissions.test.ts`.
+
+**Noted, not changed (need a product decision or are pre-existing)**
+- Login/signup/OTP limits are still in-memory per instance (a known, documented limitation from the hardening phase). `checkRateLimitDb` exists and is a one-line swap if you want them global on serverless.
+- A successful login never resets its counter (`resetRateLimit` sits after `signIn`, which always throws a redirect): 5 logins from one IP within 15 min lock that IP. Pre-existing.
+- `COLLABORATION-MATRIX.md` says only the creator may generate; the code allows members (viewers are now blocked). Either the doc or the code should change.
+- A verified phone-OTP record isn't consumed on use, so it could be replayed to the credentials callback until it expires. Low risk: the `otpId` never leaves the server.
+- The Group page shows members' emails to all members, including viewers (PII by design, not a secret).

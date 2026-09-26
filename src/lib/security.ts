@@ -74,3 +74,16 @@ export async function requireTripRole(tripId: string, minRole: TripRole) {
     throw new Error(`Unauthorized: Requires ${minRole} role for trip ${tripId}`);
   }
 }
+
+/**
+ * Viewers (e.g. people who joined through a viewer invite link) are read-only.
+ * Use this on every mutating action/route after the membership check.
+ */
+export function canEditTrip(role: string | null | undefined): boolean {
+  return role === "creator" || role === "member";
+}
+
+/** The caller's role from an already-loaded member list, or null if not a member. */
+export function roleIn(members: { userId: string; role: string }[], userId: string): string | null {
+  return members.find((m) => m.userId === userId)?.role ?? null;
+}

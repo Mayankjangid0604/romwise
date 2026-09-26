@@ -4,6 +4,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { AIGateway } from "@/lib/ai/gateway";
 import { revalidatePath } from "next/cache";
+import { checkRateLimitDb } from "@/lib/db-rate-limit";
+
+const COPILOT_MAX_PER_MINUTE = 10;
 
 export type CopilotIntentResult = 
   | { success: true; message: string; action: string }
@@ -69,6 +72,12 @@ export async function executeCopilotIntent(tripId: string, message: string): Pro
   }
   if (member.role === "viewer") {
     return { success: false, error: "Unauthorized: Viewers cannot modify the itinerary" };
+  }
+
+  // Each message is a Gemini call — same DB-backed limiter the API routes use
+  const limit = await checkRateLimitDb(`copilot:${session.user.id}`, COPILOT_MAX_PER_MINUTE, 60_000);
+  if (!limit.allowed) {
+    return { success: false, error: `You're sending messages too quickly. Try again in ${limit.retryAfterSeconds} seconds.` };
   }
 
   const trip = await prisma.trip.findUnique({
