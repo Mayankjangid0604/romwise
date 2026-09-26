@@ -59,8 +59,12 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
     })),
   );
 
-  const primaryAccommodation = trip.tripAccommodations[0];
-  const stayCostInr = primaryAccommodation?.totalCostInr ?? 0;
+  // The Stay-tab pick carries the price; manually typed stays have none. Previously this
+  // read tripAccommodations[0], so a manual stay listed first hid the hotel's cost.
+  const primaryAccommodation =
+    trip.tripAccommodations.find((a) => a.selectionRef !== null) ??
+    trip.tripAccommodations.find((a) => a.totalCostInr !== null);
+  const stayCostInr = trip.tripAccommodations.reduce((sum, a) => sum + (a.totalCostInr ?? 0), 0);
   const summary = computeBudgetSummary(budgetItems, trip.budgetInr);
   const totalSpendWithStay = summary.estimatedSpend + stayCostInr;
   const remainingWithStay = trip.budgetInr - totalSpendWithStay;

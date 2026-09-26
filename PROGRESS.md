@@ -18,6 +18,7 @@ Details for every item are in the "Item notes" section below.
 | 4 | Cache AI discovery results | DONE: DB-backed `AiResponseCache` + in-process L1, conservative prompt normalization, date/prompt-version aware keys; applied to the chat planner and group alignment; hits 0.3 ms (memory) / ~13 ms (DB) vs a 1.2 s simulated provider call | clean / clean |
 | 5 | Wireframe / page-flow redesign | DONE (proposal only): `WIREFRAME_NOTES.md`, with 12 flow findings (4 already fixed in item 2) and 5 proposed changes, none of which rename or remove a route | n/a (docs) / clean |
 | — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
+| 8 | Hotel sample data expansion | DONE: the 10-hotel list had been deleted (Stay page showed **0** hotels); replaced with a labelled 58-archetype catalogue → 21–28 stays per destination (1,459 across the 55 curated destinations), 11+ property types, ₹500–₹18,500/night | clean / clean |
 | 7 | Security re-audit | DONE: 2 of the 4 hardening guarantees had regressed (secrets in responses; rate limiting missing on 2 Gemini paths), plus 6 new authz gaps (viewers could mutate, reorder IDOR, …). All fixed, verified live, and guarded by tests | clean / clean |
 
 ## Item notes
@@ -143,3 +144,21 @@ Method: every server action (`src/app/actions`) and route handler (`src/app/api`
 - `COLLABORATION-MATRIX.md` says only the creator may generate; the code allows members (viewers are now blocked). Either the doc or the code should change.
 - A verified phone-OTP record isn't consumed on use, so it could be replayed to the credentials callback until it expires. Low risk: the `otpId` never leaves the server.
 - The Group page shows members' emails to all members, including viewers (PII by design, not a secret).
+
+### 8. Hotel sample data expansion
+**Starting point (traced):** the "10-hotel sample dataset" no longer existed. Commit `331ee89` (Planner V2) deleted `SAMPLE_HOTELS` and switched the Stay page to `Place` rows with `category = "stay"`, but none are imported, so **the Stay page listed zero hotels for every trip**. The page also measured "distance to activities" to the city centre only, and selecting a hotel ran `tripAccommodation.deleteMany({ tripId })`, which silently deleted any stay the user had typed in on the overview.
+
+**New dataset** (`src/lib/sample-hotels.ts`, labelled sample data, not a booking integration)
+- 58 property archetypes across 21 types: hostels, pod hotel, budget hotels, guesthouses, homestays, serviced apartments, boutique, business, upscale and luxury hotels, eco-lodge, beach huts, beach/valley/lake resorts, cottages, a planter's bungalow, heritage havelis and a palace hotel, houseboats, desert and river camps, ashram, yoga retreat, dharamshala, jungle lodge. ₹450–₹18,000 base price per night, with amenities, area and distance band. Names are generic, and a test forbids hotel-chain brand words.
+- Each destination gets the archetypes that fit its setting (beach, mountain, heritage, backwater/lake, desert, spiritual, wildlife, city; from `destinationType` plus per-slug overrides), priced for the place (e.g. Mumbai ×1.35, Orchha ×0.8) and placed around its real coordinates. So Goa gets beach huts, Alappuzha houseboats, Jaisalmer dune camps, Varanasi an ashram, and Mumbai no houseboats. It works for all 300+ DB destinations, not only the curated 55.
+- Deterministic (seeded by slug): ids/prices are stable, so the server looks the hotel up by id on select, and **prices never come from the client**.
+- Result: 21–28 stays per destination (1,459 across the 55 curated destinations), versus 10 fixed hotels in one city before (and 0 today).
+
+**Stay flow fixes**
+- New additive column `TripAccommodation.selectionRef` (migration `20260926142131_…`: one `ADD COLUMN`) marks the Stay-tab pick. Selecting or removing a hotel now only replaces that pick; manually added stays are kept (verified: "Aunt Meera's flat" survived a selection).
+- Distances are to the itinerary's actual stops (centre only before an itinerary exists). The Stay page shows type, ★ rating with "sample reviews", price/night + total, area, amenities, a "Sample" badge and a clear sample-data banner. Viewers see the list without Select buttons.
+- Budget uses the Stay-tab pick's cost (it read `tripAccommodations[0]`, so a manual stay listed first hid the hotel's cost).
+- Shared `getTripStayRecommendations()` so the Stay tab and the overview (item 10) rank identically.
+
+Verified in the browser (Jaipur trip): 28 options across 11 property types, ₹500–₹18,500/night; selecting "Nomad Pod Hotel" stored ₹1,050 from the server-side catalogue with its `selectionRef`; the manual stay remained; Budget showed the hotel.
+Tests: `sample-hotels.test.ts` (breadth, setting fit, labelling, sane prices/ratings, geography, no brand names, determinism, lookup), `actions/__tests__/stay.test.ts` (server-side price, manual stays kept, bad ids rejected, viewers rejected). The existing `stay.test.ts` ranking tests are unchanged and pass.

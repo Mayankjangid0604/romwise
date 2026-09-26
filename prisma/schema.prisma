@@ -460,6 +460,10 @@ model TripAccommodation {
   costPerNightInr  Int?
   totalCostInr     Int?
   nights           Int?
+  /// Set when the stay was picked on the Stay tab: the ranked option's id (a Place id or
+  /// "sample:<destination>:<archetype>"). Null for stays the user typed in manually, so
+  /// picking/removing a hotel never touches those.
+  selectionRef     String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   trip             Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)

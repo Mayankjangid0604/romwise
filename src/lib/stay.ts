@@ -1,5 +1,7 @@
 import { haversineKm } from "./route-optimizer";
 import { prisma } from "./db";
+import { getSampleHotelsForDestination, type SampleHotelDestination, type PropertyType } from "./sample-hotels";
+import { getTripDuration } from "./date-utils";
 
 export type StayCandidate = {
   id: string;
@@ -7,6 +9,13 @@ export type StayCandidate = {
   costPerNightInr: number | null;
   lat: number;
   lng: number;
+  /** Present on generated sample hotels (see sample-hotels.ts) */
+  isSample?: boolean;
+  propertyType?: PropertyType | null;
+  rating?: number | null;
+  reviewCount?: number | null;
+  amenities?: string[];
+  area?: string | null;
 };
 
 export type RankedStay = StayCandidate & {
@@ -84,19 +93,71 @@ export function rankStays(
   }).sort((a, b) => b.overallScore - a.overallScore);
 }
 
-export async function getRankedStays(destinationId: string, input: StayRankingInput): Promise<RankedStay[]> {
+export type StayDestination = SampleHotelDestination & { id: string };
+
+/**
+ * Ranked stays for a destination: real `stay` places from the DB (none are imported
+ * today) plus the labelled sample catalogue, scored by budget fit and distance.
+ */
+export async function getRankedStays(destination: StayDestination, input: StayRankingInput): Promise<RankedStay[]> {
   const places = await prisma.place.findMany({
-    where: { destinationId, category: "stay" },
-    select: { id: true, name: true, typicalCostInr: true, lat: true, lng: true }
+    where: { destinationId: destination.id, category: "stay" },
+    select: { id: true, name: true, typicalCostInr: true, lat: true, lng: true, area: true }
   });
 
-  const candidates: StayCandidate[] = places.map((place) => ({
+  const dbStays: StayCandidate[] = places.map((place) => ({
     id: place.id,
     name: place.name,
     costPerNightInr: place.typicalCostInr ?? null,
     lat: place.lat,
     lng: place.lng,
+    isSample: false,
+    area: place.area,
   }));
 
-  return rankStays(candidates, input).slice(0, 30);
+  return rankStays([...dbStays, ...getSampleHotelsForDestination(destination)], input).slice(0, 40);
+}
+
+export type TripStayContext = {
+  id: string;
+  budgetInr: number;
+  startDate: Date | null;
+  endDate: Date | null;
+  tripType: string;
+  destinationRef: StayDestination | null;
+};
+
+/**
+ * Stay recommendations for a trip, shared by the Stay tab and the overview so both
+ * rank identically: nights from the trip dates, budget left after planned activities,
+ * and distance measured to the itinerary's actual stops (falls back to the destination
+ * centre before an itinerary exists).
+ */
+export async function getTripStayRecommendations(trip: TripStayContext): Promise<{
+  nights: number;
+  remainingBudgetInr: number;
+  ranked: RankedStay[];
+}> {
+  const nights = Math.max(1, getTripDuration(trip, 3) - 1);
+  const items = await prisma.itineraryItem.findMany({
+    where: { itineraryDay: { tripId: trip.id } },
+    select: { estimatedCostInr: true, place: { select: { lat: true, lng: true } } },
+  });
+  const activityCost = items.reduce((sum, i) => sum + (i.estimatedCostInr ?? 0), 0);
+  const remainingBudgetInr = trip.budgetInr - activityCost;
+
+  if (!trip.destinationRef) return { nights, remainingBudgetInr, ranked: [] };
+
+  const stops = items
+    .map((i) => i.place)
+    .filter((p): p is { lat: number; lng: number } => !!p && !(p.lat === 0 && p.lng === 0));
+  const center = { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng };
+
+  const ranked = await getRankedStays(trip.destinationRef, {
+    nights,
+    remainingBudgetInr,
+    centerCoordinate: center,
+    stopCoordinates: stops.length > 0 ? stops : [center],
+  });
+  return { nights, remainingBudgetInr, ranked };
 }

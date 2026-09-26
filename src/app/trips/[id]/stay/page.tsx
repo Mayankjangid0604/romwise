@@ -1,10 +1,10 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { getRankedStays } from "@/lib/stay";
-import { getTripDuration } from "@/lib/date-utils";
-import { computeBudgetSummary, type BudgetItem } from "@/lib/budget";
+import { getTripStayRecommendations } from "@/lib/stay";
+import { PROPERTY_TYPE_LABELS } from "@/lib/sample-hotels";
 import { HotelSelectButton, HotelRemoveButton } from "./stay-actions";
+import { Star } from "lucide-react";
 import {
   PageShell,
   PageHeader,
@@ -23,49 +23,27 @@ export default async function StayPage(props: {
 
   const { id } = await props.params;
 
-  // Parallel flat queries instead of one nested include tree (Prisma resolves each
-  // relation level as a separate sequential round trip). Same `trip` shape as before.
-  const [tripRow, groupMembers, tripAccommodations, itineraryDays] = await Promise.all([
+  const [trip, groupMembers, tripAccommodations] = await Promise.all([
     prisma.trip.findUnique({ where: { id }, include: { destinationRef: true } }),
-    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true } }),
-    prisma.tripAccommodation.findMany({ where: { tripId: id } }),
-    prisma.itineraryDay.findMany({ where: { tripId: id }, include: { items: true } }),
+    prisma.groupMember.findMany({ where: { tripId: id }, select: { userId: true, role: true } }),
+    prisma.tripAccommodation.findMany({ where: { tripId: id }, orderBy: { createdAt: "asc" } }),
   ]);
 
-  if (!tripRow) redirect("/dashboard");
-  const trip = { ...tripRow, groupMembers, tripAccommodations, itineraryDays };
+  if (!trip) redirect("/dashboard");
 
-  const isMember = trip.groupMembers.some(
-    (m) => m.userId === session.user!.id,
-  );
-  if (!isMember) redirect("/dashboard");
+  const me = groupMembers.find((m) => m.userId === session.user!.id);
+  if (!me) redirect("/dashboard");
+  const canEdit = me.role !== "viewer";
 
-  const nights = Math.max(1, getTripDuration(trip, 3) - 1);
+  const { nights, remainingBudgetInr, ranked } = await getTripStayRecommendations(trip);
 
-  const budgetItems: BudgetItem[] = trip.itineraryDays.flatMap((day) =>
-    day.items.map((item) => ({
-      id: item.id,
-      title: item.title,
-      category: item.category,
-      estimatedCostInr: item.estimatedCostInr,
-      dayNumber: day.dayNumber,
-    })),
-  );
-  const activitySummary = computeBudgetSummary(budgetItems, trip.budgetInr);
-  const remainingAfterActivities = activitySummary.remaining;
+  // The Stay-tab pick is the accommodation with a selectionRef; manual entries have none
+  const selected = tripAccommodations.find((a) => a.selectionRef !== null) ?? null;
+  const manualCount = tripAccommodations.filter((a) => a.selectionRef === null).length;
 
-  const center = trip.destinationRef
-    ? { lat: trip.destinationRef.lat, lng: trip.destinationRef.lng }
-    : undefined;
-
-  const stopCoordinates = center ? [center] : [];
-  
-  const ranked = trip.destinationId ? await getRankedStays(trip.destinationId, {
-    nights,
-    remainingBudgetInr: remainingAfterActivities,
-    centerCoordinate: center,
-    stopCoordinates,
-  }) : [];
+  const sampleCount = ranked.filter((h) => h.isSample).length;
+  const typeCount = new Set(ranked.map((h) => h.propertyType).filter(Boolean)).size;
+  const prices = ranked.map((h) => h.costPerNightInr).filter((p): p is number => p !== null);
 
   return (
     <PageShell>
@@ -76,12 +54,13 @@ export default async function StayPage(props: {
         title="Stay"
       />
 
-      <Alert tone="caution" className="mb-6">
-        These are <strong>simulated recommendations</strong> based on typical area pricing. They
-        do not reflect real-time availability or user reviews.
+      <Alert tone="caution" title="Sample hotel data" className="mb-6">
+        These stays are <strong>generated sample data for demonstration</strong>: names, prices,
+        ratings and review counts are illustrative, not real hotels, live availability or real
+        reviews. Roamwise is not connected to a booking provider.
       </Alert>
 
-      {trip.tripAccommodations[0] && (
+      {selected && (
         <Card tone="selected" className="mb-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -89,15 +68,15 @@ export default async function StayPage(props: {
                 Selected Stay
               </p>
               <p className="font-display text-xl font-semibold text-ink-900 mt-1">
-                {trip.tripAccommodations[0].name}
+                {selected.name}
               </p>
-              {trip.tripAccommodations[0].costPerNightInr !== null ? (
+              {selected.costPerNightInr !== null ? (
                 <p className="text-[0.8125rem] text-ink-600 mt-1">
-                  <Figure>{formatInr(trip.tripAccommodations[0].costPerNightInr)}</Figure>
-                  /night &times; <Figure>{trip.tripAccommodations[0].nights ?? 0}</Figure>{" "}
+                  <Figure>{formatInr(selected.costPerNightInr)}</Figure>
+                  /night &times; <Figure>{selected.nights ?? 0}</Figure>{" "}
                   nights ={" "}
                   <Figure className="font-medium text-ink-800">
-                    {formatInr(trip.tripAccommodations[0].totalCostInr ?? 0)}
+                    {formatInr(selected.totalCostInr ?? 0)}
                   </Figure>
                 </p>
               ) : (
@@ -106,7 +85,7 @@ export default async function StayPage(props: {
                 </p>
               )}
             </div>
-            <HotelRemoveButton tripId={id} />
+            {canEdit && <HotelRemoveButton tripId={id} />}
           </div>
         </Card>
       )}
@@ -116,34 +95,74 @@ export default async function StayPage(props: {
         <span className="mx-1.5 text-ink-300">&middot;</span>
         Budget remaining after activities{" "}
         <Figure className="text-ink-700 font-medium">
-          {formatInr(remainingAfterActivities)}
+          {formatInr(remainingBudgetInr)}
         </Figure>
+        {ranked.length > 0 && (
+          <>
+            <span className="mx-1.5 text-ink-300">&middot;</span>
+            <Figure>{ranked.length}</Figure> options ({sampleCount} sample) across{" "}
+            <Figure>{typeCount}</Figure> property types
+            {prices.length > 0 && (
+              <>
+                , <Figure>{formatInr(Math.min(...prices))}</Figure>–<Figure>{formatInr(Math.max(...prices))}</Figure>/night
+              </>
+            )}
+          </>
+        )}
+        {manualCount > 0 && (
+          <>
+            <span className="mx-1.5 text-ink-300">&middot;</span>
+            {manualCount} stay{manualCount !== 1 ? "s" : ""} you added manually (kept when you pick a hotel)
+          </>
+        )}
       </p>
+
+      {ranked.length === 0 && (
+        <Alert tone="info">
+          Stay suggestions appear once this trip is linked to a known destination.
+        </Alert>
+      )}
 
       <div className="space-y-3">
         {ranked.map((hotel) => {
-          const isSelected = trip.tripAccommodations[0]?.name === hotel.name;
+          const isSelected = selected?.selectionRef === hotel.id;
           return (
-            <Card key={hotel.name} tone={isSelected ? "success" : "default"}>
+            <Card key={hotel.id} tone={isSelected ? "success" : "default"}>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="font-display text-lg font-semibold text-ink-900">
                       {hotel.name}
                     </h3>
+                    {hotel.propertyType && (
+                      <Badge tone="neutral">{PROPERTY_TYPE_LABELS[hotel.propertyType]}</Badge>
+                    )}
+                    {hotel.isSample && <Badge tone="caution">Sample</Badge>}
                     <Badge tone="lagoon">
                       Score <span className="font-mono tabular ml-0.5">{hotel.overallScore}</span>
                     </Badge>
                   </div>
 
-                  <p className="text-[0.875rem] text-ink-600 mt-1.5">
+                  <p className="text-[0.875rem] text-ink-600 mt-1.5 flex flex-wrap items-center gap-x-1.5">
+                    {hotel.rating != null && (
+                      <span className="inline-flex items-center gap-1 text-ink-800">
+                        <Star className="w-3.5 h-3.5 fill-caution-200 text-caution-600" aria-hidden />
+                        <Figure>{hotel.rating.toFixed(1)}</Figure>
+                        {hotel.reviewCount != null && (
+                          <span className="text-ink-400 text-[0.75rem]">
+                            (<Figure>{hotel.reviewCount.toLocaleString("en-IN")}</Figure> sample reviews)
+                          </span>
+                        )}
+                      </span>
+                    )}
+                    {hotel.rating != null && <span className="text-ink-300">&middot;</span>}
                     {hotel.costPerNightInr !== null ? (
                       <>
                         <Figure className="font-medium text-ink-800">
                           {formatInr(hotel.costPerNightInr)}
                         </Figure>
                         /night
-                        <span className="mx-1.5 text-ink-300">&middot;</span>
+                        <span className="text-ink-300">&middot;</span>
                         <Figure>{formatInr(hotel.totalCostInr ?? 0)}</Figure> total
                       </>
                     ) : (
@@ -152,14 +171,24 @@ export default async function StayPage(props: {
                   </p>
 
                   <p className="text-[0.75rem] text-ink-400 mt-1">
+                    {hotel.area && <>{hotel.area}<span className="mx-1.5 text-ink-300">&middot;</span></>}
                     Avg <Figure>{hotel.avgDistanceToStopsKm.toFixed(1)} km</Figure> to
-                    activities
+                    your stops
                     <span className="mx-1.5 text-ink-300">&middot;</span>
                     Budget fit <Figure>{hotel.budgetFitScore}</Figure>
                     <span className="mx-1.5 text-ink-300">&middot;</span>
                     Distance <Figure>{hotel.distanceScore}</Figure>
                   </p>
 
+                  {hotel.amenities && hotel.amenities.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {hotel.amenities.slice(0, 5).map((a) => (
+                        <span key={a} className="text-[0.6875rem] px-2 py-0.5 rounded-full bg-ink-100 text-ink-600">
+                          {a}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="shrink-0">
@@ -167,12 +196,12 @@ export default async function StayPage(props: {
                     <Badge tone="success" className="px-3 py-1">
                       Selected
                     </Badge>
-                  ) : (
+                  ) : canEdit ? (
                     <HotelSelectButton
                       tripId={id}
-                      placeId={hotel.id}
+                      stayId={hotel.id}
                     />
-                  )}
+                  ) : null}
                 </div>
               </div>
             </Card>
