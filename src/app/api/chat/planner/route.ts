@@ -298,7 +298,10 @@ Output ONLY valid JSON (no markdown, no code fences):
 }
 `;
 
-    const prompt = `Here is the conversation so far:\n${chatHistory}\n\nWhat is your next response?`;
+    // The instructions ask for relative dates ("next month"); without today's date the model
+    // falls back to its training-time notion of "now" and can return dates in the past.
+    const today = new Date().toISOString().slice(0, 10);
+    const prompt = `Today's date is ${today}.\n\nHere is the conversation so far:\n${chatHistory}\n\nWhat is your next response?`;
 
     let cacheHit = false;
     let aiData: z.infer<typeof plannerResponseSchema>;

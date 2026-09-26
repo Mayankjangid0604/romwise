@@ -11,7 +11,9 @@ import { Plane, Sparkles, Users, WifiOff } from "lucide-react";
 const emailInitial: AuthState = {};
 
 export default function LoginPage() {
-  const [method, setMethod] = useState<"email" | "phone">("phone");
+  // Email first: signup creates email accounts, and no SMS provider is wired up in
+  // production (lib/sms.ts only has a dev console provider), so phone login can't work there.
+  const [method, setMethod] = useState<"email" | "phone">("email");
   const [emailState, emailAction, emailPending] = useActionState(login, emailInitial);
   // Bumping the key remounts PhoneForm, resetting its OTP state without a full page reload
   const [phoneFormKey, setPhoneFormKey] = useState(0);

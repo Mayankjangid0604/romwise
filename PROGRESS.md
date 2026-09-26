@@ -19,6 +19,7 @@ Details for every item are in the "Item notes" section below.
 | 5 | Wireframe / page-flow redesign | DONE (proposal only): `WIREFRAME_NOTES.md`, with 12 flow findings (4 already fixed in item 2) and 5 proposed changes, none of which rename or remove a route | n/a (docs) / clean |
 | — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
 | 8 | Hotel sample data expansion | DONE: the 10-hotel list had been deleted (Stay page showed **0** hotels); replaced with a labelled 58-archetype catalogue → 21–28 stays per destination (1,459 across the 55 curated destinations), 11+ property types, ₹500–₹18,500/night | clean / clean |
+| 9 | Full pipeline trace (signup → packing) | DONE: traced in code and walked live; 8 new breaks fixed (incl. **every multi-day itinerary had a phantom extra day**, 3-day trips lost their last day, template trips 404'd on Places), dead code listed | clean / clean |
 | 7 | Security re-audit | DONE: 2 of the 4 hardening guarantees had regressed (secrets in responses; rate limiting missing on 2 Gemini paths), plus 6 new authz gaps (viewers could mutate, reorder IDOR, …). All fixed, verified live, and guarded by tests | clean / clean |
 
 ## Item notes
@@ -162,3 +163,34 @@ Method: every server action (`src/app/actions`) and route handler (`src/app/api`
 
 Verified in the browser (Jaipur trip): 28 options across 11 property types, ₹500–₹18,500/night; selecting "Nomad Pod Hotel" stored ₹1,050 from the server-side catalogue with its `selectionRef`; the manual stay remained; Budget showed the hotel.
 Tests: `sample-hotels.test.ts` (breadth, setting fit, labelling, sane prices/ratings, geography, no brand names, determinism, lookup), `actions/__tests__/stay.test.ts` (server-side price, manual stays kept, bad ids rejected, viewers rejected). The existing `stay.test.ts` ranking tests are unchanged and pass.
+
+### 9. Full pipeline trace (signup → packing)
+Traced in code: signup/login → dashboard → New Trip (destination search → form → `createTrip`) → background generation (`after()` → V2 planner) → itinerary (edit / add / reorder / replan) → Places → Route → Budget → Stay → Group/invite → Preferences → Packing. Then walked it live on the production build with fresh accounts. Compared against the last health check (2026-09-13) and the V3.x audit docs.
+
+**Chain verified working (live):** signup → auto-login → dashboard; login (with `callbackUrl`); new trip → generation → itinerary with day headings; add place → route; places selections; budget incl. stay cost; stay pick; invite → join; packing generate → check → persists after reload (31 items, 1 checked, confirmed in DB).
+
+**New breaks found and fixed**
+1. **Every multi-day itinerary had a phantom extra day.** The V2 planner passes time-adjusted datetimes (start 09:00, end 20:00) to `getTripDuration`, which did `ceil(ms span) + 1`: Nov 13–15 → **4** days (incl. Nov 16, after the trip), a same-day trip → 2. `planner-v2/__tests__/adapter.test.ts` had enshrined it (one test commented "5 days duration" asserted 6). Now counts calendar days; tests corrected; live, Nov 13–15 → 13/14/15 and Dec 1–5 → 5 days.
+2. **3-day trips lost their last day.** The form path stored a 3-calendar-day range as `WEEKEND`, which every consumer treats as a fixed 2 days (the itinerary stopped a day early, Stay counted 1 night instead of 2, and `formatTripDates` showed a 2-day range while the dashboard showed 3). New `deriveTripTypeFromDates` → `MULTI_DAY`. The E2E test that asserted `WEEKEND` for this case was updated (flagged: it encoded the bug). Templates still use `WEEKEND` with a genuine 2-day span.
+3. **Generation failures after "Generate My Trip" were silent.** `createTrip` ignored `generateTripItinerary`'s result, so e.g. hitting the free limit (3 generations per account) landed on an empty itinerary with no reason. Now shows the reason (verified).
+4. **Template trips:** preferences were computed into an unused variable and dropped; `destinationId` was never resolved, so **the Places tab 404'd** and Stay/Add Place were empty until the first generation; `dateStatus: "known"` isn't a valid value. All fixed; template labels mapped to planner categories ("Family-Friendly", "Safety", "Budget", "Luxury" have no planner equivalent and are left out).
+5. Places tab 404'd for any trip whose destination text didn't resolve → explanatory empty state.
+6. **Login defaulted to the Phone tab, but phone login can't work in production:** `lib/sms.ts` only has a console provider that refuses in production, and nothing reads the `TWILIO_*` vars the README documents. Default is now Email (signup creates email accounts). Wiring Twilio is left as a follow-up (needs credentials).
+7. **PDF export can't work on Vercel as configured:** the route imports `playwright` (only a transitive *dev* dependency), while `@sparticuz/chromium` and `playwright-core` sit unused in `dependencies`. Failures now redirect (303) to the Print page instead of a bare 500; wiring serverless Chromium is left as a follow-up (needs a Vercel test).
+8. The chat planner asks the model for relative dates ("next month") without telling it today's date → now included in the prompt.
+
+Fixed earlier in this pass, found on the same chain: Stay page listed 0 hotels (8); offline save stored no titles (security hotfix); Info tab placeholder, orphaned Stay/Preferences/Print, invite join landing, login `callbackUrl` (2); selecting a hotel deleted manual stays and the budget read the wrong stay (8).
+
+**Dead code (reported, not deleted)**
+- `src/lib/providers/routing.ts`: imported nowhere.
+- `computeEndDate()` in `actions/trips.ts`: never called. Unused `redirect` import in `actions/template-actions.ts`.
+- Server actions with no callers: `updateAccessibilityNotes` (`actions/trips.ts`) and `getActiveShares` (`actions/share.ts`, unused since item 3). Exported server actions stay callable endpoints; both are auth-checked.
+- `POST /api/jobs/generate-itinerary`: no callers since generation moved to `after()` (guarded by `INTERNAL_JOB_SECRET`).
+- Dependencies `@sparticuz/chromium`, `playwright-core`: unused (see #7).
+- Not dead but orphaned from the web UI: `/api/chat/planner` (keep for mobile) and the V1 Gemini planner (`lib/trip-brain.ts`, only with `PLANNER_ENGINE=v1`).
+
+**Reported, needs a product decision**
+- "Avg budget ₹280/day" (New Trip card) and Discovery's budget suggestion come from `averageDailyBudgetInr` = the mean *entry ticket* of the top places, not a daily budget. The New Trip total budget therefore defaults to ₹1,000 for Jaipur, which makes Stay's budget-fit scores meaningless until edited. Suggested: stay (median sample hotel) + food + activities per day.
+- Trips created before this fix (3-day `WEEKEND`, or planned with the phantom day) keep their current itinerary until regenerated; no data migration was run.
+
+Tests: `trip-type-derivation.test.ts` (6), `template-actions.test.ts` (2), corrected `planner-v2/__tests__/adapter.test.ts`, updated `tests/e2e/phase-2-durations.spec.ts`.

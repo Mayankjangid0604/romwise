@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { resolveDestination } from "@/lib/destination-resolver";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { TripType } from "@/lib/date-utils";
+import { TripType, deriveTripTypeFromDates } from "@/lib/date-utils";
 
 export type TripState = {
   error?: string;
@@ -143,14 +143,8 @@ export async function createTrip(
 
   if (Object.keys(fieldErrors).length > 0) return { fieldErrors };
 
-  let derivedTripType: string = TripType.MULTI_DAY;
-  if (startDate && endDate) {
-    const dayDiff = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    if (dayDiff === 0) derivedTripType = TripType.DAY_TRIP;
-    else if (dayDiff === 1) derivedTripType = TripType.OVERNIGHT;
-    else if (dayDiff === 2) derivedTripType = TripType.WEEKEND;
-    else derivedTripType = TripType.MULTI_DAY;
-  }
+  const derivedTripType: string =
+    startDate && endDate ? deriveTripTypeFromDates(startDate, endDate) : TripType.MULTI_DAY;
 
   const matchedDestination = await resolveDestination(destination);
 
@@ -221,8 +215,14 @@ export async function createTrip(
 
   if (formData.get("autoGenerate") === "true") {
     const { generateTripItinerary } = await import("./itinerary");
-    await generateTripItinerary(trip.id);
-    redirect(`/trips/${trip.id}/itinerary`);
+    const generation = await generateTripItinerary(trip.id);
+    // The trip is saved either way; say why the itinerary didn't start (this used to be
+    // swallowed, leaving an empty itinerary page with no explanation)
+    redirect(
+      generation.success
+        ? `/trips/${trip.id}/itinerary`
+        : `/trips/${trip.id}/itinerary?generation=${generation.errorType}`,
+    );
   }
 
   redirect(`/trips/${trip.id}`);

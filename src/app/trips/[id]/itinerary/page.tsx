@@ -9,11 +9,21 @@ import { CalendarDays, Sparkles } from "lucide-react";
 import { Alert, Card } from "@/components/ui";
 import { AlertCircle } from "lucide-react";
 
-export default async function ItineraryPage(props: { params: Promise<{ id: string }> }) {
+const GENERATION_NOTICES: Record<string, string> = {
+  entitlement: "Your trip was saved, but you've used your free itinerary generations, so no itinerary was generated.",
+  destination_not_found: "Your trip was saved, but we don't have place data for this destination yet, so no itinerary was generated.",
+  no_place_data: "Your trip was saved, but we don't have enough places for this destination to build an itinerary yet.",
+};
+
+export default async function ItineraryPage(props: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ generation?: string }>;
+}) {
   const session = await auth();
   if (!session?.user?.id) notFound();
 
   const { id } = await props.params;
+  const { generation } = await props.searchParams;
 
   // Parallel flat queries, joined in memory. The nested include tree
   // (days → items → votes / comments → user / place) cost one sequential DB round
@@ -78,6 +88,11 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
             Let Roamwise AI create a personalized, budget-aware day-by-day plan 
             based on your destination, preferences, and group size.
           </p>
+          {generation && trip.status !== "generating" && (
+            <Alert tone="caution" className="mb-6 max-w-md text-left">
+              {GENERATION_NOTICES[generation] ?? "Your trip was saved, but we couldn't start generating the itinerary. Try again below."}
+            </Alert>
+          )}
           <GenerateButton tripId={id} initialStatus={trip.status} />
         </div>
       ) : (

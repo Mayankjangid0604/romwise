@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PlaceBrowser, PlaceDTO, PlaceSelectionStatus } from "./place-browser";
 import { MapPin } from "lucide-react";
 import { Prisma } from "@prisma/client";
+import { EmptyState } from "@/components/ui";
 
 export default async function PlacesPage(props: { params: Promise<{ id: string }>, searchParams: Promise<{ q?: string, category?: string, page?: string, status?: string }> }) {
   const session = await auth();
@@ -22,7 +23,18 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
   const isCreator = trip?.creatorId === session.user.id;
   const isMember = trip?.groupMembers.some((m) => m.userId === session.user!.id);
 
-  if (!trip || (!isCreator && !isMember) || !trip.destinationId) notFound();
+  if (!trip || (!isCreator && !isMember)) notFound();
+
+  // A trip whose destination text didn't match a known destination has no place catalogue
+  // yet. This used to 404 the whole tab (e.g. every trip created from a template).
+  if (!trip.destinationId) {
+    return (
+      <EmptyState
+        title="No place catalogue for this destination yet"
+        hint={`We couldn't match "${trip.destination}" to a destination in our database. Generate the itinerary (it links the destination when it can), or create the trip from Discover to pick a known destination.`}
+      />
+    );
+  }
 
   const q = searchParams.q || "";
   const category = searchParams.category || "all";
