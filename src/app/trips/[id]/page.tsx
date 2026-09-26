@@ -89,12 +89,22 @@ export default async function TripOverviewPage(props: { params: Promise<{ id: st
               >
                 Live Mode
               </Link>
-              <Link 
-                href={`/api/trips/${trip.id}/pdf`} 
+              {/* Plain <a>, not next/link: <Link> prefetches on viewport/hover, which ran the
+                  headless-Chromium PDF route handler on every overview visit. */}
+              <a
+                href={`/api/trips/${trip.id}/pdf`}
                 target="_blank"
+                rel="noopener"
                 className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
               >
                 <FileText className="w-4 h-4" /> PDF
+              </a>
+              <Link
+                href={`/trips/${trip.id}/print`}
+                prefetch={false}
+                className={buttonStyles({ variant: "secondary", size: "sm", className: "bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-md gap-2" })}
+              >
+                Print
               </Link>
               {isCreator && (
                 <DeleteTripButton tripId={trip.id} tripTitle={trip.title} />

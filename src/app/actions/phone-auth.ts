@@ -6,6 +6,7 @@ import { getSmsProvider } from "@/lib/sms";
 import { signIn } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
+import { safeCallbackUrl } from "@/lib/safe-redirect";
 
 export type PhoneAuthState = {
   step: "phone" | "otp";
@@ -92,7 +93,7 @@ export async function verifyOtpAction(
   }
 
   await signIn("phone-otp", {
-    redirectTo: "/dashboard",
+    redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
     phone,
     otpId: result.otpId,
   });

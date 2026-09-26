@@ -54,7 +54,7 @@ export function PlaceBrowser({
     setPlaces(initialPlaces);
   }
 
-  const updateUrl = useCallback((updates: Record<string, string | null>) => {
+  const updateUrl = useCallback((updates: Record<string, string | null>, opts?: { replace?: boolean }) => {
     const params = new URLSearchParams(searchParams.toString());
     for (const [key, value] of Object.entries(updates)) {
       if (value === null) {
@@ -64,7 +64,10 @@ export function PlaceBrowser({
       }
     }
     startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
+      const url = `${pathname}?${params.toString()}`;
+      // Typing replaces (Back shouldn't step through every partial query); explicit filters push
+      if (opts?.replace) router.replace(url, { scroll: false });
+      else router.push(url);
     });
   }, [pathname, router, searchParams]);
 
@@ -72,7 +75,7 @@ export function PlaceBrowser({
   useEffect(() => {
     const handler = setTimeout(() => {
       if (search !== initialSearch) {
-        updateUrl({ q: search || null, page: "1" });
+        updateUrl({ q: search || null, page: "1" }, { replace: true });
       }
     }, 400);
     return () => clearTimeout(handler);

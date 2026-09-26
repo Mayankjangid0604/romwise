@@ -19,7 +19,8 @@ export function DeleteTripButton({ tripId, tripTitle }: { tripId: string; tripTi
       setError(result.error);
       setDeleting(false);
     } else {
-      router.push("/dashboard");
+      // replace: Back must not return to the page of a trip that no longer exists
+      router.replace("/dashboard");
     }
   };
 

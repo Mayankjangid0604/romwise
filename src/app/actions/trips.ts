@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { resolveDestination } from "@/lib/destination-resolver";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { TripType } from "@/lib/date-utils";
 
 export type TripState = {
@@ -265,6 +266,7 @@ export async function deleteTrip(tripId: string): Promise<{ error?: string }> {
 
   try {
     await prisma.trip.delete({ where: { id: tripId } });
+    revalidatePath("/dashboard");
     return {};
   } catch {
     return { error: "Failed to delete trip" };

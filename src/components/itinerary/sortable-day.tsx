@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Clock, Route as RouteIcon } from "lucide-react";
 import {
   DndContext,
@@ -25,6 +26,7 @@ import { formatDayLabel } from "@/lib/date-utils";
 
 export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; date?: Date | string | null; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
   const dayLabel = formatDayLabel(day.dayNumber, day.date);
+  const router = useRouter();
   const [items, setItems] = useState(day.items);
   const [prevDayItems, setPrevDayItems] = useState(day.items);
   const isMounted = useSyncExternalStore(() => () => {}, () => true, () => false);
@@ -68,8 +70,8 @@ export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; d
             alert(data?.error || "Failed to reorder. The schedule might be impossible.");
             setItems(items); // revert
           } else {
-            // Force a hard refresh to get the recomputed times
-            window.location.reload();
+            // Re-fetch server data to pick up the recomputed times (no full page reload)
+            router.refresh();
           }
         }).catch(err => {
           console.error("Failed to reorder", err);

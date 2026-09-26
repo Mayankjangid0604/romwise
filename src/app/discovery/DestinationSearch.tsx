@@ -12,10 +12,19 @@ interface DestinationResult {
   state: string;
 }
 
-function DestinationSearchInner() {
+/**
+ * - `explore` (Discovery): picking a destination opens its guide at /discovery/<name>;
+ *   on a collection page the box filters that collection in place.
+ * - `plan` (New Trip): picking a destination stays in the planning flow
+ *   (/trips/new?destination=<name>) instead of detouring through Discovery.
+ */
+type SearchMode = "explore" | "plan";
+
+function DestinationSearchInner({ mode }: { mode: SearchMode }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isCollectionFilter = mode === "explore" && pathname === '/discovery' && searchParams.has('collection');
   
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [results, setResults] = useState<DestinationResult[]>([]);
@@ -25,17 +34,21 @@ function DestinationSearchInner() {
   const debouncedQuery = useDebounce(query, 300);
   const containerRef = useRef<HTMLFormElement>(null);
 
-  // When searching, if on /discovery with a collection, push state. Otherwise do the API call.
+  // On a collection page the box is a filter: mirror it into ?q=. Otherwise do the API call.
   useEffect(() => {
-    if (pathname === '/discovery' && searchParams.has('collection')) {
+    if (isCollectionFilter) {
       const params = new URLSearchParams(searchParams.toString());
       if (debouncedQuery && debouncedQuery.length > 0) {
         params.set('q', debouncedQuery);
       } else {
         params.delete('q');
       }
-      // Replace instead of push to avoid massive history state while typing
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      // Only navigate when the filter actually changed — replacing with the same URL
+      // re-rendered the page (and re-ran the collection query) on every mount.
+      if (params.toString() !== searchParams.toString()) {
+        // Replace instead of push to avoid massive history state while typing
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }
       return;
     }
 
@@ -58,7 +71,7 @@ function DestinationSearchInner() {
       }
     }
     fetchResults();
-  }, [debouncedQuery, pathname, searchParams, router]);
+  }, [debouncedQuery, pathname, searchParams, router, isCollectionFilter]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -76,17 +89,22 @@ function DestinationSearchInner() {
     if (finalQuery) {
       setIsOpen(false);
       
-      if (pathname === '/discovery' && searchParams.has('collection')) {
+      if (isCollectionFilter) {
         const params = new URLSearchParams(searchParams.toString());
         params.set('q', finalQuery);
-        router.push(`${pathname}?${params.toString()}`);
+        // Typing already filtered in place; Enter must not add a duplicate history entry
+        if (params.toString() !== searchParams.toString()) {
+          router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        }
+      } else if (mode === "plan") {
+        router.push(`/trips/new?destination=${encodeURIComponent(finalQuery)}`);
       } else {
         router.push(`/discovery/${encodeURIComponent(finalQuery)}`);
       }
     }
   };
 
-  const showDropdown = isOpen && query.length >= 2 && !(pathname === '/discovery' && searchParams.has('collection'));
+  const showDropdown = isOpen && query.length >= 2 && !isCollectionFilter;
 
   return (
     <form ref={containerRef} onSubmit={e => handleSearch(e)} className="flex gap-2 max-w-xl mb-10 relative z-40">
@@ -135,16 +153,16 @@ function DestinationSearchInner() {
         )}
       </div>
       <Button type="submit" className="h-12 px-6 rounded-xl shadow-sm">
-        Explore
+        {mode === "plan" ? "Continue" : "Explore"}
       </Button>
     </form>
   );
 }
 
-export function DestinationSearch() {
+export function DestinationSearch({ mode = "explore" }: { mode?: SearchMode }) {
   return (
     <Suspense fallback={<div className="h-12 w-full max-w-xl bg-ink-100 animate-pulse rounded-xl mb-10" />}>
-      <DestinationSearchInner />
+      <DestinationSearchInner mode={mode} />
     </Suspense>
   );
 }

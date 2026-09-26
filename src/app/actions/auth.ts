@@ -7,6 +7,7 @@ import { CredentialsSignin } from "next-auth";
 
 import { checkRateLimit, resetRateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
+import { safeCallbackUrl } from "@/lib/safe-redirect";
 
 export type AuthState = {
   error?: string;
@@ -71,7 +72,7 @@ export async function signup(
   await signIn("email-password", {
     email,
     password,
-    redirectTo: "/dashboard",
+    redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
   });
   // signIn with redirectTo always throws NEXT_REDIRECT — unreachable
   return {};
@@ -98,7 +99,7 @@ export async function login(
     await signIn("email-password", {
       email,
       password,
-      redirectTo: "/dashboard",
+      redirectTo: safeCallbackUrl(formData.get("callbackUrl")),
     });
   } catch (err) {
     // Only catch actual credential failures — let NEXT_REDIRECT propagate

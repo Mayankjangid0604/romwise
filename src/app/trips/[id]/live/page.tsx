@@ -37,7 +37,8 @@ export default function LiveTripPage() {
       <div className="min-h-screen bg-ink-50 flex flex-col items-center justify-center p-6 text-center">
         <h1 className="text-2xl font-serif text-ink-900 mb-2">Trip Not Found</h1>
         <p className="text-ink-600 mb-6">This trip hasn&apos;t been saved for offline use.</p>
-        <Link href="/" className="text-lagoon-600 font-medium hover:underline">Back to Home</Link>
+        {/* "/" only redirects signed-in users to the dashboard — go back to this trip instead */}
+        <Link href={`/trips/${id}`} className="text-lagoon-600 font-medium hover:underline">Back to trip</Link>
       </div>
     );
   }

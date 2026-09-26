@@ -32,9 +32,12 @@ export default async function TripLayout(props: {
             </Link>
             <span className="text-ink-300">/</span>
             <LayoutGrid className="w-3.5 h-3.5 text-ink-400" />
-            <span className="font-medium text-ink-700 truncate max-w-[200px]">
+            <Link
+              href={`/trips/${id}`}
+              className="font-medium text-ink-700 truncate max-w-[200px] hover:text-lagoon-600 transition-colors"
+            >
               {trip.title}
-            </span>
+            </Link>
             <span className="ml-1 text-ink-400">· {trip.destination}</span>
           </div>
         )}

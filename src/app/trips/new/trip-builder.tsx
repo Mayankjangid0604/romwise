@@ -24,7 +24,7 @@ export function TripBuilder({
     return (
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-ink-900">Where do you want to go?</h2>
-        <DestinationSearch />
+        <DestinationSearch mode="plan" />
       </div>
     );
   }

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { signup, type AuthState } from "@/app/actions/auth";
 import Link from "next/link";
 import { Alert, Card, Field, Input, Button } from "@/components/ui";
+import { CallbackUrlInput, AuthSwitchLink } from "@/components/auth/callback-url";
 import { Plane, Sparkles, Users, WifiOff } from "lucide-react";
 
 const initialState: AuthState = {};
@@ -70,6 +71,7 @@ export default function SignupPage() {
 
           <Card>
             <form action={formAction} className="space-y-4">
+              <CallbackUrlInput />
               {state.error && <Alert tone="danger">{state.error}</Alert>}
 
               <Field label="Name" htmlFor="name">
@@ -102,12 +104,12 @@ export default function SignupPage() {
 
           <p className="text-center text-[0.875rem] text-ink-600 mt-6">
             Already have an account?{" "}
-            <Link
+            <AuthSwitchLink
               href="/login"
               className="font-medium text-lagoon-700 hover:text-lagoon-800"
             >
               Log in
-            </Link>
+            </AuthSwitchLink>
           </p>
         </div>
       </div>
