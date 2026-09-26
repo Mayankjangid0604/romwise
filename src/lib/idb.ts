@@ -63,7 +63,7 @@ export function createOfflineTripSnapshot(trip: any, userId: string): OfflineTri
     ownerUserId: userId,
     savedAt: Date.now(),
     tripUpdatedAt: trip.updatedAt,
-    title: trip.name || trip.destination,
+    title: trip.title || trip.name || trip.destination,
     destination: trip.destination,
     startDate: trip.startDate,
     endDate: trip.endDate,

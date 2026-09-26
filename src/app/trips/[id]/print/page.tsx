@@ -15,7 +15,7 @@ export default async function PrintTripPage(props: { params: Promise<{ id: strin
   const trip = await prisma.trip.findUnique({
     where: { id },
     include: {
-      groupMembers: { include: { user: true } },
+      groupMembers: { include: { user: { select: { name: true } } } },
       travelSegments: { orderBy: { departureDate: "asc" } },
       packingItems: { orderBy: { category: "asc" } },
       itineraryDays: {

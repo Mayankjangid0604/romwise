@@ -26,7 +26,7 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
             orderBy: { order: 'asc' },
             include: {
               votes: true,
-              comments: { include: { user: true } },
+              comments: { include: { user: { select: { name: true } } } },
               place: {
                 select: {
                   lat: true,

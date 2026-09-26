@@ -16,7 +16,7 @@ export async function getGroupAlignment(tripId: string) {
     include: {
       groupMembers: {
         include: {
-          user: true,
+          user: { select: { name: true } },
           travelerPreferences: true,
         }
       }

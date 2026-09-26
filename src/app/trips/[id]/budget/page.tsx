@@ -26,9 +26,9 @@ export default async function BudgetPage(props: { params: Promise<{ id: string }
   const trip = await prisma.trip.findUnique({
     where: { id },
     include: {
-      groupMembers: { include: { user: true } },
+      groupMembers: { select: { userId: true, user: { select: { name: true } } } },
       tripAccommodations: true,
-      expenses: { include: { payer: true, ExpenseParticipant: true }, orderBy: { date: "desc" } },
+      expenses: { include: { payer: { select: { id: true, name: true } }, ExpenseParticipant: true }, orderBy: { date: "desc" } },
       itineraryDays: {
         orderBy: { dayNumber: "asc" },
         include: { items: { orderBy: { order: "asc" } } },
