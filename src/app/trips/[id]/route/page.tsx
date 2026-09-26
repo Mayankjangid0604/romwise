@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import {
   optimizeRoute,
+  buildRouteStops,
   type RouteStop,
 } from "@/lib/route-optimizer";
 import {
@@ -100,29 +101,17 @@ export default async function RoutePage(props: {
 
   // ── Day Route ─────────────────────────────────────────────────────────────
 
-  const selectedDay = dayParam ? parseInt(dayParam, 10) : 1;
-  const dayData = trip.itineraryDays.find((d) => d.dayNumber === selectedDay);
+  // Unknown/invalid ?day= falls back to the first day in place (a redirect to
+  // ?day=1 would loop forever if the trip has no day numbered 1).
+  const requestedDay = dayParam ? parseInt(dayParam, 10) : NaN;
+  const dayData =
+    trip.itineraryDays.find((d) => d.dayNumber === requestedDay) ?? trip.itineraryDays[0];
+  const selectedDay = dayData.dayNumber;
 
-  if (!dayData) redirect(`/trips/${id}/route?day=1`);
-
-  const stops: RouteStop[] = dayData.items
-    .map((item) => {
-      const lat = item.place?.lat;
-      const lng = item.place?.lng;
-      if (lat == null || lng == null) return null;
-      if (lat === 0 && lng === 0) return null;
-      return {
-        id: item.id,
-        title: item.title,
-        category: item.category,
-        startTime: item.startTime,
-        endTime: item.endTime,
-        order: item.order,
-        lat,
-        lng,
-      };
-    })
-    .filter((s): s is RouteStop => s !== null);
+  // Built from the day's current items on every request, so places added after
+  // generation are included in the optimization.
+  const stops: RouteStop[] = buildRouteStops(dayData.items);
+  const unmappedCount = dayData.items.length - stops.length;
 
   const result = optimizeRoute(stops);
 
@@ -230,6 +219,18 @@ export default async function RoutePage(props: {
               <Stat label="Saved" value="Already optimal" tone="muted" />
             )}
           </div>
+
+          <p className="text-[0.75rem] text-ink-500">
+            Optimizing <Figure>{stops.length}</Figure> of <Figure>{dayData.items.length}</Figure> stops
+            for Day {selectedDay}
+            {unmappedCount > 0 && (
+              <> — {unmappedCount} custom {unmappedCount === 1 ? "activity has" : "activities have"} no map location and {unmappedCount === 1 ? "is" : "are"} not routed</>
+            )}
+            .{" "}
+            <Link href={`/trips/${id}/itinerary`} className="text-lagoon-600 hover:text-lagoon-800 font-medium">
+              Add or reorder places in the itinerary
+            </Link>
+          </p>
 
           {mapCenter && (
             <div className="h-[400px] sm:h-[500px]">

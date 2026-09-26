@@ -306,3 +306,11 @@ export function getTripStartEndDateTimes(trip: {
 
   return { startDateTime, endDateTime };
 }
+
+/** "Day 2 · Tue, 14 Oct" — falls back to "Day 2" when the day has no calendar date. */
+export function formatDayLabel(dayNumber: number, date?: Date | string | null): string {
+  if (!date) return `Day ${dayNumber}`;
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return `Day ${dayNumber}`;
+  return `Day ${dayNumber} · ${d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" })}`;
+}

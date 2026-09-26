@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import { SortableDay } from "@/components/itinerary/sortable-day";
+import { AddPlacePanel } from "@/components/itinerary/add-place-panel";
+import { formatDayLabel } from "@/lib/date-utils";
 import { GenerateButton } from "../generate-button";
 import { CalendarDays, Sparkles } from "lucide-react";
 import { Alert, Card } from "@/components/ui";
@@ -46,6 +48,9 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
 
   if (!trip || (!isCreator && !isMember)) notFound();
 
+  const myRole = trip.groupMembers.find((m) => m.userId === session.user!.id)?.role;
+  const canEdit = isCreator || (myRole !== undefined && myRole !== "viewer");
+
   const totalActivities = trip.itineraryDays.reduce((sum, d) => sum + d.items.length, 0);
 
   return (
@@ -77,7 +82,18 @@ export default async function ItineraryPage(props: { params: Promise<{ id: strin
                 <p className="text-xs text-ink-500">{totalActivities} activities total</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {canEdit && (
+                <AddPlacePanel
+                  tripId={trip.id}
+                  presentation="dialog"
+                  days={trip.itineraryDays.map((d) => ({
+                    id: d.id,
+                    dayNumber: d.dayNumber,
+                    label: formatDayLabel(d.dayNumber, d.date),
+                  }))}
+                />
+              )}
               <GenerateButton tripId={id} initialStatus={trip.status} />
             </div>
           </Card>

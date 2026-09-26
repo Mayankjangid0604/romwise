@@ -215,3 +215,40 @@ export function optimizeRoute(stops: RouteStop[]): RouteOptimizationResult {
     backtracking,
   };
 }
+
+export type RouteSourceItem = {
+  id: string;
+  title: string;
+  category: string;
+  startTime: string;
+  endTime: string;
+  order: number;
+  place?: { lat: number | null; lng: number | null } | null;
+};
+
+/**
+ * Turn a day's *current* itinerary items (generated or manually added) into
+ * route stops. Items without a known place location — e.g. free-text custom
+ * activities — can't be mapped and are left out; everything else is kept in
+ * the day's order so optimizeRoute compares against what the user sees.
+ */
+export function buildRouteStops(items: RouteSourceItem[]): RouteStop[] {
+  return [...items]
+    .sort((a, b) => a.order - b.order)
+    .flatMap((item) => {
+      const lat = item.place?.lat;
+      const lng = item.place?.lng;
+      if (lat == null || lng == null) return [];
+      if (lat === 0 && lng === 0) return [];
+      return [{
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        order: item.order,
+        lat,
+        lng,
+      }];
+    });
+}

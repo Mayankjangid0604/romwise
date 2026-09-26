@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { Clock } from "lucide-react";
+import Link from "next/link";
+import { Clock, Route as RouteIcon } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -19,10 +20,11 @@ import {
 import { SortableItem, SortableItemType } from "./sortable-item";
 import { TransitLink } from "./transit-link";
 import { Timeline, TimelineItem } from "@/components/ui/timeline";
-import { AddActivityButton } from "./add-activity-button";
+import { AddPlacePanel } from "./add-place-panel";
+import { formatDayLabel } from "@/lib/date-utils";
 
-
-export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
+export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; dayNumber: number; date?: Date | string | null; items: SortableItemType[] }; tripId: string; isShortTrip?: boolean }) {
+  const dayLabel = formatDayLabel(day.dayNumber, day.date);
   const [items, setItems] = useState(day.items);
   const [prevDayItems, setPrevDayItems] = useState(day.items);
   const isMounted = useSyncExternalStore(() => () => {}, () => true, () => false);
@@ -105,12 +107,7 @@ export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; d
         items={items.map((i) => i.id)}
         strategy={verticalListSortingStrategy}
       >
-        {isShortTrip && items.length > 0 && (
-          <div className="mb-4 text-sm font-medium text-lagoon-700 bg-lagoon-50 border border-lagoon-100 px-3 py-1.5 rounded-md inline-flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            {items[0].startTime} — {items[items.length - 1].endTime}
-          </div>
-        )}
+        <DayHeader tripId={tripId} dayNumber={day.dayNumber} label={dayLabel} items={items} emphasizeTimes={isShortTrip} />
         <Timeline>
           {items.map((item: SortableItemType, index: number) => {
             const nextItem = items[index + 1];
@@ -130,9 +127,58 @@ export function SortableDay({ day, tripId, isShortTrip }: { day: { id: string; d
             );
           })}
         </Timeline>
-        <AddActivityButton tripId={tripId} dayId={day.id} />
+        <AddPlacePanel
+          tripId={tripId}
+          days={[{ id: day.id, dayNumber: day.dayNumber, label: `Day ${day.dayNumber}` }]}
+          initialDayId={day.id}
+        />
       </SortableContext>
     </DndContext>
+  );
+}
+
+function DayHeader({
+  tripId,
+  dayNumber,
+  label,
+  items,
+  emphasizeTimes,
+}: {
+  tripId: string;
+  dayNumber: number;
+  label: string;
+  items: SortableItemType[];
+  emphasizeTimes?: boolean;
+}) {
+  const hasMappableStops = items.some((i) => i.place?.lat != null && i.place?.lng != null);
+  return (
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <h2 className="font-display text-xl font-semibold text-ink-900">{label}</h2>
+        {items.length > 0 && (
+          <span
+            className={
+              emphasizeTimes
+                ? "text-sm font-medium text-lagoon-700 bg-lagoon-50 border border-lagoon-100 px-3 py-1 rounded-md inline-flex items-center gap-2"
+                : "text-[0.8125rem] text-ink-500 inline-flex items-center gap-1.5"
+            }
+          >
+            <Clock className="w-4 h-4" />
+            {items[0].startTime} — {items[items.length - 1].endTime}
+            <span className="text-ink-300">·</span>
+            {items.length} {items.length === 1 ? "stop" : "stops"}
+          </span>
+        )}
+      </div>
+      {hasMappableStops && (
+        <Link
+          href={`/trips/${tripId}/route?day=${dayNumber}`}
+          className="text-[0.8125rem] font-medium text-lagoon-600 hover:text-lagoon-800 inline-flex items-center gap-1"
+        >
+          <RouteIcon className="w-4 h-4" /> View route
+        </Link>
+      )}
+    </div>
   );
 }
 
