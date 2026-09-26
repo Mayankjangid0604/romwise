@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { NOT_TRANSIT_WHERE, isTransitPoint } from "@/lib/transit-filter";
 
 export type DestinationDetails = {
   name: string;
@@ -99,6 +100,8 @@ export async function getDestinationDetails(name: string, _context?: string): Pr
     },
     include: {
       places: {
+        // Hotels and transit hubs are neither highlights nor inputs to the budget/season summary
+        where: { category: { notIn: ["stay", "transport"] }, AND: [NOT_TRANSIT_WHERE] },
         orderBy: { popularityScore: "desc" },
         take: 15
       }
@@ -124,7 +127,7 @@ export async function getDestinationDetails(name: string, _context?: string): Pr
   }
 
   const mustVisitPlaces = dest.places
-    .filter(p => p.category !== "stay")
+    .filter(p => p.category !== "stay" && !isTransitPoint(p))
     .map(p => ({
       name: p.name,
       description: p.description || p.category,

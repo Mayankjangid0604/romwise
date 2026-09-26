@@ -3,6 +3,7 @@ import { addItineraryItem, listAddablePlaces } from "../itinerary";
 import * as authModule from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { NOT_TRANSIT_WHERE } from "@/lib/transit-filter";
 
 vi.mock("@/lib/auth", () => ({ auth: vi.fn() }));
 
@@ -92,6 +93,15 @@ describe("addItineraryItem (Add Place flow)", () => {
     expect(prisma.itineraryItem.create).not.toHaveBeenCalled();
   });
 
+  it("rejects a railway station even when an importer labelled it an attraction", async () => {
+    vi.mocked(prisma.itineraryDay.findUnique).mockResolvedValue(day());
+    vi.mocked(prisma.place.findUnique).mockResolvedValue(place({ name: "Jaipur Junction", category: "history" }));
+
+    const res = await addItineraryItem("trip1", "day2", "p1");
+    expect(res.success).toBe(false);
+    expect(prisma.itineraryItem.create).not.toHaveBeenCalled();
+  });
+
   it("refuses to overflow past midnight when the day is full", async () => {
     vi.mocked(prisma.itineraryDay.findUnique).mockResolvedValue(day());
     vi.mocked(prisma.place.findUnique).mockResolvedValue(place());
@@ -142,6 +152,7 @@ describe("listAddablePlaces", () => {
     expect(args.where.category).toEqual({ notIn: ["stay", "transport"] });
     expect(args.where.id).toEqual({ notIn: ["already-1"] });
     expect(args.where.OR).toBeUndefined(); // no query → suggestions
+    expect(args.where.AND).toContainEqual(NOT_TRANSIT_WHERE); // stations/bus stands never suggested
     expect(args.take).toBe(12);
   });
 

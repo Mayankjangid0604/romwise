@@ -399,6 +399,7 @@ ${JSON.stringify(candidateJson, null, 2)}
 SELECTION RULES:
 - Select ONLY places from the candidate list above using their exact "id" values
 - Do NOT invent new places, restaurants, or locations not in this list
+- NEVER schedule transit infrastructure (railway/metro stations, bus stands, airports, ferry terminals) or hotels as activities — they are not places to visit
 - Aim for category variety across days — avoid repeating the same category consecutively
 ${diningCandidates.length > 0 ? `- Include at least one dining activity per day if possible (${diningCandidates.length} dining options available)` : "- No dining candidates available — skip dining activities"}
 - Hard exclusions must not appear (marked above)

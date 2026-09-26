@@ -17,11 +17,12 @@ Details for every item are in the "Item notes" section below.
 | 3 + 6 | Slow page opens (one investigation) | DONE: measured with injected DB latency; trip-tab clicks went from 0.7–1.2 s frozen to a skeleton in <100 ms, and page renders are 2–3.7× faster | clean / clean |
 | 4 | Cache AI discovery results | DONE: DB-backed `AiResponseCache` + in-process L1, conservative prompt normalization, date/prompt-version aware keys; applied to the chat planner and group alignment; hits 0.3 ms (memory) / ~13 ms (DB) vs a 1.2 s simulated provider call | clean / clean |
 | 5 | Wireframe / page-flow redesign | DONE (proposal only): `WIREFRAME_NOTES.md`, with 12 flow findings (4 already fixed in item 2) and 5 proposed changes, none of which rename or remove a route | n/a (docs) / clean |
+| 7 | Security re-audit | DONE: 2 of the 4 hardening guarantees had regressed (secrets in responses; rate limiting missing on 2 Gemini paths), plus 6 new authz gaps (viewers could mutate, reorder IDOR, …). All fixed, verified live, and guarded by tests | clean / clean |
 | — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
 | 8 | Hotel sample data expansion | DONE: the 10-hotel list had been deleted (Stay page showed **0** hotels); replaced with a labelled 58-archetype catalogue → 21–28 stays per destination (1,459 across the 55 curated destinations), 11+ property types, ₹500–₹18,500/night | clean / clean |
 | 9 | Full pipeline trace (signup → packing) | DONE: traced in code and walked live; 8 new breaks fixed (incl. **every multi-day itinerary had a phantom extra day**, 3-day trips lost their last day, template trips 404'd on Places), dead code listed | clean / clean |
 | 10 | Hotel suggestions on trip overview | DONE: compact "Suggested stays" card (name, type, ★ rating + review count, ₹/night, sample-data label, "See all N stays") from the Stay tab's own ranking; streams in without delaying the overview | clean / clean |
-| 7 | Security re-audit | DONE: 2 of the 4 hardening guarantees had regressed (secrets in responses; rate limiting missing on 2 Gemini paths), plus 6 new authz gaps (viewers could mutate, reorder IDOR, …). All fixed, verified live, and guarded by tests | clean / clean |
+| 11 | Transit points are never attractions | DONE: stations/bus stands/airports were reaching the itinerary candidates, the Discover/New-trip "must visit" list, and the copilot's catch-all placeholder, mostly via importer mislabelling. One shared rule now excludes them everywhere, both importers are fixed, a repair script is added, and a regression suite covers the whole class of bug (8 of its checks fail on the old code) | clean / clean |
 
 ## Item notes
 
@@ -202,3 +203,35 @@ Tests: `trip-type-derivation.test.ts` (6), `template-actions.test.ts` (2), corre
 - **No slowdown:** it sits in its own `<Suspense>` with a skeleton and reuses the overview's already-loaded trip data (budget, dates, destination, current pick), so it adds only the ranking's own queries. A/B at 20 ms DB RTT against the pre-item build: overview main content 109 ms vs 117 ms (within run-to-run noise); suggestions stream in ~130 ms later.
 - Verified in the browser: the card's 3 hotels are exactly the Stay tab's top 3 excluding the pick, and the link lands on `/stay`.
 - Tests: `trips/[id]/__tests__/stay-suggestions.test.tsx` (4: top-3 content matches the ranking with name/rating/price and the sample label, selected hotel excluded, nothing without a destination, ranking uses itinerary stops + remaining budget).
+
+### 11. Places vs. transit points
+**Where a station/bus stand/airport could be offered as a place to visit (before this item):**
+
+| Surface | What was wrong |
+|---|---|
+| Itinerary candidates (`getCandidatePlaces`, feeds both planners) | No category filter at all: the V1 (Gemini + deterministic fallback) planner got hotels **and** `transport` places as candidates, and the prompt didn't say not to schedule them. V2 dropped `category === "transport"` afterwards, so a station stored as "history" still went through. |
+| Discover page / New-trip "must visit" (`destination-brain/details.ts`) | Top 15 places by popularity, filtered only for `stay`, so correctly labelled airports and stations were listed as must-visits. The budget estimate also averaged hotel prices in. |
+| Copilot "add …" | The place lookup had no category filter, and when nothing matched it created an **"Explore <keyword>" sightseeing item**, so "add the railway station to day 2" produced one. |
+| Add place, Places browser | Only excluded `category: "transport"`, so mislabelled stations got through. The Places browser also listed transport places if you set `?category=transport` in the URL. |
+| Importers (root cause of the mislabelling) | Wikidata runs one pass per category and each pass **overwrote** the last. The railway-station pass ran before the "World Heritage Site" and "monuments" passes, so CSMT-type stations ended up as sightseeing/history. OSM only knew `railway=station`, `aeroway=aerodrome` and `amenity=bus_station`, so halts, metro stations, bus stops, `public_transport=station` and a "Bus Stand" tagged `tourism=attraction` became attractions. |
+| Sample data | No problem: the hotel catalogue only contains stays. The curated master data has exactly one station (see the judgment call below). |
+
+**Fix: one rule, applied everywhere.** `src/lib/transit-filter.ts` defines transit as `category "transport"`, a transit `placeType` (station/halt/metro/bus stand/stop/airport/ferry terminal/…), **or** a name pattern ("… railway station", "… Junction"/"Jn", "… Terminus", "bus stand", "ISBT", "airport", "ferry terminal", …). It comes in two forms built from the same lists: `isTransitPoint()` for data already in memory and `NOT_TRANSIT_WHERE` for Prisma queries. The SQL form handles NULL `placeType` explicitly, because `NOT IN` on NULL would have hidden most places. I checked that the JS and SQL forms agree on 18 fixtures against Postgres (0 mismatches). The name patterns are deliberately narrow, so "Darjeeling Himalayan Railway", "Kalka–Shimla Railway", "Top Station Viewpoint" and "National Rail Museum" stay visible.
+- Applied in: `getCandidatePlaces` (query + in-loop check), the V2 engine post-filter, `listAddablePlaces` + `addItineraryItem`, the Places browser (list, count, category dropdown), destination details, and the copilot lookup. The copilot now also refuses a transit keyword with a message pointing to Transit instead of creating a placeholder.
+- Prompts: the trip-brain SELECTION RULES and the copilot prompt now say never to schedule transit infrastructure or hotels as activities. V1 output is already grounded (every `placeId` must be in the candidate list), so the prompt rule is a second layer, not the guarantee. The discovery chat planner only extracts destinations, and stations go into `travelSegments`, so it needed no change.
+- Importers: OSM maps airports/terminals/helipads, metro/subway, railway station/halt/stop, bus station/stop, ferry terminal, taxi stand and name-matched transit to `transport`. Wikidata uses `resolveImportedCategory()`, so once a place is transport a later pass can't re-label it.
+- Repair script for already-imported rows: `scripts/maintenance/recategorize-transit-places.ts`. It is a dry run by default; `--apply` changes it to write. It only changes imported rows and lists curated/verified rows, stays and food places for manual review.
+
+**Judgment call to confirm:** Chhatrapati Shivaji Maharaj Terminus (Mumbai, curated, category "history") is a UNESCO site **and** a working terminus. Following "must never be presented as a visitable attraction", it is now hidden by the " terminus" rule. If you'd rather keep it as a heritage sight, add an explicit allow-list entry in `transit-filter.ts` and update `REVIEWED_TRANSIT_NAMES` in the test. Also note that "airport" matches anywhere in a name, so a restaurant called "Airport Road Dhaba" would be hidden from attraction lists. That is acceptable for this purpose, and the repair script never re-labels food/stay places.
+
+**Verified in the browser** (production build, local Postgres): I inserted "Jaipur Junction" (history), "Sindhi Camp Bus Stand" (sightseeing) and "Jaipur International Airport" (sightseeing) with the highest popularity in Jaipur. Under the old filter they ranked #1, #2 and #4. With the fix, none of them appears in: the Places browser (page 1, `?q=junction|bus|airport`, `?category=history|sightseeing|transport`), Add-place suggestions and searches, `/api/destination-details`, `/discovery/jaipur`, `/trips/new?destination=Jaipur`, or a **regenerated itinerary** (8 items, all real sights). Real attractions (Amer Fort, Hawa Mahal, …) still list. The repair script found exactly those 3 (plus CSMT for review) and re-labelled them `transport/transit_hub` with `--apply`. The test rows were then deleted.
+
+**Regression tests:** `src/lib/__tests__/transit-filter.test.ts` (47):
+- Transit vs. look-alike names.
+- `NOT_TRANSIT_WHERE` ≡ `isTransitPoint` via a small where-evaluator.
+- `getCandidatePlaces` excludes stations both in its query and when the DB returns one anyway.
+- A **static guard** failing if any new place query in `src/` omits `NOT_TRANSIT_WHERE` (allowlist: admin data page, stay-only query).
+- OSM and Wikidata mappings.
+- Curated master data contains no transit points beyond the reviewed list.
+
+Plus cases in `add-place.test.ts` (mislabelled station rejected, suggestions filtered) and `copilot.test.ts` (3 transit keywords → NO_ACTION with no item created; lookup filtered). **Run against the pre-fix code, 8 of these checks fail.**

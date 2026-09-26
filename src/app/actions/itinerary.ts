@@ -13,6 +13,7 @@ import { generateGroundedItineraryV2 } from "@/lib/planner-v2/adapter";
 import { checkGenerationEntitlement } from "@/lib/entitlements";
 import { getDestinationDescendants } from "@/lib/destination-hierarchy";
 import { NON_ITINERARY_CATEGORIES } from "@/lib/categories";
+import { NOT_TRANSIT_WHERE, isTransitPoint } from "@/lib/transit-filter";
 import { computeAppendSlot, timeToMinutes } from "@/lib/itinerary-slots";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
@@ -353,7 +354,7 @@ export async function addItineraryItem(tripId: string, dayId: string, placeId?: 
     if (!allowedDestinationIds.includes(place.destinationId)) {
       return { success: false, error: "Place does not belong to this trip's destination" };
     }
-    if ((NON_ITINERARY_CATEGORIES as readonly string[]).includes(place.category)) {
+    if ((NON_ITINERARY_CATEGORIES as readonly string[]).includes(place.category) || isTransitPoint(place)) {
       return { success: false, error: "Stays and transport hubs can't be added as itinerary activities" };
     }
 
@@ -472,6 +473,7 @@ export async function listAddablePlaces(tripId: string, query = ""): Promise<Add
     category: { notIn: [...NON_ITINERARY_CATEGORIES] },
     dataStatus: { notIn: ["deprecated", "REJECTED"] },
     ...(scheduledIds.length > 0 ? { id: { notIn: scheduledIds } } : {}),
+    AND: [NOT_TRANSIT_WHERE],
   };
   if (q.length >= 2) {
     where.OR = [

@@ -5,6 +5,7 @@ import { PlaceBrowser, PlaceDTO, PlaceSelectionStatus } from "./place-browser";
 import { MapPin } from "lucide-react";
 import { Prisma } from "@prisma/client";
 import { EmptyState } from "@/components/ui";
+import { NOT_TRANSIT_WHERE } from "@/lib/transit-filter";
 
 export default async function PlacesPage(props: { params: Promise<{ id: string }>, searchParams: Promise<{ q?: string, category?: string, page?: string, status?: string }> }) {
   const session = await auth();
@@ -45,6 +46,8 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
   const whereCondition: Prisma.PlaceWhereInput = {
     destinationId: trip.destinationId,
     category: category !== "all" ? category : { notIn: ["stay", "transport"] },
+    // Stations/bus stands/airports aren't places to visit, whatever category an importer gave them
+    AND: [NOT_TRANSIT_WHERE],
   };
 
   if (q) {
@@ -87,7 +90,7 @@ export default async function PlacesPage(props: { params: Promise<{ id: string }
       }
     }),
     prisma.place.findMany({
-      where: { destinationId: trip.destinationId, category: { notIn: ["stay", "transport"] } },
+      where: { destinationId: trip.destinationId, category: { notIn: ["stay", "transport"] }, AND: [NOT_TRANSIT_WHERE] },
       distinct: ['category'],
       select: { category: true }
     }),
