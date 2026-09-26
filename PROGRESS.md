@@ -16,6 +16,7 @@ Details for every item are in the "Item notes" section below.
 | 2 | Navigation / page-reopen audit | DONE: 16 instances found by tracing every Link/router/redirect/reload call; all fixed and back/forward verified in a real browser | clean / clean |
 | 3 + 6 | Slow page opens (one investigation) | DONE: measured with injected DB latency; trip-tab clicks went from 0.7–1.2 s frozen to a skeleton in <100 ms, and page renders are 2–3.7× faster | clean / clean |
 | 4 | Cache AI discovery results | DONE: DB-backed `AiResponseCache` + in-process L1, conservative prompt normalization, date/prompt-version aware keys; applied to the chat planner and group alignment; hits 0.3 ms (memory) / ~13 ms (DB) vs a 1.2 s simulated provider call | clean / clean |
+| 5 | Wireframe / page-flow redesign | DONE (proposal only): `WIREFRAME_NOTES.md`, with 12 flow findings (4 already fixed in item 2) and 5 proposed changes, none of which rename or remove a route | n/a (docs) / clean |
 | — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
 
 ## Item notes
@@ -109,3 +110,6 @@ Honest trade-off: at *low* latency (20 ms RTT) content now lands ~100 ms later t
 **Measured** with the real module against the real Postgres table, provider stubbed at 1.2 s (no Gemini key in this environment): miss 1210 ms; hit on the same instance **0.3 ms**; hit from a cold instance (DB) **12.6 ms** locally, ~179 ms at 20 ms RTT including opening a new pooled connection. A different prompt missed as expected; 2 provider calls for 4 requests.
 
 Tests: `ai/__tests__/cache.test.ts` (24: normalization equivalence/non-collision, hit/miss, cross-instance, expiry, invalid entry, errors not cached, DB down, mutation safety), `chat/planner/__tests__/route-cache.test.ts` (4: repeat hits without a Gemini call, different prompt misses, next day misses, invalid AI output never cached). The existing planner and group-alignment parsing tests mock the cache as a passthrough, since they test parsing, not caching.
+
+### 5. Wireframe / page-flow redesign
+See `WIREFRAME_NOTES.md`. It has a current page map, 12 flow-level findings (F1, F8, F9, F10 were fixed in item 2), and 5 proposals with ASCII wireframes. P1: one planning form instead of Discovery's quick-plan form *plus* `/trips/new`. P2: overview as a summary hub with grouped tabs. P3: one stay model. P4: dashboard duplicate trims. P5: make "mark for next generation" vs. "add to current plan" explicit. **None of the proposals rename or remove a URL**; the few URL-affecting candidates are listed separately with the redirect each would need. Nothing in the proposals was built.
