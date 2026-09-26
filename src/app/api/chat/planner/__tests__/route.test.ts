@@ -16,6 +16,15 @@ vi.mock("@/lib/ai/gateway", () => ({
   },
 }));
 
+// These tests exercise AI response parsing; caching is covered in ai/__tests__/cache.test.ts
+vi.mock("@/lib/ai/cache", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/ai/cache")>();
+  return {
+    ...actual,
+    withAiCache: async (_opts: unknown, compute: () => Promise<unknown>) => ({ value: await compute(), cacheHit: false }),
+  };
+});
+
 vi.mock("@/lib/db-rate-limit", () => ({
   checkRateLimitDb: vi.fn().mockResolvedValue({ allowed: true, retryAfterSeconds: 0 }),
 }));

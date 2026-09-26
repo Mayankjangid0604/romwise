@@ -15,6 +15,7 @@ Details for every item are in the "Item notes" section below.
 | 1 | Add-place flow + route reflects current items | DONE: "Add place" dialog (day picker) + per-day panel, suggestions list + search, route re-optimizes over current items (verified in browser) | clean / clean |
 | 2 | Navigation / page-reopen audit | DONE: 16 instances found by tracing every Link/router/redirect/reload call; all fixed and back/forward verified in a real browser | clean / clean |
 | 3 + 6 | Slow page opens (one investigation) | DONE: measured with injected DB latency; trip-tab clicks went from 0.7–1.2 s frozen to a skeleton in <100 ms, and page renders are 2–3.7× faster | clean / clean |
+| 4 | Cache AI discovery results | DONE: DB-backed `AiResponseCache` + in-process L1, conservative prompt normalization, date/prompt-version aware keys; applied to the chat planner and group alignment; hits 0.3 ms (memory) / ~13 ms (DB) vs a 1.2 s simulated provider call | clean / clean |
 | — | **Security hotfix (found during 3, reported under 7)** | DONE: overview/budget/itinerary/expenses API were serializing members' bcrypt `passwordHash` + email to the browser; fixed + regression test | clean / clean |
 
 ## Item notes
@@ -92,3 +93,19 @@ Tests: `safe-redirect.test.ts` (19). Full suite 511/511.
 | Time to page content | 700–1218 ms | 378–499 ms |
 
 Honest trade-off: at *low* latency (20 ms RTT) content now lands ~100 ms later than before (≈380 ms vs 220–380 ms). Once React shows a Suspense fallback it keeps it for at least 300 ms to avoid flicker. The skeleton appears in ~75 ms instead of the UI sitting frozen, and the gain grows with latency (see the 100 ms column), which is the production condition that was reported.
+
+### 4. Cache AI discovery results
+**What actually calls Gemini today (traced, not assumed):** the Discovery pages make **no** Gemini calls; since V2 they are DB-driven (collections, destination details, search). The Phase-2 `/api/discovery` route no longer exists. Free-text "discovery" prompts go to **`/api/chat/planner`** (conversation → destination/dates/budget extraction). No web UI component calls it any more (the trip builder became a form), but it is a live authenticated endpoint and the natural entry point for the mobile work being scoped. The only Gemini call the web UI triggers on demand is **Group Alignment** (Group tab → "Analyze"). Copilot (trip-state dependent, performs actions) and the V1 planner (behind `PLANNER_ENGINE=v1`) are deliberately **not** cached.
+
+**Choice: DB-backed cache table plus a small in-process L1.** Production is serverless (Vercel), where each instance has its own memory and cold starts wipe it, so an in-memory-only cache would rarely hit and would differ per instance. That's the same reason rate limiting already moved to the `RateLimitEntry` table. A new additive table `AiResponseCache` (migration `20260926140735_add_ai_response_cache`: one `CREATE TABLE` + one index) is shared by all instances; an LRU map (200 entries) in front makes repeat hits on a warm instance skip even that round trip. No new infrastructure or dependencies.
+
+**Correctness guards** (`src/lib/ai/cache.ts`)
+- Key = sha256 of task + model + **prompt version** (hash of the system prompt, so editing a prompt invalidates old answers) + normalized input.
+- Normalization only folds formatting: case, whitespace, spacing around punctuation, trailing `!?.`, Unicode width forms, and thousands separators (`50,000` → `50000`, `1,00,000` → `100000`). Numbers, words, negations and order all stay in the key. Tested pairs that must *not* collide include `3 days` vs `5 days`, `50,000` vs `5,000`, `1,2` vs `12`, `2.5 lakh` vs `25 lakh`, "not crowded" vs "crowded", and "Goa then Hampi" vs "Hampi then Goa".
+- The planner key includes **today's date (UTC)**: its answers contain relative dates ("next month"), so an answer is never served across days. TTL is 24 h; group alignment is 7 days (no relative dates; any preference change produces a new key).
+- Only responses that pass the endpoint's own zod schema are stored; a cached entry that fails validation is a miss; provider errors are never cached; cache/DB failures fall back to calling the provider; stored values are copied so callers can't mutate them. Expired rows are pruned at most hourly per instance.
+- Destination resolution in the planner still runs on every request (it depends on current DB data). Responses carry `X-Roamwise-AI-Cache: hit|miss`.
+
+**Measured** with the real module against the real Postgres table, provider stubbed at 1.2 s (no Gemini key in this environment): miss 1210 ms; hit on the same instance **0.3 ms**; hit from a cold instance (DB) **12.6 ms** locally, ~179 ms at 20 ms RTT including opening a new pooled connection. A different prompt missed as expected; 2 provider calls for 4 requests.
+
+Tests: `ai/__tests__/cache.test.ts` (24: normalization equivalence/non-collision, hit/miss, cross-instance, expiry, invalid entry, errors not cached, DB down, mutation safety), `chat/planner/__tests__/route-cache.test.ts` (4: repeat hits without a Gemini call, different prompt misses, next day misses, invalid AI output never cached). The existing planner and group-alignment parsing tests mock the cache as a passthrough, since they test parsing, not caching.

@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { AIGateway } from "./ai/gateway";
 import { AIGatewayError } from "./ai/types";
+import { withAiCache, sha256 } from "./ai/cache";
+import { getModelForTask } from "./ai/router";
 import { ValidationError } from "./errors";
 export { ValidationError } from "./errors";
 
@@ -59,6 +61,9 @@ Rules:
 - All string fields must be non-empty
 - Consider pace preferences, interests, food restrictions, and accessibility needs`;
 
+// The same group profiles always get the same analysis; any preference change is a new key.
+const GROUP_ALIGNMENT_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
 export async function analyzeGroupAlignment(
   input: GroupAlignmentInput,
 ): Promise<GroupAlignmentResponse> {
@@ -69,14 +74,31 @@ export async function analyzeGroupAlignment(
     )
     .join("\n");
 
-  const result = await AIGateway.generateStructured<unknown>({
-    prompt: `${GROUP_ALIGNMENT_PROMPT}\n\nTraveler profiles:\n${profilesSummary}`,
-    context: { task: "group_alignment" },
-  });
+  const { value } = await withAiCache(
+    {
+      task: "group_alignment",
+      model: getModelForTask("group_alignment").model,
+      version: sha256(GROUP_ALIGNMENT_PROMPT).slice(0, 12),
+      // Names are not case-folded: they appear verbatim in the generated text
+      input: input.travelers,
+      ttlMs: GROUP_ALIGNMENT_CACHE_TTL_MS,
+      validate: (data) => {
+        const r = groupAlignmentResponseSchema.safeParse(data);
+        return r.success ? r.data : null;
+      },
+    },
+    async () => {
+      const result = await AIGateway.generateStructured<unknown>({
+        prompt: `${GROUP_ALIGNMENT_PROMPT}\n\nTraveler profiles:\n${profilesSummary}`,
+        context: { task: "group_alignment" },
+      });
 
-  try {
-    return validateGroupAlignmentResponse(result.data);
-  } catch (error) {
-    throw new AIGatewayError("Failed to validate group alignment response", "AI_INVALID_OUTPUT", false);
-  }
+      try {
+        return validateGroupAlignmentResponse(result.data);
+      } catch (error) {
+        throw new AIGatewayError("Failed to validate group alignment response", "AI_INVALID_OUTPUT", false);
+      }
+    },
+  );
+  return value;
 }

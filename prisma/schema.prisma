@@ -391,6 +391,21 @@ model RateLimitEntry {
   updatedAt DateTime @updatedAt
 }
 
+/// Cache of validated AI (Gemini) responses, keyed by a hash of the task, model,
+/// prompt version and normalized input. Shared across serverless instances so
+/// repeated prompts don't re-hit the provider. See src/lib/ai/cache.ts.
+model AiResponseCache {
+  key       String   @id
+  task      String
+  model     String
+  response  Json
+  hits      Int      @default(0)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
 model RecentActivity {
   id            String   @id @default(cuid())
   userId        String
