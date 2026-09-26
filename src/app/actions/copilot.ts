@@ -133,7 +133,8 @@ Only suggest places people visit (sights, food, experiences). Never add transit 
     // Prisma modifications
     if (
       (intent.action === "ADD_PLACE" || intent.action === "REPLACE_ITEM") &&
-      isTransitName(intent.newPlaceKeyword)
+      // newPlaceKeyword isn't a required schema field — the model can omit it
+      isTransitName(intent.newPlaceKeyword ?? "")
     ) {
       // The fallbacks below would otherwise create an "Explore <keyword>" sightseeing item
       appliedMessage = `${intent.newPlaceKeyword} is a transit point, not a place to visit, so I haven't added it as an activity. You can add trains, buses and flights under Transit on the trip overview.`;

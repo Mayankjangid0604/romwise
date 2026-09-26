@@ -5,7 +5,7 @@
 > `git show b045fdf^:PROGRESS.md` and `git show b045fdf^:FINAL_REPORT.md`. Later phase
 > reports live in `docs/audits/current/`.
 
-## Bug-fix & UX pass (2026-09-26): IN PROGRESS
+## Bug-fix & UX pass (2026-09-26): COMPLETE
 
 One line per item; `typecheck` + `build` were run after each item before moving on.
 Details for every item are in the "Item notes" section below.
@@ -23,6 +23,36 @@ Details for every item are in the "Item notes" section below.
 | 9 | Full pipeline trace (signup → packing) | DONE: traced in code and walked live; 8 new breaks fixed (incl. **every multi-day itinerary had a phantom extra day**, 3-day trips lost their last day, template trips 404'd on Places), dead code listed | clean / clean |
 | 10 | Hotel suggestions on trip overview | DONE: compact "Suggested stays" card (name, type, ★ rating + review count, ₹/night, sample-data label, "See all N stays") from the Stay tab's own ranking; streams in without delaying the overview | clean / clean |
 | 11 | Transit points are never attractions | DONE: stations/bus stands/airports were reaching the itinerary candidates, the Discover/New-trip "must visit" list, and the copilot's catch-all placeholder, mostly via importer mislabelling. One shared rule now excludes them everywhere, both importers are fixed, a repair script is added, and a regression suite covers the whole class of bug (8 of its checks fail on the old code) | clean / clean |
+
+## Final verification
+
+*Commands run: 2026-09-26, after all items, from a clean tree (`.next` deleted first).*
+
+### `npm run typecheck` (tsc --noEmit)
+```
+Exit code: 0
+Output: (no errors)
+```
+**PASS: zero type errors.**
+
+### `npm test` (vitest run)
+```
+Test Files  61 passed (61)
+     Tests  635 passed (635)
+  Duration  6.52s
+```
+**PASS: 635 tests in 61 test files, 0 failures, 0 skipped.** Before this pass (`161774b`) the suite was 45 files / 470 tests, so this pass added **16 files and 165 tests**. The final run initially caught one bug of mine: the item-11 copilot guard threw when the model omitted `newPlaceKeyword`. I fixed it before the numbers above were taken.
+
+### `npm run build` (next build)
+```
+Exit code: 0
+Compiled successfully in 9.3s
+TypeScript: clean (9.3s)
+Static pages: 22/22 generated
+43 routes (39 dynamic, 4 static)
+Warnings: 0
+```
+**PASS: clean production build, zero warnings.**
 
 ## Item notes
 
