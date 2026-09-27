@@ -102,9 +102,12 @@ test.describe('Collaborative Trip Planning', () => {
     await expect(pageCreator.locator('h1')).toContainText('Welcome back');
 
     await pageCreator.goto(`/trips/${tripId}/group`);
+    await pageCreator.waitForLoadState('networkidle');
     
     // Create Share Link
-    await pageCreator.locator('div').filter({ hasText: 'Member Link' }).locator('button', { hasText: 'Copy Link' }).first().click();
+    const copyLinkBtn = pageCreator.locator('div').filter({ hasText: 'Member Link' }).locator('button', { hasText: 'Copy Link' }).first();
+    await expect(copyLinkBtn).toBeVisible({ timeout: 5000 });
+    await copyLinkBtn.click();
     
     // Wait for the token to be generated in the DB
     await expect.poll(async () => {
@@ -112,7 +115,7 @@ test.describe('Collaborative Trip Planning', () => {
       if (share) shareToken = share.token;
       return !!share;
     }, {
-      timeout: 10000,
+      timeout: 15000,
     }).toBeTruthy();
     
     const shareUrl = `/trips/join/${shareToken}`;
