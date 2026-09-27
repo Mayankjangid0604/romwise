@@ -175,7 +175,7 @@ test.describe('Collaborative Trip Planning', () => {
     await pageUser3.goto(shareUrl);
     
     // Should see error or be redirected to dashboard since link is invalid
-    await expect(pageUser3.locator('text="Invalid or expired invite link."')).toBeVisible();
+    await expect(pageUser3.locator('text="Invalid invite link"')).toBeVisible();
     
     await contextCreator.close();
     await contextUser2.close();

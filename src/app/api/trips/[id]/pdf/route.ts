@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { chromium } from "playwright";
+import chromium from "@sparticuz/chromium";
+import { chromium as playwright } from "playwright-core";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
@@ -46,7 +47,20 @@ export async function GET(
     // Launch headless browser
     let browser;
     try {
-      browser = await chromium.launch({ headless: true });
+      // Local development fallback
+      const isLocal = process.env.NODE_ENV !== "production";
+      let executablePath = await chromium.executablePath();
+      if (!executablePath && isLocal) {
+        // Fallback for local development testing, e.g. /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+        executablePath = process.env.CHROME_EXECUTABLE_PATH || "";
+      }
+
+      browser = await playwright.launch({
+        args: isLocal ? [] : chromium.args,
+        executablePath: executablePath || undefined,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        headless: isLocal ? true : (chromium as any).headless,
+      });
       const context = await browser.newContext();
 
       // Pass the session cookie to the headless browser so it can access the protected print page

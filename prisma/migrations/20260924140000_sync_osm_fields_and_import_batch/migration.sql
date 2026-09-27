@@ -1,5 +1,8 @@
--- DropForeignKey
-ALTER TABLE "StaySelection" DROP CONSTRAINT IF EXISTS "StaySelection_tripId_fkey";
+-- DropForeignKey (idempotent — table may already be dropped by earlier migration 20260920184354)
+DO $$ BEGIN
+  ALTER TABLE "StaySelection" DROP CONSTRAINT IF EXISTS "StaySelection_tripId_fkey";
+EXCEPTION WHEN undefined_table THEN NULL;
+END $$;
 
 -- AlterTable
 ALTER TABLE "Place" ADD COLUMN     "cuisine" TEXT,

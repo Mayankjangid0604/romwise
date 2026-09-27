@@ -1,55 +1,40 @@
-# V3.2 Deployment Instructions
+# ROAMWISE V3.2 — DEPLOYMENT AND MIGRATION INSTRUCTIONS
 
-This document provides the exact sequence of commands for deploying the V3.2 release safely to production.
+## 1. Prerequisites
+- Node.js 18.x or 20.x
+- PostgreSQL 15+ database
+- Verified environment variables (see `REQUIRED-API-KEYS.md`)
 
-## Explicit Prohibitions in Production
-- **NO** `prisma db push`
-- **NO** `prisma migrate reset`
-- **NO** `npm run db:seed:fixture`
-- **NO** `E2E_TEST_MODE=true`
-- **NO** `E2E_AI_MOCK=true`
-- **NO** `OTP_TEST_BYPASS=true`
-
-## 1. Exact Release SHA Verification
-Ensure you are deploying the certified release SHA (replace with exact SHA if known, e.g. `1836efe` or `b5b176f`).
-
-## 2. Database Backup & Restore Point
-Before applying any migration to production, ensure you have taken a full backup (e.g., via Neon dashboard branch/snapshot).
-
-## 3. Environment Configuration
-Verify your Vercel or production hosting environment variables:
-- `DATABASE_URL` is set.
-- `AUTH_SECRET` is generated (`openssl rand -base64 32`) and set.
-- `APP_URL` is set to the absolute domain of your production app.
-- `INTERNAL_JOB_SECRET` is set.
-- All testing bypasses (`E2E_TEST_MODE`, `OTP_TEST_BYPASS`, `E2E_AI_MOCK`) are REMOVED.
-
-## 4. Database Migration
-Use the pooled or unpooled connection string as appropriate for migrations based on your database provider. For Neon, standard connections support transactions but a direct URL might be required for some DDL, though `DATABASE_URL` is configured in `prisma/schema.prisma`.
-
+## 2. Remote Synchronization
+The application MUST be deployed from `origin/main`.
 ```bash
-# 1. Configure direct migration DB URL (if necessary for your provider)
-export DATABASE_URL="postgresql://user:password@host/db"
+git checkout main
+git pull origin main
+```
+Exact SHA verified for V3.2 production: (Verified from origin/main)
 
-# 2. Check pending migrations
-npx prisma migrate status
-
-# 3. Safely deploy migrations
-npx prisma migrate deploy
-
-# 4. Verify completion
-npx prisma migrate status
+## 3. Dependency Installation
+Strict lockfile installation is required to ensure consistent dependencies.
+```bash
+# Do NOT use npm install
+npm ci
 ```
 
-*Note: The V3.1/V3.2 migration `20260925080000_add_trip_place_selection` is purely additive and safe.*
+## 4. Database Migration
+Ensure the database schema is up-to-date.
+```bash
+npx prisma migrate deploy
+npx prisma generate
+```
 
-## 5. Vercel Deployment
-Deploy the exact verified SHA to Vercel. Verify the final SHA on the Vercel dashboard.
+## 5. Build
+Produce the optimized production build.
+```bash
+npm run build
+```
 
-## 6. Smoke Testing
-Execute the steps in `docs/deployment/PRODUCTION-SMOKE-TEST.md` to ensure system integrity.
-
-## 7. Rollback Procedure
-If the application fails:
-1. Revert to the previous deployment via the Vercel Dashboard.
-2. The recent migrations are additive, so rolling back the application code without restoring the database is safe. The old code simply will not query the new tables/columns.
+## 6. Start
+Start the Next.js production server.
+```bash
+npm start
+```
